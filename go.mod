@@ -5,6 +5,7 @@ go 1.21.0
 require (
 	github.com/gin-gonic/gin v1.9.1
 	github.com/golang/protobuf v1.5.3
+
 	github.com/spf13/viper v1.16.0
 	google.golang.org/grpc v1.57.0
 	google.golang.org/protobuf v1.30.0
