@@ -2,11 +2,11 @@ syntax= "proto3";
 
 package pb;
 
-option go_package = "./pkg/auth/pb";
+option go_package = "./pkg/auth/common/pb";
 
-service VideoService {
-    rpc Signup (SignupRequest) returns (SignupResponse){}
-    rpc Login (LoginRequest) returns (LoginResponse){}
+service Autharization {
+    rpc UserSignup (SignupRequest) returns (SignupResponse){}
+    rpc UserLogin (LoginRequest) returns (LoginResponse){}
   
 }
 

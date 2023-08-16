@@ -14,124 +14,124 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// VideoServiceClient is the client API for VideoService service.
+// AutharizationClient is the client API for Autharization service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type VideoServiceClient interface {
-	Signup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupResponse, error)
-	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
+type AutharizationClient interface {
+	UserSignup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupResponse, error)
+	UserLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 }
 
-type videoServiceClient struct {
+type autharizationClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewVideoServiceClient(cc grpc.ClientConnInterface) VideoServiceClient {
-	return &videoServiceClient{cc}
+func NewAutharizationClient(cc grpc.ClientConnInterface) AutharizationClient {
+	return &autharizationClient{cc}
 }
 
-func (c *videoServiceClient) Signup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupResponse, error) {
+func (c *autharizationClient) UserSignup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupResponse, error) {
 	out := new(SignupResponse)
-	err := c.cc.Invoke(ctx, "/pb.VideoService/Signup", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/UserSignup", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *videoServiceClient) Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
+func (c *autharizationClient) UserLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error) {
 	out := new(LoginResponse)
-	err := c.cc.Invoke(ctx, "/pb.VideoService/Login", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/UserLogin", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// VideoServiceServer is the server API for VideoService service.
-// All implementations must embed UnimplementedVideoServiceServer
+// AutharizationServer is the server API for Autharization service.
+// All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
-type VideoServiceServer interface {
-	Signup(context.Context, *SignupRequest) (*SignupResponse, error)
-	Login(context.Context, *LoginRequest) (*LoginResponse, error)
-	mustEmbedUnimplementedVideoServiceServer()
+type AutharizationServer interface {
+	UserSignup(context.Context, *SignupRequest) (*SignupResponse, error)
+	UserLogin(context.Context, *LoginRequest) (*LoginResponse, error)
+	mustEmbedUnimplementedAutharizationServer()
 }
 
-// UnimplementedVideoServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedVideoServiceServer struct {
+// UnimplementedAutharizationServer must be embedded to have forward compatible implementations.
+type UnimplementedAutharizationServer struct {
 }
 
-func (UnimplementedVideoServiceServer) Signup(context.Context, *SignupRequest) (*SignupResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Signup not implemented")
+func (UnimplementedAutharizationServer) UserSignup(context.Context, *SignupRequest) (*SignupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserSignup not implemented")
 }
-func (UnimplementedVideoServiceServer) Login(context.Context, *LoginRequest) (*LoginResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+func (UnimplementedAutharizationServer) UserLogin(context.Context, *LoginRequest) (*LoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UserLogin not implemented")
 }
-func (UnimplementedVideoServiceServer) mustEmbedUnimplementedVideoServiceServer() {}
+func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
-// UnsafeVideoServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to VideoServiceServer will
+// UnsafeAutharizationServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to AutharizationServer will
 // result in compilation errors.
-type UnsafeVideoServiceServer interface {
-	mustEmbedUnimplementedVideoServiceServer()
+type UnsafeAutharizationServer interface {
+	mustEmbedUnimplementedAutharizationServer()
 }
 
-func RegisterVideoServiceServer(s grpc.ServiceRegistrar, srv VideoServiceServer) {
-	s.RegisterService(&VideoService_ServiceDesc, srv)
+func RegisterAutharizationServer(s grpc.ServiceRegistrar, srv AutharizationServer) {
+	s.RegisterService(&Autharization_ServiceDesc, srv)
 }
 
-func _VideoService_Signup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Autharization_UserSignup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SignupRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VideoServiceServer).Signup(ctx, in)
+		return srv.(AutharizationServer).UserSignup(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.VideoService/Signup",
+		FullMethod: "/pb.Autharization/UserSignup",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VideoServiceServer).Signup(ctx, req.(*SignupRequest))
+		return srv.(AutharizationServer).UserSignup(ctx, req.(*SignupRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VideoService_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Autharization_UserLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VideoServiceServer).Login(ctx, in)
+		return srv.(AutharizationServer).UserLogin(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.VideoService/Login",
+		FullMethod: "/pb.Autharization/UserLogin",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VideoServiceServer).Login(ctx, req.(*LoginRequest))
+		return srv.(AutharizationServer).UserLogin(ctx, req.(*LoginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// VideoService_ServiceDesc is the grpc.ServiceDesc for VideoService service.
+// Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var VideoService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "pb.VideoService",
-	HandlerType: (*VideoServiceServer)(nil),
+var Autharization_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "pb.Autharization",
+	HandlerType: (*AutharizationServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Signup",
-			Handler:    _VideoService_Signup_Handler,
+			MethodName: "UserSignup",
+			Handler:    _Autharization_UserSignup_Handler,
 		},
 		{
-			MethodName: "Login",
-			Handler:    _VideoService_Login_Handler,
+			MethodName: "UserLogin",
+			Handler:    _Autharization_UserLogin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "pkg/auth/proto/auth.proto",
+	Metadata: "pkg/auth/common/pb/auth.proto",
 }
