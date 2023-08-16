@@ -2,7 +2,7 @@ syntax= "proto3";
 
 package pb;
 
-option go_package = "./pkg/pb";
+option go_package = "./pkg/auth/pb";
 
 service VideoService {
     rpc Signup (SignupRequest) returns (SignupResponse){}
