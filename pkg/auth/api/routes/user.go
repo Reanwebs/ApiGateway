@@ -6,6 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterVideoRoutes(api *gin.RouterGroup, authHandler handlers.SignupHandler) {
+func RegisterVideoRoutes(api *gin.RouterGroup, authHandler handlers.AuthHandler) {
 
 }
