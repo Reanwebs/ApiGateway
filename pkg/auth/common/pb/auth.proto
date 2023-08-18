@@ -9,6 +9,7 @@ service Autharization {
     rpc OtpValidation (OtpValidationRequest) returns (OtpValidationResponse){}
     rpc UserLogin (LoginRequest) returns (LoginResponse){}
     rpc validName (validNameRequest) returns (validNameResponse){}
+
   
 }
 

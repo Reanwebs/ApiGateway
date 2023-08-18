@@ -43,12 +43,16 @@ func (h *UserHandler) OtpValidation(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
+
 	res, err := h.Client.OtpValidation(ctx, body)
+
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadGateway, err)
 		return
 	}
+
 	ctx.JSON(http.StatusOK, &res)
+
 
 }
 
@@ -59,6 +63,7 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
+
 
 	res, err := h.Client.UserLogin(ctx, body)
 	if err != nil {
@@ -78,10 +83,13 @@ func (h *UserHandler) ValidName(ctx *gin.Context) {
 	}
 
 	res, err := h.Client.ValidName(ctx, body)
+
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadGateway, err)
 		return
 	}
+
 	ctx.JSON(http.StatusOK, &res)
+
 
 }

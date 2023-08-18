@@ -1,5 +1,6 @@
 package client
 
+
 import (
 	"context"
 	"gateway/pkg/auth/common/client/interfaces"
@@ -75,4 +76,3 @@ func (c *authClient) ValidName(ctx context.Context, request models.ValidName) (*
 		return nil, err
 	}
 	return res, nil
-}
