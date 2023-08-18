@@ -1,5 +1,6 @@
 package client
 
+
 import (
 	"context"
 	"gateway/pkg/auth/common/client/interfaces"
@@ -66,3 +67,12 @@ func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestB
 	return res, nil
 
 }
+
+func (c *authClient) ValidName(ctx context.Context, request models.ValidName) (*pb.ValidNameResponse, error) {
+	res, err := c.Server.ValidName(ctx, &pb.ValidNameRequest{
+		Username: request.UserName,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
