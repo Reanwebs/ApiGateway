@@ -5,6 +5,7 @@ type RegisterRequestBody struct {
 	Password    string `json:"password"`
 	PhoneNumber string `json:"phoneNumber"`
 	UserName    string `json:"userName"`
+	Referral    string `json:"referral"`
 }
 
 type OtpValidation struct {
@@ -15,4 +16,8 @@ type OtpValidation struct {
 type LoginRequestBody struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
+}
+
+type ValidName struct {
+	UserName string `json:"userName"`
 }
