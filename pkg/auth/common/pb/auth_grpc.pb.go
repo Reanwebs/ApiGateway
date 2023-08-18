@@ -68,6 +68,7 @@ func (c *autharizationClient) ValidName(ctx context.Context, in *ValidNameReques
 	return out, nil
 }
 
+
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
