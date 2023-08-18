@@ -3,8 +3,8 @@ package config
 import "github.com/spf13/viper"
 
 type Config struct {
-	VideoService string `mapstructure:"VIDEO_SRV"`
-	Port         string `mapstructure:"PORT"`
+	AuthService string `mapstructure:"Auth_SRV"`
+	Port        string `mapstructure:"PORT"`
 }
 
 var envs = []string{"VIDEO_SRV", "PORT"}
