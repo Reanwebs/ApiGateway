@@ -22,7 +22,6 @@ type AutharizationClient interface {
 	OtpValidation(ctx context.Context, in *OtpValidationRequest, opts ...grpc.CallOption) (*OtpValidationResponse, error)
 	UserLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	ValidName(ctx context.Context, in *ValidNameRequest, opts ...grpc.CallOption) (*ValidNameResponse, error)
-
 }
 
 type autharizationClient struct {
@@ -63,12 +62,12 @@ func (c *autharizationClient) UserLogin(ctx context.Context, in *LoginRequest, o
 func (c *autharizationClient) ValidName(ctx context.Context, in *ValidNameRequest, opts ...grpc.CallOption) (*ValidNameResponse, error) {
 	out := new(ValidNameResponse)
 	err := c.cc.Invoke(ctx, "/pb.Autharization/validName", in, out, opts...)
-
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
+
 
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
@@ -78,7 +77,6 @@ type AutharizationServer interface {
 	OtpValidation(context.Context, *OtpValidationRequest) (*OtpValidationResponse, error)
 	UserLogin(context.Context, *LoginRequest) (*LoginResponse, error)
 	ValidName(context.Context, *ValidNameRequest) (*ValidNameResponse, error)
-
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -98,7 +96,6 @@ func (UnimplementedAutharizationServer) UserLogin(context.Context, *LoginRequest
 func (UnimplementedAutharizationServer) ValidName(context.Context, *ValidNameRequest) (*ValidNameResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidName not implemented")
 }
-
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
 // UnsafeAutharizationServer may be embedded to opt out of forward compatibility for this service.
@@ -206,7 +203,6 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "validName",
 			Handler:    _Autharization_ValidName_Handler,
-
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

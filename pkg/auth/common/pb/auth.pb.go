@@ -485,7 +485,6 @@ func (x *ValidNameResponse) GetError() string {
 	return ""
 }
 
-
 var File_pkg_auth_common_pb_auth_proto protoreflect.FileDescriptor
 
 var file_pkg_auth_common_pb_auth_proto_rawDesc = []byte{
@@ -522,7 +521,6 @@ var file_pkg_auth_common_pb_auth_proto_rawDesc = []byte{
 	0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x18, 0x02,
 	0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x12, 0x14, 0x0a, 0x05, 0x74,
 	0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65,
-
 	0x6e, 0x22, 0x2e, 0x0a, 0x10, 0x76, 0x61, 0x6c, 0x69, 0x64, 0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65,
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d,
 	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d,
@@ -574,7 +572,6 @@ var file_pkg_auth_common_pb_auth_proto_goTypes = []interface{}{
 	(*OtpValidationResponse)(nil), // 3: pb.OtpValidationResponse
 	(*LoginRequest)(nil),          // 4: pb.LoginRequest
 	(*LoginResponse)(nil),         // 5: pb.LoginResponse
-
 	(*ValidNameRequest)(nil),      // 6: pb.validNameRequest
 	(*ValidNameResponse)(nil),     // 7: pb.validNameResponse
 
@@ -583,7 +580,6 @@ var file_pkg_auth_common_pb_auth_proto_depIdxs = []int32{
 	0, // 0: pb.Autharization.UserSignup:input_type -> pb.SignupRequest
 	2, // 1: pb.Autharization.OtpValidation:input_type -> pb.OtpValidationRequest
 	4, // 2: pb.Autharization.UserLogin:input_type -> pb.LoginRequest
-
 	6, // 3: pb.Autharization.validName:input_type -> pb.validNameRequest
 	1, // 4: pb.Autharization.UserSignup:output_type -> pb.SignupResponse
 	3, // 5: pb.Autharization.OtpValidation:output_type -> pb.OtpValidationResponse
@@ -591,7 +587,6 @@ var file_pkg_auth_common_pb_auth_proto_depIdxs = []int32{
 	7, // 7: pb.Autharization.validName:output_type -> pb.validNameResponse
 	4, // [4:8] is the sub-list for method output_type
 	0, // [0:4] is the sub-list for method input_type
-
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -706,9 +701,7 @@ func file_pkg_auth_common_pb_auth_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_pkg_auth_common_pb_auth_proto_rawDesc,
 			NumEnums:      0,
-
 			NumMessages:   8,
-
 			NumExtensions: 0,
 			NumServices:   1,
 		},

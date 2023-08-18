@@ -24,3 +24,14 @@ type ValidName struct {
 	UserName string `json:"userName"`
 }
 
+type Interests struct {
+	Interest   string
+	InterestID string
+}
+
+type Connection struct {
+	UserID          uint
+	ConnectedUserID uint
+	ConnectionDate  string
+}
+
