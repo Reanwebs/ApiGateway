@@ -2,11 +2,12 @@ package interfaces
 
 import (
 	"context"
+	"gateway/pkg/auth/common/models"
 	"gateway/pkg/auth/common/pb"
-	"mime/multipart"
 )
 
 type AuthClient interface {
-	UserSignup(context.Context, *multipart.FileHeader) (*pb.SignupResponse, error)
-	UserLogin(context.Context, string, string) (pb.LoginResponse, error)
+	UserSignup(context.Context, models.RegisterRequestBody) (*pb.SignupResponse, error)
+	OtpValidation(context.Context, models.OtpValidation) (*pb.OtpValidationResponse, error)
+	UserLogin(context.Context, models.LoginRequestBody) (*pb.LoginResponse, error)
 }

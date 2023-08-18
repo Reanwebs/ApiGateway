@@ -1,23 +1,68 @@
 package client
 
 import (
-	"fmt"
-	"gateway/pkg/auth/common"
+	"context"
+	"gateway/pkg/auth/common/client/interfaces"
+	"gateway/pkg/auth/common/config"
+	"gateway/pkg/auth/common/models"
 	"gateway/pkg/auth/common/pb"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
-type ServiceClient struct {
-	Client pb.AutharizationClient
+type authClient struct {
+	Server pb.AutharizationClient
 }
 
-func InitServiceClient(c *common.Config) pb.AutharizationClient {
-
-	cc, err := grpc.Dial(c.Port, grpc.WithInsecure())
+func InitClient(c *config.Config) (interfaces.AuthClient, error) {
+	cc, err := grpc.Dial(c.AuthService, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		fmt.Println("Could not connect:", err)
+		return nil, err
 	}
+	return NewAuthClient(pb.NewAutharizationClient(cc)), nil
+}
 
-	return pb.NewAutharizationClient(cc)
+func NewAuthClient(server pb.AutharizationClient) interfaces.AuthClient {
+	return &authClient{
+		Server: server,
+	}
+}
+
+func (c *authClient) UserSignup(ctx context.Context, request models.RegisterRequestBody) (*pb.SignupResponse, error) {
+
+	res, err := c.Server.UserSignup(ctx, &pb.SignupRequest{
+		Email:       request.Email,
+		Password:    request.Password,
+		PhoneNumber: request.PhoneNumber,
+		UserName:    request.UserName,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) OtpValidation(ctx context.Context, request models.OtpValidation) (*pb.OtpValidationResponse, error) {
+	res, err := c.Server.OtpValidation(ctx, &pb.OtpValidationRequest{
+		Otp:         request.Otp,
+		Phonenumber: request.PhoneNumber,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
+}
+
+func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestBody) (*pb.LoginResponse, error) {
+	res, err := c.Server.UserLogin(ctx, &pb.LoginRequest{
+		Email:    request.Email,
+		Password: request.Password,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
 }

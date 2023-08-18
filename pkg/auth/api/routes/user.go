@@ -6,10 +6,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegisterVideoRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
-
+func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	routes := api.Group("/user")
-	routes.POST("/register", userHandler.UserSignup)
+	routes.POST("/signup", userHandler.UserSignup)
+	routes.POST("/otp", userHandler.OtpValidation)
 	routes.POST("/login", userHandler.UserLogin)
-
 }

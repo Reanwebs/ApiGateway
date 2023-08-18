@@ -2,45 +2,32 @@ package handlers
 
 import (
 	"context"
-	"gateway/pkg/auth/common/client"
-	"gateway/pkg/auth/common/pb"
+	"gateway/pkg/auth/common/client/interfaces"
+	"gateway/pkg/auth/common/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-type RegisterRequestBody struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-type LoginRequestBody struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
 type UserHandler struct {
-	Client client.ServiceClient
+	Client interfaces.AuthClient
 }
 
-func NewAuthHandler(client client.ServiceClient) UserHandler {
+func NewAuthHandler(client interfaces.AuthClient) UserHandler {
 	return UserHandler{
 		Client: client,
 	}
 }
 
-func UserSignup(ctx *gin.Context, c pb.AutharizationClient) {
-	body := RegisterRequestBody{}
+func (h *UserHandler) UserSignup(ctx *gin.Context) {
+	body := models.RegisterRequestBody{}
 
 	if err := ctx.BindJSON(&body); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	res, err := c.UserSignup(context.Background(), &pb.SignupRequest{
-		Email:    body.Email,
-		Password: body.Password,
-	})
+	res, err := h.Client.UserSignup(context.Background(), body)
 
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadGateway, err)
@@ -50,18 +37,30 @@ func UserSignup(ctx *gin.Context, c pb.AutharizationClient) {
 	ctx.JSON(int(res.Status), &res)
 }
 
-func UserLogin(ctx *gin.Context, c pb.AutharizationClient) {
-	b := LoginRequestBody{}
+func (h *UserHandler) OtpValidation(ctx *gin.Context) {
+	body := models.OtpValidation{}
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	res, err := h.Client.OtpValidation(context.Background(), body)
+	if err != nil {
+		ctx.AbortWithError(http.StatusBadGateway, err)
+		return
+	}
+	ctx.JSON(http.StatusCreated, &res)
 
-	if err := ctx.BindJSON(&b); err != nil {
+}
+
+func (h *UserHandler) UserLogin(ctx *gin.Context) {
+	body := models.LoginRequestBody{}
+
+	if err := ctx.BindJSON(&body); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	res, err := c.UserLogin(context.Background(), &pb.LoginRequest{
-		Email:    b.Email,
-		Password: b.Password,
-	})
+	res, err := h.Client.UserLogin(context.Background(), body)
 
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadGateway, err)
