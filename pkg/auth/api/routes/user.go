@@ -15,3 +15,4 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	// api.Use(middleware.AuthenticateUser)
 	// api.POST()
 }
+

@@ -140,9 +140,11 @@ func _Autharization_OtpValidation_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AutharizationServer).OtpValidation(ctx, req.(*OtpValidationRequest))
+
 	}
 	return interceptor(ctx, in, info, handler)
 }
+
 
 func _Autharization_UserLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginRequest)

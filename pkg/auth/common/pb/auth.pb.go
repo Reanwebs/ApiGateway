@@ -374,6 +374,7 @@ func (x *LoginResponse) GetToken() string {
 	return ""
 }
 
+
 type ValidNameRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

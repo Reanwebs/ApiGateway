@@ -6,6 +6,7 @@ type RegisterRequestBody struct {
 	PhoneNumber string `json:"phoneNumber"`
 	UserName    string `json:"userName"`
 	Referral    string `json:"referral"`
+
 }
 
 type OtpValidation struct {

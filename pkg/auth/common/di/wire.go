@@ -19,5 +19,6 @@ func InitializeAPI(c *config.Config) (*api.Server, error) {
 		handlers.NewAuthHandler,
 		api.NewServeHTTP,
 	)
+
 	return &api.Server{}, nil
 }

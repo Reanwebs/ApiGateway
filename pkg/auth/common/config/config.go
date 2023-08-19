@@ -65,4 +65,5 @@ func generateSecretKey(length int) (string, error) {
 
 func (c *Config) GetJWTSecretKey() string {
 	return c.JwtSecretKey
+
 }
