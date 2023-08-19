@@ -15,13 +15,18 @@ import (
 
 // Injectors from wire.go:
 
-func InitializeAPI(c *config.Config) (*api.Server, error) {
-	authClient, err := client.InitClient(c)
+// InitializeAPI initializes the API server with dependencies
+func InitializeAPI() (*api.Server, error) {
+	configConfig, err := config.NewConfig()
+	if err != nil {
+		return nil, err
+	}
+	authClient, err := client.InitClient(configConfig)
 	if err != nil {
 		return nil, err
 	}
 	userHandler := handlers.NewAuthHandler(authClient)
-	server, err := api.NewServeHTTP(c, userHandler)
+	server, err := api.NewServeHTTP(configConfig, userHandler)
 	if err != nil {
 		return nil, err
 	}
