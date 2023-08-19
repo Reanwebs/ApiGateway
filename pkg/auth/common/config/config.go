@@ -17,18 +17,6 @@ type Config struct {
 
 var envs = []string{"AUTH_SRV", "PORT"}
 
-// Provider defines the methods for accessing configuration data
-type Provider interface {
-	GetAuthService() string
-	GetPort() string
-	GetJWTSecretKey() string
-}
-
-// NewConfig creates a new instance of Config
-func NewConfig() (*Config, error) {
-	return LoadConfig()
-}
-
 // LoadConfig loads the configuration from file and environment variables
 func LoadConfig() (*Config, error) {
 	config := &Config{}
@@ -77,14 +65,4 @@ func generateSecretKey(length int) (string, error) {
 
 func (c *Config) GetJWTSecretKey() string {
 	return c.JwtSecretKey
-}
-
-// GetAuthService returns the Auth service configuration
-func (c *Config) GetAuthService() string {
-	return c.AuthService
-}
-
-// GetPort returns the Port configuration
-func (c *Config) GetPort() string {
-	return c.Port
 }
