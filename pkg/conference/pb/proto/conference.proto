@@ -1,0 +1,19 @@
+syntax= "proto3";
+
+package pb;
+
+option go_package = "./pkg/conference/pb";
+
+service VideoService {
+    rpc StartConfernce (StartRequest) returns (StartResponse){}
+}
+
+message StartRequest{
+	strign UserID    = 1;
+	bool ChatPermission   bool
+	Broadcast        bool
+	ParticipantLimit uint
+	Title            string
+	Description      string
+	Interest         string
+}

@@ -41,3 +41,19 @@ type ConferencePrivateChat struct {
 	Message       string
 	Time          timestamp.Timestamp
 }
+
+type StartConference struct {
+	UserID           string
+	ChatPermission   bool
+	Broadcast        bool
+	ParticipantLimit uint
+	Title            string
+	Description      string
+	Interest         string
+}
+
+type JoinConference struct {
+	ConferenceID string
+	UserID       string
+	Link         string
+}
