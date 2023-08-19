@@ -12,7 +12,12 @@ import (
 	"github.com/google/wire"
 )
 
+// InitializeAPI initializes the API server with dependencies
 func InitializeAPI(c *config.Config) (*api.Server, error) {
-	wire.Build(client.InitClient, handlers.NewAuthHandler, api.NewServeHTTP)
+	wire.Build(
+		client.InitClient,
+		handlers.NewAuthHandler,
+		api.NewServeHTTP,
+	)
 	return &api.Server{}, nil
 }
