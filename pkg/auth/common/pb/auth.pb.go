@@ -548,7 +548,6 @@ var file_pkg_auth_common_pb_auth_proto_rawDesc = []byte{
 	0x64, 0x4e, 0x61, 0x6d, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42,
 	0x16, 0x5a, 0x14, 0x2e, 0x2f, 0x70, 0x6b, 0x67, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x2f, 0x63, 0x6f,
 	0x6d, 0x6d, 0x6f, 0x6e, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
-
 }
 
 var (
@@ -564,7 +563,6 @@ func file_pkg_auth_common_pb_auth_proto_rawDescGZIP() []byte {
 }
 
 var file_pkg_auth_common_pb_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
-
 var file_pkg_auth_common_pb_auth_proto_goTypes = []interface{}{
 	(*SignupRequest)(nil),         // 0: pb.SignupRequest
 	(*SignupResponse)(nil),        // 1: pb.SignupResponse
@@ -574,7 +572,6 @@ var file_pkg_auth_common_pb_auth_proto_goTypes = []interface{}{
 	(*LoginResponse)(nil),         // 5: pb.LoginResponse
 	(*ValidNameRequest)(nil),      // 6: pb.validNameRequest
 	(*ValidNameResponse)(nil),     // 7: pb.validNameResponse
-
 }
 var file_pkg_auth_common_pb_auth_proto_depIdxs = []int32{
 	0, // 0: pb.Autharization.UserSignup:input_type -> pb.SignupRequest

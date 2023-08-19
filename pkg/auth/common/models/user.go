@@ -19,7 +19,6 @@ type LoginRequestBody struct {
 	Password string `json:"password"`
 }
 
-
 type ValidName struct {
 	UserName string `json:"userName"`
 }
@@ -34,4 +33,3 @@ type Connection struct {
 	ConnectedUserID uint
 	ConnectionDate  string
 }
-

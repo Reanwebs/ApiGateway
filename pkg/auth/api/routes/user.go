@@ -1,6 +1,5 @@
 package routes
 
-
 import (
 	"gateway/pkg/auth/api/handlers"
 
@@ -13,6 +12,7 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	routes.POST("/otp", userHandler.OtpValidation)
 	routes.POST("/login", userHandler.UserLogin)
 	routes.POST("/valid-name", userHandler.ValidName)
-
+	// api.Use(middleware.AuthenticateUser)
+	// api.POST()
 }
 
