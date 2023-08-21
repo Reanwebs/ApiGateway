@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"fmt"
+	"gateway/pkg/utils"
 	"net/http"
 	"time"
 
@@ -48,7 +49,9 @@ func authHelper(ctx *gin.Context, user string) {
 		})
 		return
 	}
+	traceId := utils.GenerateTraceID()
 	// claim the" userId and set it on context
 	ctx.Set("userId", fmt.Sprint(claims.Id))
+	ctx.Set("traceId", traceId)
 
 }
