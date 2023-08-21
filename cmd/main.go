@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"gateway/pkg/auth/common/config"
-	"gateway/pkg/auth/common/di"
+	"gateway/pkg/common/config"
+	"gateway/pkg/common/di"
 )
 
 func main() {
