@@ -22,7 +22,12 @@ func InitializeAPI(c *config.Config) (*api.Server, error) {
 		return nil, err
 	}
 	userHandler := handlers.NewAuthHandler(authClient)
-	server, err := api.NewServeHTTP(c, userHandler)
+	conferenceClient, err := client.InitConferenceClient(c)
+	if err != nil {
+		return nil, err
+	}
+	conferenceHandler := handlers.NewConferenceHandler(conferenceClient)
+	server, err := api.NewServeHTTP(c, userHandler, conferenceHandler)
 	if err != nil {
 		return nil, err
 	}

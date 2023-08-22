@@ -14,11 +14,11 @@ type Server struct {
 	Port   string
 }
 
-func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler) (*Server, error) {
+func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler, conferenceHandler handlers.ConferenceHandler) (*Server, error) {
 	engine := gin.New()
 	engine.Use(gin.Logger())
 
-	routes.UserRoutes(engine.Group("/api"), userHandler)
+	routes.UserRoutes(engine.Group("/api"), userHandler, conferenceHandler)
 	engine.NoRoute(func(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"StatusCode": 404,
