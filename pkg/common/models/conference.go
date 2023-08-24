@@ -14,51 +14,51 @@ type StartConferenceRequest struct {
 
 type JoinConferenceRequest struct {
 	UserID       string `json:"userId"`
-	ConferenceID int32  `json:"conferenceID"`
+	ConferenceID string `json:"conferenceID"`
 }
 
 type AcceptJoiningRequest struct {
 	UserID       string `json:"userId"`
-	ConferenceID int32  `json:"conferenceID"`
+	ConferenceID string `json:"conferenceID"`
 }
 
 type DeclineJoiningRequest struct {
 	UserID       string `json:"userId"`
-	ConferenceID int32  `json:"conferenceID"`
+	ConferenceID string `json:"conferenceID"`
 }
 
 type RemoveParticipantRequest struct {
 	UserID       string `json:"userId"`
-	ConferenceID int32  `json:"conferenceID"`
+	ConferenceID string `json:"conferenceID"`
 	Block        bool   `json:"block"`
 }
 
 type ToggleCameraRequest struct {
 	UserID       string `json:"userID"`
-	ConferenceID int32  `json:"conferenceID"`
+	ConferenceID string `json:"conferenceID"`
 }
 
 type ToggleMicRequest struct {
 	UserID       string `json:"userId"`
-	ConferenceID int32  `json:"conferenceID"`
+	ConferenceID string `json:"conferenceID"`
 }
 
 type ToggleParticipantCameraRequest struct {
 	UserID       string `json:"userID"`
-	ConferenceID int32  `json:"conferenceID"`
+	ConferenceID string `json:"conferenceID"`
 }
 
 type ToggleParticipantMicRequest struct {
 	UserID       string `json:"userID"`
-	ConferenceID int32  `json:"conferenceID"`
+	ConferenceID string `json:"conferenceID"`
 }
 
 type LeaveConferenceRequest struct {
 	UserID       string `json:"userID"`
-	ConferenceID int32  `json:"conferenceID"`
+	ConferenceID string `json:"conferenceID"`
 }
 
 type EndConferenceRequest struct {
 	UserID       string `json:"userID"`
-	ConferenceID int32  `json:"conferenceID"`
+	ConferenceID string `json:"conferenceID"`
 }

@@ -3,14 +3,19 @@ package models
 type RegisterRequestBody struct {
 	Email       string `json:"email"`
 	Password    string `json:"password"`
+	CPassword   string `json:"cPassword"`
 	PhoneNumber string `json:"phoneNumber"`
 	UserName    string `json:"userName"`
 	Referral    string `json:"referral"`
+	Otp         string `json:"otp"`
 }
 
 type OtpValidation struct {
-	Otp         string `json:"otp"`
 	PhoneNumber string `json:"phoneNumber"`
+	UserName    string `json:"userName"`
+	Email       string `json:"email"`
+	Password    string `json:"password"`
+	CPassword   string `json:"cPassword"`
 }
 
 type LoginRequestBody struct {

@@ -19,7 +19,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AutharizationClient interface {
 	UserSignup(ctx context.Context, in *SignupRequest, opts ...grpc.CallOption) (*SignupResponse, error)
-	OtpValidation(ctx context.Context, in *OtpValidationRequest, opts ...grpc.CallOption) (*OtpValidationResponse, error)
+	OtpRequest(ctx context.Context, in *OtpSignUpRequest, opts ...grpc.CallOption) (*OtpSignUpResponse, error)
 	UserLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	ValidName(ctx context.Context, in *ValidNameRequest, opts ...grpc.CallOption) (*ValidNameResponse, error)
 }
@@ -41,9 +41,9 @@ func (c *autharizationClient) UserSignup(ctx context.Context, in *SignupRequest,
 	return out, nil
 }
 
-func (c *autharizationClient) OtpValidation(ctx context.Context, in *OtpValidationRequest, opts ...grpc.CallOption) (*OtpValidationResponse, error) {
-	out := new(OtpValidationResponse)
-	err := c.cc.Invoke(ctx, "/pb.Autharization/OtpValidation", in, out, opts...)
+func (c *autharizationClient) OtpRequest(ctx context.Context, in *OtpSignUpRequest, opts ...grpc.CallOption) (*OtpSignUpResponse, error) {
+	out := new(OtpSignUpResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/OtpRequest", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -73,7 +73,7 @@ func (c *autharizationClient) ValidName(ctx context.Context, in *ValidNameReques
 // for forward compatibility
 type AutharizationServer interface {
 	UserSignup(context.Context, *SignupRequest) (*SignupResponse, error)
-	OtpValidation(context.Context, *OtpValidationRequest) (*OtpValidationResponse, error)
+	OtpRequest(context.Context, *OtpSignUpRequest) (*OtpSignUpResponse, error)
 	UserLogin(context.Context, *LoginRequest) (*LoginResponse, error)
 	ValidName(context.Context, *ValidNameRequest) (*ValidNameResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
@@ -86,8 +86,8 @@ type UnimplementedAutharizationServer struct {
 func (UnimplementedAutharizationServer) UserSignup(context.Context, *SignupRequest) (*SignupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserSignup not implemented")
 }
-func (UnimplementedAutharizationServer) OtpValidation(context.Context, *OtpValidationRequest) (*OtpValidationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method OtpValidation not implemented")
+func (UnimplementedAutharizationServer) OtpRequest(context.Context, *OtpSignUpRequest) (*OtpSignUpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OtpRequest not implemented")
 }
 func (UnimplementedAutharizationServer) UserLogin(context.Context, *LoginRequest) (*LoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserLogin not implemented")
@@ -126,20 +126,20 @@ func _Autharization_UserSignup_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Autharization_OtpValidation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(OtpValidationRequest)
+func _Autharization_OtpRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OtpSignUpRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AutharizationServer).OtpValidation(ctx, in)
+		return srv.(AutharizationServer).OtpRequest(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.Autharization/OtpValidation",
+		FullMethod: "/pb.Autharization/OtpRequest",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AutharizationServer).OtpValidation(ctx, req.(*OtpValidationRequest))
+		return srv.(AutharizationServer).OtpRequest(ctx, req.(*OtpSignUpRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,8 +192,8 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Autharization_UserSignup_Handler,
 		},
 		{
-			MethodName: "OtpValidation",
-			Handler:    _Autharization_OtpValidation_Handler,
+			MethodName: "OtpRequest",
+			Handler:    _Autharization_OtpRequest_Handler,
 		},
 		{
 			MethodName: "UserLogin",

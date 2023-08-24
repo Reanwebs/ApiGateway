@@ -37,13 +37,13 @@ func (h *UserHandler) UserSignup(ctx *gin.Context) {
 	ctx.JSON(int(res.Status), &res)
 }
 
-func (h *UserHandler) OtpValidation(ctx *gin.Context) {
+func (h *UserHandler) OtpRequest(ctx *gin.Context) {
 	body := models.OtpValidation{}
 	if err := ctx.BindJSON(&body); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-	res, err := h.Client.OtpValidation(ctx, body)
+	res, err := h.Client.OtpRequest(ctx, body)
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadGateway, err)
 		return
@@ -62,7 +62,7 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 
 	res, err := h.Client.UserLogin(ctx, body)
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadGateway, err)
+		ctx.JSON(http.StatusBadGateway, err)
 		return
 	}
 
@@ -79,9 +79,13 @@ func (h *UserHandler) ValidName(ctx *gin.Context) {
 
 	res, err := h.Client.ValidName(ctx, body)
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadGateway, err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "User name not available",
+			"error":   err.Error(),
+		})
 		return
 	}
+
 	ctx.JSON(http.StatusOK, &res)
 
 }

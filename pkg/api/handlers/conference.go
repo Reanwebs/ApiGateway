@@ -36,7 +36,7 @@ func (h *ConferenceHandler) StartConference(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(int(res.ConferenceID), &res)
+	ctx.JSON(http.StatusCreated, &res)
 }
 
 func (h *ConferenceHandler) JoinConference(ctx *gin.Context) {

@@ -34,8 +34,11 @@ func (c *authClient) UserSignup(ctx context.Context, request models.RegisterRequ
 	res, err := c.Server.UserSignup(ctx, &pb.SignupRequest{
 		Email:       request.Email,
 		Password:    request.Password,
+		CPassword:   request.CPassword,
 		PhoneNumber: request.PhoneNumber,
-		UserName:    request.UserName,
+		Username:    request.UserName,
+		Referral:    request.Referral,
+		Otp:         request.Otp,
 	})
 	if err != nil {
 		return nil, err
@@ -43,10 +46,13 @@ func (c *authClient) UserSignup(ctx context.Context, request models.RegisterRequ
 	return res, nil
 }
 
-func (c *authClient) OtpValidation(ctx context.Context, request models.OtpValidation) (*pb.OtpValidationResponse, error) {
-	res, err := c.Server.OtpValidation(ctx, &pb.OtpValidationRequest{
-		Otp:         request.Otp,
-		Phonenumber: request.PhoneNumber,
+func (c *authClient) OtpRequest(ctx context.Context, request models.OtpValidation) (*pb.OtpSignUpResponse, error) {
+	res, err := c.Server.OtpRequest(ctx, &pb.OtpSignUpRequest{
+		Username:    request.UserName,
+		Email:       request.Email,
+		PhoneNumber: request.PhoneNumber,
+		Password:    request.Password,
+		CPassword:   request.CPassword,
 	})
 	if err != nil {
 		return nil, err
