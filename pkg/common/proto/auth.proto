@@ -50,7 +50,7 @@ message LoginRequest {
 message LoginResponse {
     int64 status = 1;
     string error = 2;
-    string token = 3;
+    int32 token = 3;
     string message = 4;
 }
 
