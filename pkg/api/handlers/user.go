@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"gateway/pkg/common/client/interfaces"
+	middleware "gateway/pkg/common/midleware"
 	"gateway/pkg/common/models"
 	"net/http"
 
@@ -64,6 +66,15 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, err)
 		return
+	}
+
+	// setup JWT
+	ok := middleware.JwtCookieSetup(ctx, "user-auth", uint(res.Token))
+	if !ok {
+		res := errors.New("failed to login")
+		ctx.JSON(http.StatusInternalServerError, res)
+		return
+
 	}
 
 	ctx.JSON(http.StatusCreated, &res)
