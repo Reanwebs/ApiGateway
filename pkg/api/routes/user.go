@@ -2,6 +2,7 @@ package routes
 
 import (
 	"gateway/pkg/api/handlers"
+	middleware "gateway/pkg/common/midleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,7 +16,7 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler, conferen
 
 	routes.POST("/healthCheck")
 	confernce := api.Group("/conference")
-	// confernce.Use(middleware.AuthenticateUser)
+	confernce.Use(middleware.AuthenticateUser)
 	confernce.POST("/startConference", conferenceHandler.StartConference)
 	confernce.POST("/joinConference", conferenceHandler.JoinConference)
 	confernce.POST("/acceptJoining", conferenceHandler.AcceptJoining)
