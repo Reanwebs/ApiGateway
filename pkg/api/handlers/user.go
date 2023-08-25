@@ -128,3 +128,4 @@ func (h *UserHandler) LogoutUser(c *gin.Context) {
 		"message": "Log out successful",
 	})
 }
+
