@@ -22,6 +22,7 @@ type AutharizationClient interface {
 	OtpRequest(ctx context.Context, in *OtpSignUpRequest, opts ...grpc.CallOption) (*OtpSignUpResponse, error)
 	UserLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	ValidName(ctx context.Context, in *ValidNameRequest, opts ...grpc.CallOption) (*ValidNameResponse, error)
+	ResendOtp(ctx context.Context, in *ResendOtpRequest, opts ...grpc.CallOption) (*ResendOtpResponse, error)
 }
 
 type autharizationClient struct {
@@ -68,6 +69,15 @@ func (c *autharizationClient) ValidName(ctx context.Context, in *ValidNameReques
 	return out, nil
 }
 
+func (c *autharizationClient) ResendOtp(ctx context.Context, in *ResendOtpRequest, opts ...grpc.CallOption) (*ResendOtpResponse, error) {
+	out := new(ResendOtpResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ResendOtp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
@@ -76,6 +86,7 @@ type AutharizationServer interface {
 	OtpRequest(context.Context, *OtpSignUpRequest) (*OtpSignUpResponse, error)
 	UserLogin(context.Context, *LoginRequest) (*LoginResponse, error)
 	ValidName(context.Context, *ValidNameRequest) (*ValidNameResponse, error)
+	ResendOtp(context.Context, *ResendOtpRequest) (*ResendOtpResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -94,6 +105,9 @@ func (UnimplementedAutharizationServer) UserLogin(context.Context, *LoginRequest
 }
 func (UnimplementedAutharizationServer) ValidName(context.Context, *ValidNameRequest) (*ValidNameResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidName not implemented")
+}
+func (UnimplementedAutharizationServer) ResendOtp(context.Context, *ResendOtpRequest) (*ResendOtpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ResendOtp not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -180,6 +194,24 @@ func _Autharization_ValidName_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Autharization_ResendOtp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResendOtpRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ResendOtp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ResendOtp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ResendOtp(ctx, req.(*ResendOtpRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -202,6 +234,10 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "validName",
 			Handler:    _Autharization_ValidName_Handler,
+		},
+		{
+			MethodName: "ResendOtp",
+			Handler:    _Autharization_ResendOtp_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
