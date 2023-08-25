@@ -32,7 +32,10 @@ func (h *UserHandler) UserSignup(ctx *gin.Context) {
 	res, err := h.Client.UserSignup(context.Background(), body)
 
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadGateway, err)
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "signup failed",
+			"error":   err.Error(),
+		})
 		return
 	}
 
@@ -41,13 +44,17 @@ func (h *UserHandler) UserSignup(ctx *gin.Context) {
 
 func (h *UserHandler) OtpRequest(ctx *gin.Context) {
 	body := models.OtpValidation{}
+
 	if err := ctx.BindJSON(&body); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 	res, err := h.Client.OtpRequest(ctx, body)
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadGateway, err)
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "otp sending failed",
+			"error":   err.Error(),
+		})
 		return
 	}
 	ctx.JSON(http.StatusOK, &res)
@@ -64,7 +71,10 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 
 	res, err := h.Client.UserLogin(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, err)
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "failed to login",
+			"error":   err.Error(),
+		})
 		return
 	}
 
