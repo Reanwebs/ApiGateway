@@ -13,6 +13,7 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler, conferen
 	routes.POST("/otp", userHandler.OtpRequest)
 	routes.POST("/login", userHandler.UserLogin)
 	routes.POST("/valid-name", userHandler.ValidName)
+	routes.POST("/logout", userHandler.LogoutUser)
 
 	routes.POST("/healthCheck")
 	confernce := api.Group("/conference")
