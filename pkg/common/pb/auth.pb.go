@@ -468,7 +468,7 @@ func (x *LoginResponse) GetUid() string {
 	if x != nil {
 		return x.Uid
 	}
-	return ""
+	return 0
 }
 
 func (x *LoginResponse) GetMessage() string {
