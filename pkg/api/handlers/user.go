@@ -100,3 +100,24 @@ func (h *UserHandler) ValidName(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 
 }
+
+func (h *UserHandler) ResendOtp(ctx *gin.Context) {
+	body := models.ResendOtp{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ResendOtp(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "resending otp failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+
+}

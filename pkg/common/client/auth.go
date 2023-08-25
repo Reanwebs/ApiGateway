@@ -82,3 +82,13 @@ func (c *authClient) ValidName(ctx context.Context, request models.ValidName) (*
 	}
 	return res, nil
 }
+
+func (c *authClient) ResendOtp(ctx context.Context, request models.ResendOtp) (*pb.ResendOtpResponse, error) {
+	res, err := c.Server.ResendOtp(ctx, &pb.ResendOtpRequest{
+		PhoneNumber: request.PhoneNumber,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

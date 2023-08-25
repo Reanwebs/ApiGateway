@@ -27,6 +27,10 @@ type ValidName struct {
 	UserName string `json:"userName"`
 }
 
+type ResendOtp struct {
+	PhoneNumber string `json:"phoneNumber"`
+}
+
 type Interests struct {
 	Interest   string
 	InterestID string

@@ -11,4 +11,5 @@ type AuthClient interface {
 	OtpRequest(context.Context, models.OtpValidation) (*pb.OtpSignUpResponse, error)
 	UserLogin(context.Context, models.LoginRequestBody) (*pb.LoginResponse, error)
 	ValidName(context.Context, models.ValidName) (*pb.ValidNameResponse, error)
+	ResendOtp(context.Context, models.ResendOtp) (*pb.ResendOtpResponse, error)
 }
