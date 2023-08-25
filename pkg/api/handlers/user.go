@@ -70,6 +70,7 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 
 	// setup JWT
 	ok := middleware.JwtCookieSetup(ctx, "user-auth", uid)
+
 	if !ok {
 		res := errors.New("failed to login")
 		ctx.JSON(http.StatusInternalServerError, res)
