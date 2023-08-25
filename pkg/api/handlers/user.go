@@ -69,8 +69,7 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 	}
 
 	// setup JWT
-	ok := middleware.JwtCookieSetup(ctx, "user-auth", uid)
-
+	ok := middleware.JwtCookieSetup(ctx, "user-auth", res.Uid)
 	if !ok {
 		res := errors.New("failed to login")
 		ctx.JSON(http.StatusInternalServerError, res)
@@ -122,3 +121,11 @@ func (h *UserHandler) ResendOtp(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 
 }
+
+func (h *UserHandler) LogoutUser(c *gin.Context) {
+	c.SetCookie("user-auth", "", -1, "", "", false, true)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Log out successful",
+	})
+}
+

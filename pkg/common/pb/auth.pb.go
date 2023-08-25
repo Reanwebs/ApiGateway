@@ -395,7 +395,6 @@ type LoginResponse struct {
 	Error       string `protobuf:"bytes,5,opt,name=error,proto3" json:"error,omitempty"`
 	Uid         string `protobuf:"bytes,6,opt,name=uid,proto3" json:"uid,omitempty"`
 	Message     string `protobuf:"bytes,7,opt,name=message,proto3" json:"message,omitempty"`
-
 }
 
 func (x *LoginResponse) Reset() {
@@ -466,7 +465,6 @@ func (x *LoginResponse) GetError() string {
 }
 
 func (x *LoginResponse) GetUid() string {
-
 	if x != nil {
 		return x.Uid
 	}
