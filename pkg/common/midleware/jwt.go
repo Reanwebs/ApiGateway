@@ -11,7 +11,7 @@ import (
 )
 
 // JwtCookieSetup sets up a JWT cookie
-func JwtCookieSetup(c *gin.Context, name string, userId uint) bool {
+func JwtCookieSetup(c *gin.Context, name string, userId string) bool {
 	// Get the configuration instance
 	cfg, err := config.LoadConfig()
 	if err != nil {
