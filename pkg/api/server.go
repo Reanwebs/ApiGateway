@@ -18,13 +18,16 @@ func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler, conference
 	engine := gin.New()
 	engine.Use(gin.Logger())
 
-	routes.UserRoutes(engine.Group("/api"), userHandler, conferenceHandler)
+	routes.UserRoutes(engine.Group("/api"), userHandler)
+	routes.ConferenceRoutes(engine.Group("/api"), conferenceHandler)
+
 	engine.NoRoute(func(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"StatusCode": 404,
 			"msg":        "invalid url",
 		})
 	})
+
 	return &Server{
 		Engine: engine,
 		Port:   c.Port,

@@ -1,8 +1,6 @@
 package config
 
 import (
-	"crypto/rand"
-	"encoding/base64"
 	"fmt"
 	"os"
 
@@ -36,15 +34,7 @@ func LoadConfig() (*Config, error) {
 	}
 
 	secretKey := os.Getenv("JWT_SECRET_KEY")
-	if secretKey == "" {
-		secretKey, err = generateSecretKey(32)
-		if err != nil {
-			return nil, fmt.Errorf("error generating secret key: %w", err)
-		}
-		config.JwtSecretKey = secretKey
-	} else {
-		config.JwtSecretKey = secretKey
-	}
+	config.JwtSecretKey = secretKey
 
 	err = viper.Unmarshal(&config)
 	if err != nil {
@@ -54,15 +44,16 @@ func LoadConfig() (*Config, error) {
 	return config, nil
 }
 
-func generateSecretKey(length int) (string, error) {
-	randomBytes := make([]byte, length)
-	_, err := rand.Read(randomBytes)
-	if err != nil {
-		return "", err
-	}
-	secretKey := base64.URLEncoding.EncodeToString(randomBytes)
-	return secretKey, nil
-}
+// func generateSecretKey(length int) (string, error) {
+// 	randomBytes := make([]byte, length)
+// 	_, err := rand.Read(randomBytes)
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	secretKey := base64.URLEncoding.EncodeToString(randomBytes)
+// 	fmt.Println("secretKey\t", secretKey)
+// 	return secretKey, nil
+// }
 
 func (c *Config) GetJWTSecretKey() string {
 	return c.JwtSecretKey

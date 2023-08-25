@@ -1,165 +1,308 @@
 syntax = "proto3";
 
-option go_package = "./pkg/common/pb";
+option go_package = "./pkg/common/pb/conference";
 
-package pb;
+package conference;
 
 service Conference{
-  rpc HealthCheck(Request) returns (Response);
-  rpc StartConference (StartConferenceRequest) returns (StartConferenceResponse){}
-  rpc JoinConference (JoinConferenceRequest) returns (JoinConferenceResponse){}
-  rpc AcceptJoining (AcceptJoiningRequest) returns (AcceptJoiningResponse){}
-  rpc DeclineJoining (DeclineJoiningRequest) returns (DeclineJoiningResponse){}
-  rpc LeaveConference(LeaveConferenceRequest)returns (LeaveConferenceResponse){}
-  rpc RemoveParticipant (RemoveParticipantRequest) returns (RemoveParticipantResponse){}
-  rpc ToggleCamera (ToggleCameraRequest) returns (ToggleCameraResponse){}
-  rpc ToggleMic (ToggleMicRequest) returns (ToggleMicResponse){}
-  rpc ToggleParticipantCamera(ToggleParticipantCameraRequest) returns (ToggleParticipantCameraResponse){}
-  rpc ToggleParticipantMic(ToggleParticipantMicRequest) returns (ToggleParticipantMicResponse){}
-  rpc EndConference(EndConferenceRequest) returns (EndConferenceResponse){}
-}
-
-
-message Request {
-  string data = 1;
-}
-
-message Response {
-  string result = 1;
-}
-
-
-// Start Conference
-
-message StartConferenceRequest {
-    string userID  = 1;
-    string type    = 2;
-    string title   = 3;
-    string description = 4;
-    string interest    = 5;
-    bool   recording   = 6;
-    bool   chat        = 7;
-    bool   broadcast   = 8;
-    int32  participantlimit = 9;
- }
-
-message StartConferenceResponse {
-   string link = 1;
-   string offer= 2;
-   string  conferenceID = 3;
-
- }
-
-//  Join Conference
-
- message JoinConferenceRequest {
-   string userID       = 1;
-   string  conferenceID = 2;
- }
-
-message JoinConferenceResponse {
-   string result = 1;
- }
-
-//  AcceptJoinRequest
-
- message AcceptJoiningRequest {
-   string userID = 1;
-   string conferenceID = 2;
-}
-
-message AcceptJoiningResponse {
-   string result = 1;
-}
-
-// Decline Joining
-message DeclineJoiningRequest {
-   string userID = 1;
-   string conferenceID = 2;
-}
-
-message DeclineJoiningResponse {
+    rpc HealthCheck(Request) returns (Response);
+    rpc ScheduleConference(ScheduleConferenceRequest) returns (ScheduleConferenceResponse){}
+    rpc StartPrivateConference (StartPrivateConferenceRequest) returns (StartPrivateConferenceResponse){}
+    rpc StartGroupConference (StartGroupConferenceRequest) returns (StartGroupConferenceResponse){}
+    rpc StartPublicConference (StartPublicConferenceRequest) returns (StartPublicConferenceResponse){}
+    rpc JoinPrivateConference (JoinPrivateConferenceRequest) returns (JoinPrivateConferenceResponse){}
+    rpc JoinGroupConfernce (JoinGroupConferenceRequest) returns (JoinGroupConferenceResponse){}
+    rpc JoinPublicConference (JoinPublicConferenceRequest) returns (JoinPublicConferenceResponse){}
+    rpc AcceptJoining (AcceptJoiningRequest) returns (AcceptJoiningResponse){}
+    rpc DeclineJoining (DeclineJoiningRequest) returns (DeclineJoiningResponse){}
+    rpc LeavePrivateConference(LeavePrivateConferenceRequest)returns (LeavePrivateConferenceResponse){}
+    rpc LeaveGroupConference(LeaveGroupConferenceRequest)returns (LeaveGroupConferenceResponse){}
+    rpc LeavePublicConference(LeavePublicConferenceRequest)returns (LeavePublicConferenceResponse){}
+    rpc RemovePrivateParticipant (RemovePrivateParticipantRequest) returns (RemovePrivateParticipantResponse){}
+    rpc RemoveGroupParticipant (RemoveGroupParticipantRequest) returns (RemoveGroupParticipantResponse){}
+    rpc RemovePublicParticipant (RemovePublicParticipantRequest) returns (RemovePublicParticipantResponse){}
+    rpc EndPrivateConference(EndPrivateConferenceRequest) returns (EndPrivateConferenceResponse){}
+    rpc EndGroupConference(EndGroupConferenceRequest) returns (EndGroupConferenceResponse){}
+    rpc EndPublicConference(EndPublicConferenceRequest) returns (EndPublicConferenceResponse){}
+    rpc ToggleCamera (ToggleCameraRequest) returns (ToggleCameraResponse){}
+    rpc ToggleMic (ToggleMicRequest) returns (ToggleMicResponse){}
+    rpc ToggleParticipantCamera(ToggleParticipantCameraRequest) returns (ToggleParticipantCameraResponse){}
+    rpc ToggleParticipantMic(ToggleParticipantMicRequest) returns (ToggleParticipantMicResponse){}
+    
+  }
+  
+  
+  message Request {
+    string data = 1;
+  }
+  
+  message Response {
     string result = 1;
-}
-
-// RemoveParticipant
-
-message RemoveParticipantRequest {
-    string userID = 1;
-    string conferenceID = 2;
-    bool   block        = 3;
-}
-
-message RemoveParticipantResponse {
-    string result = 1;
-}
-
-
-// ToggleCamera
-
-message ToggleCameraRequest {
-    string userID = 1;
-    string conferenceID = 2;
-}
-
-
-message ToggleCameraResponse {
-    string result = 1;
-}
-
-// ToggleMic
-
-message ToggleMicRequest {
-    string userID = 1;
-    string conferenceID = 2;
-}
-
-message ToggleMicResponse {
-    string result = 1;
-}
-
-// ToggleParticipantCamera
-
-message ToggleParticipantCameraRequest {
-    string userID = 1;
-    string conferenceID = 2;
-}
-
-message ToggleParticipantCameraResponse {
-    string result = 1;
-}
-
-
-// ToggleParticipantMic
-
-message ToggleParticipantMicRequest {
-    string userID = 1;
-    string conferenceID = 2;
-}
-
-message ToggleParticipantMicResponse {
-    string result = 1;
-}
-
-// LeaveConference
-
-message LeaveConferenceRequest {
-    string userID = 1;
-    string conferenceID = 2;
-}
-
-message LeaveConferenceResponse {
-    string result = 1;
-}
-
-
-// EndConference
-
-message EndConferenceRequest {
-    string userID = 1;
-    string conferenceID = 2;
-}
-
-message EndConferenceResponse {
-    string result = 1;
-}
+  }
+  
+  message ScheduleConferenceRequest {
+      string userID  = 1;
+      string type    = 2;
+      string title   = 3;
+      string description = 4;
+      string interest    = 5;
+      bool   recording   = 6;
+      bool   chat        = 7;
+      bool   broadcast   = 8;
+      int32  participantlimit = 9;
+      string date          = 10;
+      int64  time_seconds = 11;
+      int32  time_nanos = 12;
+   }
+  
+  
+  message ScheduleConferenceResponse{
+      string Result = 1;
+      string ConferenceID = 2;
+  }
+  
+  // Start Conference
+  
+  message StartPrivateConferenceRequest {
+      string userID  = 1;
+      string title   = 3;
+      string description = 4;
+      string interest    = 5;
+      bool   recording   = 6;
+      bool   chat        = 7;
+      bool   broadcast   = 8;
+      int32  participantlimit = 9;
+   }
+  
+  message StartPrivateConferenceResponse {
+     string  Result = 1;
+     string  conferenceID = 2;
+  
+   }
+  
+  
+   message StartGroupConferenceRequest{
+      string userID  = 1;
+      string groupID = 2;
+      string title   = 3;
+      string description = 4;
+      string interest    = 5;
+      bool   recording   = 6;
+      bool   chat        = 7;
+      bool   broadcast   = 8;
+      int32  participantlimit = 9;
+   }
+  
+   message StartGroupConferenceResponse{
+      string Result = 1;
+      string ConferenceID = 2;
+   }
+  
+  message StartPublicConferenceRequest{
+      string userID  = 1;
+      string title   = 3;
+      string description = 4;
+      string interest    = 5;
+      string joinType    = 6;
+      bool   recording   = 7;
+      bool   chat        = 8;
+      bool   broadcast   = 9;
+      int32  participantlimit = 10;
+  }
+  
+  message StartPublicConferenceResponse{
+      string Result = 1;
+      string ConferenceID = 2;
+  }
+  
+  //  Join Conference
+  
+   message JoinPrivateConferenceRequest {
+     string userID       = 1;
+     string  conferenceID = 2;
+   }
+  
+  message JoinPrivateConferenceResponse {
+     string result = 1;
+   }
+  
+  message JoinGroupConferenceRequest{
+     string userID       = 1;
+     string groupID      = 2;
+     string  conferenceID = 3;
+  }
+  
+  message JoinGroupConferenceResponse {
+     string result = 1;
+   }
+  
+  message JoinPublicConferenceRequest{
+     string userID       = 1;
+     string  conferenceID = 2;
+  }
+  
+  message JoinPublicConferenceResponse{
+      string result = 1;
+  }
+  
+  
+  //  AcceptJoinRequest
+  
+   message AcceptJoiningRequest {
+     string userID = 1;
+     string hostID = 2;
+     string conferenceID = 3;
+  }
+  
+  message AcceptJoiningResponse {
+     string result = 1;
+  }
+  
+  // Decline Joining
+  message DeclineJoiningRequest {
+     string userID = 1;
+     string conferenceID = 2;
+  }
+  
+  message DeclineJoiningResponse {
+      string result = 1;
+  }
+  
+  // RemoveParticipant
+  
+  message RemovePrivateParticipantRequest {
+      string userID = 1;
+      string hostID = 2;
+      string conferenceID = 3;
+      bool   block        = 4;
+  }
+  
+  message RemovePrivateParticipantResponse {
+      string result = 1;
+  }
+  
+  message RemoveGroupParticipantRequest {
+      string userID = 1;
+      string hostID = 2;
+      string conferenceID = 3;
+      bool   block        = 4;
+  }
+  
+  message RemoveGroupParticipantResponse {
+      string result = 1;
+  }
+  
+  message RemovePublicParticipantRequest {
+      string userID = 1;
+      string hostID = 2;
+      string conferenceID = 3;
+      bool   block        = 4;
+  }
+  
+  message RemovePublicParticipantResponse {
+      string result = 1;
+  }
+  
+  
+  // ToggleCamera
+  
+  message ToggleCameraRequest {
+      string userID = 1;
+      string conferenceID = 2;
+  }
+  
+  
+  message ToggleCameraResponse {
+      string result = 1;
+  }
+  
+  // ToggleMic
+  
+  message ToggleMicRequest {
+      string userID = 1;
+      string conferenceID = 2;
+  }
+  
+  message ToggleMicResponse {
+      string result = 1;
+  }
+  
+  // ToggleParticipantCamera
+  
+  message ToggleParticipantCameraRequest {
+      string userID = 1;
+      string conferenceID = 2;
+  }
+  
+  message ToggleParticipantCameraResponse {
+      string result = 1;
+  }
+  
+  
+  // ToggleParticipantMic
+  
+  message ToggleParticipantMicRequest {
+      string userID = 1;
+      string conferenceID = 2;
+  }
+  
+  message ToggleParticipantMicResponse {
+      string result = 1;
+  }
+  
+  // LeaveConference
+  
+  message LeavePrivateConferenceRequest {
+      string userID = 1;
+      string conferenceID = 2;
+  }
+  
+  message LeavePrivateConferenceResponse {
+      string result = 1;
+  }
+  
+  message LeaveGroupConferenceRequest {
+      string userID = 1;
+      string conferenceID = 2;
+  }
+  
+  message LeaveGroupConferenceResponse {
+      string result = 1;
+  }
+  
+  message LeavePublicConferenceRequest {
+      string userID = 1;
+      string conferenceID = 2;
+  }
+  
+  message LeavePublicConferenceResponse {
+      string result = 1;
+  }
+  // EndConference
+  
+  message EndPrivateConferenceRequest {
+      string userID = 1;
+      string conferenceID = 2;
+  }
+  
+  message EndPrivateConferenceResponse {
+      string result = 1;
+  }
+  
+  message EndGroupConferenceRequest {
+      string userID = 1;
+      string conferenceID = 2;
+  }
+  
+  message EndGroupConferenceResponse {
+      string result = 1;
+  }
+  
+  message EndPublicConferenceRequest {
+      string userID = 1;
+      string conferenceID = 2;
+  }
+  
+  message EndPublicConferenceResponse {
+      string result = 1;
+  }
