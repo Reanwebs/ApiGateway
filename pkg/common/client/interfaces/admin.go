@@ -12,4 +12,5 @@ type AdminClient interface {
 	ManageUser(context.Context, models.ManageUserRequest) (*pb.ManageUserResponse, error)
 	GetInterest(context.Context) (*pb.GetInterestResponse, error)
 	AddInterest(context.Context, models.AddInterestRequest) (*pb.AddInterestResponse, error)
+	ManageInterest(context.Context, models.ManageInterestRequest) (*pb.ManageInterestResponse, error)
 }

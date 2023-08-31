@@ -75,3 +75,13 @@ func (c *AdminClient) AddInterest(ctx context.Context, request models.AddInteres
 	}
 	return res, nil
 }
+
+func (c *AdminClient) ManageInterest(ctx context.Context, request models.ManageInterestRequest) (*pb.ManageInterestResponse, error) {
+	res, err := c.Server.ManageInterest(ctx, &pb.ManageInterestRequest{
+		Id: request.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
