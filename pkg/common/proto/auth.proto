@@ -6,11 +6,20 @@ option go_package = "./pkg/common/pb";
 
 
 service Autharization {
-    rpc UserSignup (SignupRequest) returns (SignupResponse) {}
-    rpc OtpRequest (OtpSignUpRequest) returns (OtpSignUpResponse) {}
-    rpc UserLogin (LoginRequest) returns (LoginResponse) {}
-    rpc validName (validNameRequest) returns (validNameResponse) {}
+    rpc UserSignup (SignupRequest) returns (SignupResponse){}
+    rpc OtpRequest (OtpSignUpRequest) returns (OtpSignUpResponse){}
+    rpc UserLogin (LoginRequest) returns (LoginResponse){}
+    rpc validName (validNameRequest) returns (validNameResponse){}
     rpc ResendOtp (resendOtpRequest) returns (resendOtpResponse){}
+    rpc ForgotPasswordOtp(ForgotPasswordOtpRequest) returns (ForgotPasswordOtpResponse){}
+    rpc ForgotPasswordValidateOtp(ForgotPasswordValidateOtpRequest) returns (ForgotPasswordValidateOtpResponse){}
+    rpc ForgotPasswordChangePassword(ForgotPasswordChangePasswordRequest) returns (ForgotPasswordChangePasswordResponse){}
+    rpc AdminLogin(AdminLoginRequest) returns (AdminLoginResponse) {}
+    rpc GetUsers (GetUsersRequest) returns (GetUsersResponse) {}
+    rpc ManageUser (ManageUserRequest) returns (ManageUserResponse){}
+    rpc GetInterest(GetInterestRequest) returns (GetInterestResponse){}
+    rpc AddInterest(AddInterestRequest) returns (AddInterestResponse) {}
+
 }
 
 message SignupRequest {
@@ -75,6 +84,106 @@ message resendOtpRequest{
 
 message resendOtpResponse{
     int64 status = 1;
+    string message = 2;
+    string error = 3;
+}
+
+
+message ForgotPasswordOtpRequest{
+    string phoneNumber = 1;
+}
+
+message ForgotPasswordOtpResponse{
+    int64 status =1;
+    string message = 2;
+    string error = 3;
+}
+
+message ForgotPasswordValidateOtpRequest{
+    string phoneNumber =1;
+    string otp = 2;
+}
+message ForgotPasswordValidateOtpResponse{
+    int64 status =1;
+    string message =2;
+    string error = 3;
+}
+
+
+message ForgotPasswordChangePasswordRequest{
+    string phoneNumber =1;
+    string password = 2;
+}
+
+message ForgotPasswordChangePasswordResponse{
+    int64 status = 1;
+    string message = 2;
+    string error = 3;
+}
+
+message AdminLoginRequest{
+    string email = 1;
+    string password = 2;
+}
+
+message AdminLoginResponse{
+    int64 status = 1;
+    string uid = 2;
+    string message = 3;
+    string error = 4;
+}
+
+message GetUsersRequest{
+
+}
+
+message user{
+    string id = 1;
+    string userName =2;
+    string email = 3;
+    string phoneNumber = 4;
+}
+
+message GetUsersResponse{
+    int32 status = 1;
+    repeated user users = 2;
+    string message = 3;
+    string error = 4;
+}
+
+message ManageUserRequest{
+    string id = 1;
+}
+
+message ManageUserResponse{
+    int32 status = 1;
+    string message = 2;
+    string error = 3;
+}
+
+message GetInterestRequest{
+
+}
+
+message interest{
+    string id =1;
+    string interest = 2;
+    string status = 3;
+}
+
+message GetInterestResponse{
+    int64 status = 1;
+    repeated interest interests = 2;
+    string message = 3;
+    string error = 4;
+}
+
+message AddInterestRequest{
+    string interest = 1;
+}
+
+message AddInterestResponse{
+    int32 status = 1;
     string message = 2;
     string error = 3;
 }

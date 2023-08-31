@@ -12,4 +12,7 @@ type AuthClient interface {
 	UserLogin(context.Context, models.LoginRequestBody) (*pb.LoginResponse, error)
 	ValidName(context.Context, models.ValidName) (*pb.ValidNameResponse, error)
 	ResendOtp(context.Context, models.ResendOtp) (*pb.ResendOtpResponse, error)
+	ForgotPasswordOtp(context.Context, models.ForgotPasswordOtpRequest) (*pb.ForgotPasswordOtpResponse, error)
+	ForgotPasswordValidateOtp(context.Context, models.ForgotPasswordValidateOtpRequest) (*pb.ForgotPasswordValidateOtpResponse, error)
+	ForgotPasswordChangePassword(context.Context, models.ForgotPasswordChangePasswordRequest) (*pb.ForgotPasswordChangePasswordResponse, error)
 }

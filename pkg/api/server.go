@@ -16,13 +16,16 @@ type Server struct {
 	Port   string
 }
 
-func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler, conferenceHandler handlers.ConferenceHandler) (*Server, error) {
+func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler,
+	conferenceHandler handlers.ConferenceHandler, adminHandler handlers.AdminHandler) (*Server, error) {
+
 	engine := gin.New()
 	engine.Use(gin.Logger())
 
 	engine.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	routes.UserRoutes(engine.Group("/api"), userHandler)
+	routes.AdminRoutes(engine.Group("/api"), adminHandler)
 	routes.ConferenceRoutes(engine.Group("/api"), conferenceHandler)
 
 	engine.NoRoute(func(ctx *gin.Context) {
