@@ -23,6 +23,14 @@ type AutharizationClient interface {
 	UserLogin(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	ValidName(ctx context.Context, in *ValidNameRequest, opts ...grpc.CallOption) (*ValidNameResponse, error)
 	ResendOtp(ctx context.Context, in *ResendOtpRequest, opts ...grpc.CallOption) (*ResendOtpResponse, error)
+	ForgotPasswordOtp(ctx context.Context, in *ForgotPasswordOtpRequest, opts ...grpc.CallOption) (*ForgotPasswordOtpResponse, error)
+	ForgotPasswordValidateOtp(ctx context.Context, in *ForgotPasswordValidateOtpRequest, opts ...grpc.CallOption) (*ForgotPasswordValidateOtpResponse, error)
+	ForgotPasswordChangePassword(ctx context.Context, in *ForgotPasswordChangePasswordRequest, opts ...grpc.CallOption) (*ForgotPasswordChangePasswordResponse, error)
+	AdminLogin(ctx context.Context, in *AdminLoginRequest, opts ...grpc.CallOption) (*AdminLoginResponse, error)
+	GetUsers(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error)
+	ManageUser(ctx context.Context, in *ManageUserRequest, opts ...grpc.CallOption) (*ManageUserResponse, error)
+	GetInterest(ctx context.Context, in *GetInterestRequest, opts ...grpc.CallOption) (*GetInterestResponse, error)
+	AddInterest(ctx context.Context, in *AddInterestRequest, opts ...grpc.CallOption) (*AddInterestResponse, error)
 }
 
 type autharizationClient struct {
@@ -78,6 +86,78 @@ func (c *autharizationClient) ResendOtp(ctx context.Context, in *ResendOtpReques
 	return out, nil
 }
 
+func (c *autharizationClient) ForgotPasswordOtp(ctx context.Context, in *ForgotPasswordOtpRequest, opts ...grpc.CallOption) (*ForgotPasswordOtpResponse, error) {
+	out := new(ForgotPasswordOtpResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ForgotPasswordOtp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) ForgotPasswordValidateOtp(ctx context.Context, in *ForgotPasswordValidateOtpRequest, opts ...grpc.CallOption) (*ForgotPasswordValidateOtpResponse, error) {
+	out := new(ForgotPasswordValidateOtpResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ForgotPasswordValidateOtp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) ForgotPasswordChangePassword(ctx context.Context, in *ForgotPasswordChangePasswordRequest, opts ...grpc.CallOption) (*ForgotPasswordChangePasswordResponse, error) {
+	out := new(ForgotPasswordChangePasswordResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ForgotPasswordChangePassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) AdminLogin(ctx context.Context, in *AdminLoginRequest, opts ...grpc.CallOption) (*AdminLoginResponse, error) {
+	out := new(AdminLoginResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/AdminLogin", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) GetUsers(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error) {
+	out := new(GetUsersResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/GetUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) ManageUser(ctx context.Context, in *ManageUserRequest, opts ...grpc.CallOption) (*ManageUserResponse, error) {
+	out := new(ManageUserResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ManageUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) GetInterest(ctx context.Context, in *GetInterestRequest, opts ...grpc.CallOption) (*GetInterestResponse, error) {
+	out := new(GetInterestResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/GetInterest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) AddInterest(ctx context.Context, in *AddInterestRequest, opts ...grpc.CallOption) (*AddInterestResponse, error) {
+	out := new(AddInterestResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/AddInterest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
@@ -87,6 +167,14 @@ type AutharizationServer interface {
 	UserLogin(context.Context, *LoginRequest) (*LoginResponse, error)
 	ValidName(context.Context, *ValidNameRequest) (*ValidNameResponse, error)
 	ResendOtp(context.Context, *ResendOtpRequest) (*ResendOtpResponse, error)
+	ForgotPasswordOtp(context.Context, *ForgotPasswordOtpRequest) (*ForgotPasswordOtpResponse, error)
+	ForgotPasswordValidateOtp(context.Context, *ForgotPasswordValidateOtpRequest) (*ForgotPasswordValidateOtpResponse, error)
+	ForgotPasswordChangePassword(context.Context, *ForgotPasswordChangePasswordRequest) (*ForgotPasswordChangePasswordResponse, error)
+	AdminLogin(context.Context, *AdminLoginRequest) (*AdminLoginResponse, error)
+	GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
+	ManageUser(context.Context, *ManageUserRequest) (*ManageUserResponse, error)
+	GetInterest(context.Context, *GetInterestRequest) (*GetInterestResponse, error)
+	AddInterest(context.Context, *AddInterestRequest) (*AddInterestResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -108,6 +196,30 @@ func (UnimplementedAutharizationServer) ValidName(context.Context, *ValidNameReq
 }
 func (UnimplementedAutharizationServer) ResendOtp(context.Context, *ResendOtpRequest) (*ResendOtpResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ResendOtp not implemented")
+}
+func (UnimplementedAutharizationServer) ForgotPasswordOtp(context.Context, *ForgotPasswordOtpRequest) (*ForgotPasswordOtpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ForgotPasswordOtp not implemented")
+}
+func (UnimplementedAutharizationServer) ForgotPasswordValidateOtp(context.Context, *ForgotPasswordValidateOtpRequest) (*ForgotPasswordValidateOtpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ForgotPasswordValidateOtp not implemented")
+}
+func (UnimplementedAutharizationServer) ForgotPasswordChangePassword(context.Context, *ForgotPasswordChangePasswordRequest) (*ForgotPasswordChangePasswordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ForgotPasswordChangePassword not implemented")
+}
+func (UnimplementedAutharizationServer) AdminLogin(context.Context, *AdminLoginRequest) (*AdminLoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AdminLogin not implemented")
+}
+func (UnimplementedAutharizationServer) GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUsers not implemented")
+}
+func (UnimplementedAutharizationServer) ManageUser(context.Context, *ManageUserRequest) (*ManageUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ManageUser not implemented")
+}
+func (UnimplementedAutharizationServer) GetInterest(context.Context, *GetInterestRequest) (*GetInterestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInterest not implemented")
+}
+func (UnimplementedAutharizationServer) AddInterest(context.Context, *AddInterestRequest) (*AddInterestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddInterest not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -212,6 +324,150 @@ func _Autharization_ResendOtp_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Autharization_ForgotPasswordOtp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ForgotPasswordOtpRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ForgotPasswordOtp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ForgotPasswordOtp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ForgotPasswordOtp(ctx, req.(*ForgotPasswordOtpRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_ForgotPasswordValidateOtp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ForgotPasswordValidateOtpRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ForgotPasswordValidateOtp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ForgotPasswordValidateOtp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ForgotPasswordValidateOtp(ctx, req.(*ForgotPasswordValidateOtpRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_ForgotPasswordChangePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ForgotPasswordChangePasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ForgotPasswordChangePassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ForgotPasswordChangePassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ForgotPasswordChangePassword(ctx, req.(*ForgotPasswordChangePasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_AdminLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).AdminLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/AdminLogin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).AdminLogin(ctx, req.(*AdminLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_GetUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).GetUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/GetUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).GetUsers(ctx, req.(*GetUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_ManageUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ManageUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ManageUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ManageUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ManageUser(ctx, req.(*ManageUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_GetInterest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInterestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).GetInterest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/GetInterest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).GetInterest(ctx, req.(*GetInterestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_AddInterest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddInterestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).AddInterest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/AddInterest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).AddInterest(ctx, req.(*AddInterestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -238,6 +494,38 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ResendOtp",
 			Handler:    _Autharization_ResendOtp_Handler,
+		},
+		{
+			MethodName: "ForgotPasswordOtp",
+			Handler:    _Autharization_ForgotPasswordOtp_Handler,
+		},
+		{
+			MethodName: "ForgotPasswordValidateOtp",
+			Handler:    _Autharization_ForgotPasswordValidateOtp_Handler,
+		},
+		{
+			MethodName: "ForgotPasswordChangePassword",
+			Handler:    _Autharization_ForgotPasswordChangePassword_Handler,
+		},
+		{
+			MethodName: "AdminLogin",
+			Handler:    _Autharization_AdminLogin_Handler,
+		},
+		{
+			MethodName: "GetUsers",
+			Handler:    _Autharization_GetUsers_Handler,
+		},
+		{
+			MethodName: "ManageUser",
+			Handler:    _Autharization_ManageUser_Handler,
+		},
+		{
+			MethodName: "GetInterest",
+			Handler:    _Autharization_GetInterest_Handler,
+		},
+		{
+			MethodName: "AddInterest",
+			Handler:    _Autharization_AddInterest_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

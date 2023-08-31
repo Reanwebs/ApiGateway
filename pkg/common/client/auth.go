@@ -92,3 +92,35 @@ func (c *authClient) ResendOtp(ctx context.Context, request models.ResendOtp) (*
 	}
 	return res, nil
 }
+
+func (c *authClient) ForgotPasswordOtp(ctx context.Context, request models.ForgotPasswordOtpRequest) (*pb.ForgotPasswordOtpResponse, error) {
+	res, err := c.Server.ForgotPasswordOtp(ctx, &pb.ForgotPasswordOtpRequest{
+		PhoneNumber: request.PhoneNumber,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) ForgotPasswordValidateOtp(ctx context.Context, request models.ForgotPasswordValidateOtpRequest) (*pb.ForgotPasswordValidateOtpResponse, error) {
+	res, err := c.Server.ForgotPasswordValidateOtp(ctx, &pb.ForgotPasswordValidateOtpRequest{
+		PhoneNumber: request.PhoneNumber,
+		Otp:         request.Otp,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) ForgotPasswordChangePassword(ctx context.Context, request models.ForgotPasswordChangePasswordRequest) (*pb.ForgotPasswordChangePasswordResponse, error) {
+	res, err := c.Server.ForgotPasswordChangePassword(ctx, &pb.ForgotPasswordChangePasswordRequest{
+		PhoneNumber: request.PhoneNumber,
+		Password:    request.Password,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

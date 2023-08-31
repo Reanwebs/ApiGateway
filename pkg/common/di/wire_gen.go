@@ -27,7 +27,12 @@ func InitializeAPI(c *config.Config) (*api.Server, error) {
 		return nil, err
 	}
 	conferenceHandler := handlers.NewConferenceHandler(conferenceClient)
-	server, err := api.NewServeHTTP(c, userHandler, conferenceHandler)
+	adminClient, err := client.InitAdminClient(c)
+	if err != nil {
+		return nil, err
+	}
+	adminHandler := handlers.NewAdminHandler(adminClient)
+	server, err := api.NewServeHTTP(c, userHandler, conferenceHandler, adminHandler)
 	if err != nil {
 		return nil, err
 	}

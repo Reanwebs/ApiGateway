@@ -31,6 +31,11 @@ type ResendOtp struct {
 	PhoneNumber string `json:"phoneNumber"`
 }
 
+type ForgotPasswordValidateOtpRequest struct {
+	PhoneNumber string `json:"phoneNumber"`
+	Otp         string `json:"otp"`
+}
+
 type Interests struct {
 	Interest   string
 	InterestID string
