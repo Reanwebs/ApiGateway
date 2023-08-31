@@ -31,6 +31,7 @@ type AutharizationClient interface {
 	ManageUser(ctx context.Context, in *ManageUserRequest, opts ...grpc.CallOption) (*ManageUserResponse, error)
 	GetInterest(ctx context.Context, in *GetInterestRequest, opts ...grpc.CallOption) (*GetInterestResponse, error)
 	AddInterest(ctx context.Context, in *AddInterestRequest, opts ...grpc.CallOption) (*AddInterestResponse, error)
+	ManageInterest(ctx context.Context, in *ManageInterestRequest, opts ...grpc.CallOption) (*ManageInterestResponse, error)
 }
 
 type autharizationClient struct {
@@ -158,6 +159,15 @@ func (c *autharizationClient) AddInterest(ctx context.Context, in *AddInterestRe
 	return out, nil
 }
 
+func (c *autharizationClient) ManageInterest(ctx context.Context, in *ManageInterestRequest, opts ...grpc.CallOption) (*ManageInterestResponse, error) {
+	out := new(ManageInterestResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ManageInterest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
@@ -175,6 +185,7 @@ type AutharizationServer interface {
 	ManageUser(context.Context, *ManageUserRequest) (*ManageUserResponse, error)
 	GetInterest(context.Context, *GetInterestRequest) (*GetInterestResponse, error)
 	AddInterest(context.Context, *AddInterestRequest) (*AddInterestResponse, error)
+	ManageInterest(context.Context, *ManageInterestRequest) (*ManageInterestResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -220,6 +231,9 @@ func (UnimplementedAutharizationServer) GetInterest(context.Context, *GetInteres
 }
 func (UnimplementedAutharizationServer) AddInterest(context.Context, *AddInterestRequest) (*AddInterestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddInterest not implemented")
+}
+func (UnimplementedAutharizationServer) ManageInterest(context.Context, *ManageInterestRequest) (*ManageInterestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ManageInterest not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -468,6 +482,24 @@ func _Autharization_AddInterest_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Autharization_ManageInterest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ManageInterestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ManageInterest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ManageInterest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ManageInterest(ctx, req.(*ManageInterestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -526,6 +558,10 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddInterest",
 			Handler:    _Autharization_AddInterest_Handler,
+		},
+		{
+			MethodName: "ManageInterest",
+			Handler:    _Autharization_ManageInterest_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

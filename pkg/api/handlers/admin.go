@@ -120,3 +120,23 @@ func (h *AdminHandler) AddInterest(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, &res)
 
 }
+
+func (h *AdminHandler) ManageInterest(ctx *gin.Context) {
+	body := models.ManageInterestRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ManageInterest(context.Background(), body)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "action failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
