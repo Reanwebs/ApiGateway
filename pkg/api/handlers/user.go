@@ -316,3 +316,4 @@ func (h *UserHandler) ForgotPasswordChangePassword(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &res)
 }
+
