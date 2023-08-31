@@ -17,7 +17,9 @@ func InitializeAPI(c *config.Config) (*api.Server, error) {
 	wire.Build(
 		client.InitClient,
 		client.InitConferenceClient,
+		client.InitAdminClient,
 		handlers.NewAuthHandler,
+		handlers.NewAdminHandler,
 		handlers.NewConferenceHandler,
 		api.NewServeHTTP,
 	)

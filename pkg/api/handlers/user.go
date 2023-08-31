@@ -210,10 +210,110 @@ func (h *UserHandler) ResendOtp(ctx *gin.Context) {
 //	@Success		200	{string}	Log	out	successful
 //
 //	@Router			/api/user/logout [post]
-func (h *UserHandler) LogoutUser(c *gin.Context) {
-	c.SetCookie("user-auth", "", -1, "", "", false, true)
-	c.JSON(http.StatusOK, gin.H{
+func (h *UserHandler) LogoutUser(ctx *gin.Context) {
+	ctx.SetCookie("user-auth", "", -1, "", "", false, true)
+	ctx.JSON(http.StatusOK, gin.H{
 		"message": "Log out successful",
 	})
+}
+
+// USER FORGOT PASSWORD OTP REQUEST
+//
+//	@Summary		API FOR FORGOT PASSWORD OTP REQUEST
+//	@ID				FORGOT-PASSWORD-REQUEST
+//	@Description	FORGOT PASSWORD OTP REQUEST
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			FORGOT-PASSWORD-REQUEST	body		models.ForgotPasswordOtpRequest	false	"enter phone number"
+//	@Success		200			{object}	pb.ForgotPasswordOtpResponse
+//	@Failure		400			{object}	pb.ForgotPasswordOtpResponse
+//	@Failure		400			{object}	pb.ForgotPasswordOtpResponse
+//	@Router			/api/user/forgot-pass-otp [post]
+func (h *UserHandler) ForgotPasswordOtp(ctx *gin.Context) {
+	body := models.ForgotPasswordOtpRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ForgotPasswordOtp(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "sending otp failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+
+}
+
+// USER FORGOT PASSWORD OTP VALIDATION
+//
+//	@Summary		API FOR FORGOT PASSWORD OTP VALIDATION
+//	@ID				FORGOT-PASSWORD-VALIDATION
+//	@Description	FORGOT PASSWORD OTP VALIDATION
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			FORGOT-PASSWORD-VALIDATION	body		models.ForgotPasswordValidateOtpRequest	false	"enter phone number"
+//	@Success		200			{object}	pb.ForgotPasswordValidateOtpResponse
+//	@Failure		400			{object}	pb.ForgotPasswordValidateOtpResponse
+//	@Failure		400			{object}	pb.ForgotPasswordValidateOtpResponse
+//	@Router			/api/user/forgot-pass-validate [post]
+func (h *UserHandler) ForgotPasswordValidateOtp(ctx *gin.Context) {
+	body := models.ForgotPasswordValidateOtpRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ForgotPasswordValidateOtp(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "otp validation failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+// USER FORGOT PASSWORD RESET PASSWORD
+//
+//	@Summary		API FOR RESETING PASSWORD AFTER VERIFICATION
+//	@ID				RESET-PASSWORD
+//	@Description	RESETING PASSWORD AFTER VERIFICATION
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			RESET-PASSWORD	body		models.ForgotPasswordChangePasswordRequest	false	"enter new password"
+//	@Success		200			{object}	pb.ForgotPasswordOtpResponse
+//	@Failure		400			{object}	pb.ForgotPasswordOtpResponse
+//	@Failure		400			{object}	pb.ForgotPasswordOtpResponse
+//	@Router			/api/user/forgot-pass-reset [patch]
+func (h *UserHandler) ForgotPasswordChangePassword(ctx *gin.Context) {
+	body := models.ForgotPasswordChangePasswordRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ForgotPasswordChangePassword(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "otp verification failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
 }
 
