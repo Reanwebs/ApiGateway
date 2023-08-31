@@ -7,3 +7,7 @@ wire:
 
 run:
 	go run cmd/main.go
+
+swag:
+	swag init -g ./pkg/api/handlers/user.go -o ./docs
+	swag init -g ./pkg/api/handlers/conference.go -o ./docs

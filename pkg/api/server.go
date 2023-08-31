@@ -7,6 +7,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Server struct {
@@ -17,6 +19,8 @@ type Server struct {
 func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler, conferenceHandler handlers.ConferenceHandler) (*Server, error) {
 	engine := gin.New()
 	engine.Use(gin.Logger())
+
+	engine.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	routes.UserRoutes(engine.Group("/api"), userHandler)
 	routes.ConferenceRoutes(engine.Group("/api"), conferenceHandler)
