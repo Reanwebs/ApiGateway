@@ -21,3 +21,7 @@ type ManageUserRequest struct {
 type AddInterestRequest struct {
 	Interest string `json:"interest"`
 }
+
+type ManageInterestRequest struct {
+	Id string `json:"id"`
+}

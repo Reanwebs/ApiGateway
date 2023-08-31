@@ -17,4 +17,5 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler handlers.AdminHandler) {
 	routes.PATCH("manage-users", adminHandler.ManageUser)
 	routes.GET("get-intrest", adminHandler.GetInterest)
 	routes.POST("add-intrest", adminHandler.AddInterest)
+	routes.PATCH("manage-intrest", adminHandler.ManageInterest)
 }
