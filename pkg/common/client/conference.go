@@ -6,6 +6,7 @@ import (
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
 	"gateway/pkg/common/pb/conference"
+	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -41,7 +42,12 @@ func (c *conferenceClient) HealthCheck(ctx context.Context, request string) (*co
 }
 
 func (c *conferenceClient) ScheduleConference(ctx context.Context, request models.ScheduleConferenceRequest) (*conference.ScheduleConferenceResponse, error) {
-	res, err := c.Server.ScheduleConference(ctx, &conference.ScheduleConferenceRequest{
+	ctx1, _ := context.WithTimeout(ctx, 30*time.Second)
+	go func() {
+		<-ctx.Done()
+		// log golang done channel patterns, golang generated channel pattern
+	}()
+	res, err := c.Server.ScheduleConference(ctx1, &conference.ScheduleConferenceRequest{
 		UserID:           request.UserID,
 		Type:             request.Type,
 		Title:            request.Type,

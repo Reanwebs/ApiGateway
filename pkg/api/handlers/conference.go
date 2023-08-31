@@ -19,6 +19,21 @@ func NewConferenceHandler(client interfaces.ConferenceClient) ConferenceHandler 
 	}
 }
 
+// CONFERENCE HEALTH CHECK
+//
+//	@Summary		API FOR CONFERENCE SERVICE HEALTH CHECK
+//	@ID				CONFERENCE-HEALTH-CHECK
+//	@Description	CONFERENCE SERVICE HEALTH CHECK
+//	@Tags			CONFERENCE
+//	@Accept			json
+//	@Produce		json
+//
+//	@Param			HEALTH-CHECK	body		models.HealthCheck	false	"Request body for health check"
+//
+//	@Success		200				{object}	conference.Response
+//	@Failure		400				{object}	conference.Response
+//	@Failure		502				{object}	conference.Response
+//	@Router			/api/conference/health-check [post]
 func (h *ConferenceHandler) HealthCheck(ctx *gin.Context) {
 	body := models.HealthCheck{}
 
@@ -39,6 +54,19 @@ func (h *ConferenceHandler) HealthCheck(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 }
 
+// CONFERENCE SCHEDULE CONFERENCE
+//
+//	@Summary		API FOR SCHEDULE CONFERENCE
+//	@ID				SCHEDULE-CONFERENCE
+//	@Description	CONFERENCE SCHEDULE CONFERENCE
+//	@Tags			CONFERENCE
+//	@Accept			json
+//	@Produce		json
+//	@Param			SCHEDULE-CONFERENCE	body		models.ScheduleConferenceRequest false	"Request body for schedule conference"
+//	@Success		200					{object}	conference.ScheduleConferenceResponse
+//	@Failure		400					{object}	conference.ScheduleConferenceResponse
+//	@Failure		502					{object}	conference.ScheduleConferenceResponse
+//	@Router			/api/conference/schedule-conference [post]
 func (h *ConferenceHandler) ScheduleConference(ctx *gin.Context) {
 	body := models.ScheduleConferenceRequest{}
 
@@ -60,6 +88,19 @@ func (h *ConferenceHandler) ScheduleConference(ctx *gin.Context) {
 
 }
 
+// CONFERENCE START PRIVATE CONFERENCE
+//
+//	@Summary		API FOR START PRIVATE CONFERENCE
+//	@ID				START-PRIVATE-CONFERENCE
+//	@Description	START PRIVATE CONFERENCE
+//	@Tags			CONFERENCE
+//	@Accept			json
+//	@Produce		json
+//	@Param			START-PRIVATE-CONFERENCE	body		models.StartPrivateConferenceRequest false	"Request body for start private conference"
+//	@Success		200							{object}	conference.StartPrivateConferenceResponse
+//	@Failure		400							{object}	conference.StartPrivateConferenceResponse
+//	@Failure		502							{object}	conference.StartPrivateConferenceResponse
+//	@Router			/api/conference/start-private-conference [post]
 func (h *ConferenceHandler) StartPrivateConference(ctx *gin.Context) {
 	body := models.StartPrivateConferenceRequest{}
 
@@ -80,6 +121,19 @@ func (h *ConferenceHandler) StartPrivateConference(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 }
 
+// CONFERENCE START PUBLIC CONFERENCE
+//
+//	@Summary		API FOR START PUBLIC CONFERENCE
+//	@ID				START-PUBLIC-CONFERENCE
+//	@Description	START PUBLIC CONFERENCE
+//	@Tags			CONFERENCE
+//	@Accept			json
+//	@Produce		json
+//	@Param			START-PUBLIC-CONFERENCE	body		models.StartPublicConferenceRequest false	"Request body for start public conference"
+//	@Success		200						{object}	conference.StartPublicConferenceResponse
+//	@Failure		400						{object}	conference.StartPublicConferenceResponse
+//	@Failure		502						{object}	conference.StartPublicConferenceResponse
+//	@Router			/api/conference/start-public-conference [post]
 func (h *ConferenceHandler) StartPublicConference(ctx *gin.Context) {
 	body := models.StartPublicConferenceRequest{}
 
@@ -100,6 +154,19 @@ func (h *ConferenceHandler) StartPublicConference(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 }
 
+// CONFERENCE JOIN PRIVATE CONFERENCE
+//
+//	@Summary		API FOR JOIN PRIVATE CONFERENCE
+//	@ID				JOIN-PRIVATE-CONFERENCE
+//	@Description	JOIN PRIVATE CONFERENCE
+//	@Tags			CONFERENCE
+//	@Accept			json
+//	@Produce		json
+//	@Param			JOIN-PRIVATE-CONFERENCE	body		models.JoinPrivateConferenceRequest false	"Request body for join private conference"
+//	@Success		200						{object}	conference.JoinPrivateConferenceResponse
+//	@Failure		400						{object}	conference.JoinPrivateConferenceResponse
+//	@Failure		502						{object}	conference.JoinPrivateConferenceResponse
+//	@Router			/api/conference/join-private-conference [patch]
 func (h *ConferenceHandler) JoinPrivateConference(ctx *gin.Context) {
 	body := models.JoinPrivateConferenceRequest{}
 
@@ -120,6 +187,19 @@ func (h *ConferenceHandler) JoinPrivateConference(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 }
 
+// CONFERENCE JOIN PUBLIC CONFERENCE
+//
+//	@Summary		API FOR JOIN PUBLIC CONFERENCE
+//	@ID				JOIN-PUBLIC-CONFERENCE
+//	@Description	JOIN PUBLIC CONFERENCE
+//	@Tags			CONFERENCE
+//	@Accept			json
+//	@Produce		json
+//	@Param			JOIN-PUBLIC-CONFERENCE	body		models.JoinPublicConferenceRequest false	"Request body for sjoin public conference"
+//	@Success		200						{object}	conference.JoinPublicConferenceResponse
+//	@Failure		400						{object}	conference.JoinPublicConferenceResponse
+//	@Failure		502						{object}	conference.JoinPublicConferenceResponse
+//	@Router			/api/conference/join-public-conference [patch]
 func (h *ConferenceHandler) JoinPublicConference(ctx *gin.Context) {
 	body := models.JoinPublicConferenceRequest{}
 
@@ -140,6 +220,19 @@ func (h *ConferenceHandler) JoinPublicConference(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 }
 
+// CONFERENCE JOIN GROUP CONFERENCE
+//
+//	@Summary		API FOR JOIN GROUP CONFERENCE
+//	@ID				JOIN-GROUP-CONFERENCE
+//	@Description	JOIN GROUP CONFERENCE
+//	@Tags			CONFERENCE
+//	@Accept			json
+//	@Produce		json
+//	@Param			JOIN-GROUP-CONFERENCE	body		models.JoinGroupConferenceRequest false	"Request body for join group conference"
+//	@Success		200						{object}	conference.JoinGroupConferenceResponse
+//	@Failure		400						{object}	conference.JoinGroupConferenceResponse
+//	@Failure		502						{object}	conference.JoinGroupConferenceResponse
+//	@Router			/api/conference/join-group-confernce [patch]
 func (h *ConferenceHandler) JoinGroupConfernce(ctx *gin.Context) {
 	body := models.JoinGroupConferenceRequest{}
 

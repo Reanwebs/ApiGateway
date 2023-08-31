@@ -1,0 +1,625 @@
+definitions:
+  conference.JoinGroupConferenceResponse:
+    properties:
+      result:
+        type: string
+    type: object
+  conference.JoinPrivateConferenceResponse:
+    properties:
+      result:
+        type: string
+    type: object
+  conference.JoinPublicConferenceResponse:
+    properties:
+      result:
+        type: string
+    type: object
+  conference.Response:
+    properties:
+      result:
+        type: string
+    type: object
+  conference.ScheduleConferenceResponse:
+    properties:
+      ConferenceID:
+        type: string
+      Result:
+        type: string
+    type: object
+  conference.StartPrivateConferenceResponse:
+    properties:
+      Result:
+        type: string
+      conferenceID:
+        type: string
+    type: object
+  conference.StartPublicConferenceResponse:
+    properties:
+      ConferenceID:
+        type: string
+      Result:
+        type: string
+    type: object
+  models.HealthCheck:
+    properties:
+      data:
+        type: string
+    type: object
+  models.JoinGroupConferenceRequest:
+    properties:
+      conferenceID:
+        type: string
+      groupID:
+        type: string
+      userID:
+        type: string
+    type: object
+  models.JoinPrivateConferenceRequest:
+    properties:
+      conferenceID:
+        type: string
+      userID:
+        type: string
+    type: object
+  models.JoinPublicConferenceRequest:
+    properties:
+      conferenceID:
+        type: string
+      userID:
+        type: string
+    type: object
+  models.LoginRequestBody:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  models.OtpValidation:
+    properties:
+      cPassword:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      phoneNumber:
+        type: string
+      userName:
+        type: string
+    type: object
+  models.RegisterRequestBody:
+    properties:
+      cPassword:
+        type: string
+      email:
+        type: string
+      otp:
+        type: string
+      password:
+        type: string
+      phoneNumber:
+        type: string
+      referral:
+        type: string
+      userName:
+        type: string
+    type: object
+  models.ResendOtp:
+    properties:
+      phoneNumber:
+        type: string
+    type: object
+  models.ScheduleConferenceRequest:
+    properties:
+      broadcast:
+        type: boolean
+      chat:
+        type: boolean
+      date:
+        type: string
+      description:
+        type: string
+      interest:
+        type: string
+      participantlimit:
+        type: integer
+      recording:
+        type: boolean
+      time_nanos:
+        type: integer
+      time_seconds:
+        type: integer
+      title:
+        type: string
+      type:
+        type: string
+      userID:
+        type: string
+    type: object
+  models.StartPrivateConferenceRequest:
+    properties:
+      broadcast:
+        type: boolean
+      chat:
+        type: boolean
+      description:
+        type: string
+      interest:
+        type: string
+      participantlimit:
+        type: integer
+      recording:
+        type: boolean
+      title:
+        type: string
+      userID:
+        type: string
+    type: object
+  models.StartPublicConferenceRequest:
+    properties:
+      broadcast:
+        type: boolean
+      chat:
+        type: boolean
+      description:
+        type: string
+      interest:
+        type: string
+      joinType:
+        type: string
+      participantlimit:
+        type: integer
+      recording:
+        type: boolean
+      title:
+        type: string
+      userID:
+        type: string
+    type: object
+  models.ValidName:
+    properties:
+      userName:
+        type: string
+    type: object
+  pb.LoginResponse:
+    properties:
+      email:
+        type: string
+      error:
+        type: string
+      message:
+        type: string
+      phoneNumber:
+        type: string
+      status:
+        type: integer
+      uid:
+        type: string
+      username:
+        type: string
+    type: object
+  pb.OtpSignUpResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  pb.ResendOtpResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  pb.SignupResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+      token:
+        type: string
+    type: object
+  pb.ValidNameResponse:
+    properties:
+      error:
+        type: string
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+  /api/conference/health-check:
+    post:
+      consumes:
+      - application/json
+      description: CONFERENCE SERVICE HEALTH CHECK
+      operationId: CONFERENCE-HEALTH-CHECK
+      parameters:
+      - description: Request body for health check
+        in: body
+        name: HEALTH-CHECK
+        schema:
+          $ref: '#/definitions/models.HealthCheck'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/conference.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/conference.Response'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/conference.Response'
+      summary: API FOR CONFERENCE SERVICE HEALTH CHECK
+      tags:
+      - CONFERENCE
+  /api/conference/join-group-confernce:
+    patch:
+      consumes:
+      - application/json
+      description: JOIN GROUP CONFERENCE
+      operationId: JOIN-GROUP-CONFERENCE
+      parameters:
+      - description: Request body for join group conference
+        in: body
+        name: JOIN-GROUP-CONFERENCE
+        schema:
+          $ref: '#/definitions/models.JoinGroupConferenceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/conference.JoinGroupConferenceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/conference.JoinGroupConferenceResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/conference.JoinGroupConferenceResponse'
+      summary: API FOR JOIN GROUP CONFERENCE
+      tags:
+      - CONFERENCE
+  /api/conference/join-private-conference:
+    patch:
+      consumes:
+      - application/json
+      description: JOIN PRIVATE CONFERENCE
+      operationId: JOIN-PRIVATE-CONFERENCE
+      parameters:
+      - description: Request body for join private conference
+        in: body
+        name: JOIN-PRIVATE-CONFERENCE
+        schema:
+          $ref: '#/definitions/models.JoinPrivateConferenceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/conference.JoinPrivateConferenceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/conference.JoinPrivateConferenceResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/conference.JoinPrivateConferenceResponse'
+      summary: API FOR JOIN PRIVATE CONFERENCE
+      tags:
+      - CONFERENCE
+  /api/conference/join-public-conference:
+    patch:
+      consumes:
+      - application/json
+      description: JOIN PUBLIC CONFERENCE
+      operationId: JOIN-PUBLIC-CONFERENCE
+      parameters:
+      - description: Request body for sjoin public conference
+        in: body
+        name: JOIN-PUBLIC-CONFERENCE
+        schema:
+          $ref: '#/definitions/models.JoinPublicConferenceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/conference.JoinPublicConferenceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/conference.JoinPublicConferenceResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/conference.JoinPublicConferenceResponse'
+      summary: API FOR JOIN PUBLIC CONFERENCE
+      tags:
+      - CONFERENCE
+  /api/conference/schedule-conference:
+    post:
+      consumes:
+      - application/json
+      description: CONFERENCE SCHEDULE CONFERENCE
+      operationId: SCHEDULE-CONFERENCE
+      parameters:
+      - description: Request body for schedule conference
+        in: body
+        name: SCHEDULE-CONFERENCE
+        schema:
+          $ref: '#/definitions/models.ScheduleConferenceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/conference.ScheduleConferenceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/conference.ScheduleConferenceResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/conference.ScheduleConferenceResponse'
+      summary: API FOR SCHEDULE CONFERENCE
+      tags:
+      - CONFERENCE
+  /api/conference/start-private-conference:
+    post:
+      consumes:
+      - application/json
+      description: START PRIVATE CONFERENCE
+      operationId: START-PRIVATE-CONFERENCE
+      parameters:
+      - description: Request body for start private conference
+        in: body
+        name: START-PRIVATE-CONFERENCE
+        schema:
+          $ref: '#/definitions/models.StartPrivateConferenceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/conference.StartPrivateConferenceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/conference.StartPrivateConferenceResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/conference.StartPrivateConferenceResponse'
+      summary: API FOR START PRIVATE CONFERENCE
+      tags:
+      - CONFERENCE
+  /api/conference/start-public-conference:
+    post:
+      consumes:
+      - application/json
+      description: START PUBLIC CONFERENCE
+      operationId: START-PUBLIC-CONFERENCE
+      parameters:
+      - description: Request body for start public conference
+        in: body
+        name: START-PUBLIC-CONFERENCE
+        schema:
+          $ref: '#/definitions/models.StartPublicConferenceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/conference.StartPublicConferenceResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/conference.StartPublicConferenceResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/conference.StartPublicConferenceResponse'
+      summary: API FOR START PUBLIC CONFERENCE
+      tags:
+      - CONFERENCE
+  /api/user/login:
+    post:
+      consumes:
+      - application/json
+      description: VERIFY THE EMAIL,PASSWORD AND GENERATE A JWT TOKEN AND SET IT TO
+        A COOKIE
+      operationId: USER-LOGIN
+      parameters:
+      - description: Enter the email and password
+        in: body
+        name: login_details
+        required: true
+        schema:
+          $ref: '#/definitions/models.LoginRequestBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/pb.LoginResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/pb.LoginResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.LoginResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/pb.LoginResponse'
+      summary: API FOR USER LOGIN
+      tags:
+      - USER
+  /api/user/logout:
+    post:
+      consumes:
+      - application/json
+      description: LOGOUT USER AND ALSO CLEAR COOKIES
+      operationId: USER-LOGOUT
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: API FOR USER LOGOUT
+      tags:
+      - USER
+  /api/user/otp:
+    post:
+      consumes:
+      - application/json
+      description: CREATE A NEW USER WITH REQUIRED DETAILS
+      operationId: SIGNUP-USER
+      parameters:
+      - description: New user Details
+        in: body
+        name: user_details
+        schema:
+          $ref: '#/definitions/models.OtpValidation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.OtpSignUpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.OtpSignUpResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/pb.OtpSignUpResponse'
+      summary: API FOR NEW USER SIGN UP
+      tags:
+      - USER
+  /api/user/resend-otp:
+    post:
+      consumes:
+      - application/json
+      description: RESEND OTP REQUEST
+      operationId: RESEND-OTP
+      parameters:
+      - description: enter phone number
+        in: body
+        name: RESENDOTP
+        schema:
+          $ref: '#/definitions/models.ResendOtp'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.ResendOtpResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.ResendOtpResponse'
+      summary: API FOR RESEND OTP REQUEST
+      tags:
+      - USER
+  /api/user/signup:
+    post:
+      consumes:
+      - application/json
+      description: VERIFY THE OTP AND DATA INSERT TO THE DATABASE
+      operationId: SIGNUP-USER-OTP-VERIFY
+      parameters:
+      - description: otp
+        in: body
+        name: user_details
+        schema:
+          $ref: '#/definitions/models.RegisterRequestBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/pb.SignupResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.SignupResponse'
+        "502":
+          description: Bad Gateway
+          schema:
+            $ref: '#/definitions/pb.SignupResponse'
+      summary: API FOR NEW USER SIGN UP OTP VERIFICATION
+      tags:
+      - USER
+  /api/user/valid-name:
+    post:
+      consumes:
+      - application/json
+      description: VERIFY USERNAME IF IT UNIQUE OR NOT
+      operationId: USERNAME-VALIDATION
+      parameters:
+      - description: Enter User Name
+        in: body
+        name: USERNAME
+        required: true
+        schema:
+          $ref: '#/definitions/models.ValidName'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.ValidNameResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.ValidNameResponse'
+      summary: API FOR USERNAME VALIDATION
+      tags:
+      - USER
+swagger: "2.0"

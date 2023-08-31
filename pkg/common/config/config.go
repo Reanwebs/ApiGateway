@@ -12,6 +12,9 @@ type Config struct {
 	ConferenceService string `mapstructure:"Conference_SRV"`
 	Port              string `mapstructure:"PORT"`
 	JwtSecretKey      string `mapstructure:"JWT_SECRET_KEY"`
+	SwagTitle         string `mapstructure:"SwagTitle"`
+	SwagDescription   string `mapstructure:"SwagDescription"`
+	SwagVersion       string `mapstructure:"SwagVersion"`
 }
 
 var envs = []string{"AUTH_SRV", "PORT"}
