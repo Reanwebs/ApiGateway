@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"gateway/pkg/common/client/interfaces"
+	middleware "gateway/pkg/common/midleware"
 	"gateway/pkg/common/models"
 	"net/http"
 
@@ -34,6 +36,15 @@ func (h *AdminHandler) AdminLogin(ctx *gin.Context) {
 			"error":   err.Error(),
 		})
 		return
+	}
+
+	// setup JWT
+	ok := middleware.JwtCookieSetup(ctx, "admin-auth", res.Uid)
+	if !ok {
+		res := errors.New("Generate JWT failure")
+		ctx.JSON(http.StatusInternalServerError, res)
+		return
+
 	}
 
 	ctx.JSON(http.StatusCreated, &res)
