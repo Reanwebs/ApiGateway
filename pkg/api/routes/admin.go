@@ -2,6 +2,7 @@ package routes
 
 import (
 	"gateway/pkg/api/handlers"
+	middleware "gateway/pkg/common/midleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,6 +10,9 @@ import (
 func AdminRoutes(api *gin.RouterGroup, adminHandler handlers.AdminHandler) {
 	routes := api.Group("/admin")
 	routes.POST("login", adminHandler.AdminLogin)
+
+	routes.Use(middleware.AuthenticateAdmin)
+
 	routes.GET("get-users", adminHandler.GetUsers)
 	routes.PATCH("manage-users", adminHandler.ManageUser)
 	routes.GET("get-intrest", adminHandler.GetInterest)
