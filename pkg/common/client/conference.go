@@ -60,7 +60,7 @@ func (c *conferenceClient) HealthCheck(ctx context.Context, request string) (*co
 			return nil, context.Canceled
 
 		default:
-			res, err = c.Server.HealthCheck(ctx, &conference.Request{
+			res, err = c.Server.HealthCheck(ctx1, &conference.Request{
 				Data: request,
 			})
 			cancel()
