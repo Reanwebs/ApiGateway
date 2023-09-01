@@ -2,10 +2,12 @@ package client
 
 import (
 	"context"
+	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
 	"gateway/pkg/common/pb"
+	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -61,17 +63,110 @@ func (c *authClient) OtpRequest(ctx context.Context, request models.OtpValidatio
 
 }
 
-func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestBody) (*pb.LoginResponse, error) {
-	res, err := c.Server.UserLogin(ctx, &pb.LoginRequest{
-		Email:    request.Email,
-		Password: request.Password,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+// func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestBody) (*pb.LoginResponse, error) {
+// 	res, err := c.Server.UserLogin(ctx, &pb.LoginRequest{
+// 		Email:    request.Email,
+// 		Password: request.Password,
+// 	})
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return res, nil
 
+// }
+
+func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestBody) (*pb.LoginResponse, error) {
+	var res *pb.LoginResponse
+	var err error
+
+	//  a maximum of 5 retries and a maximum duration of 5 seconds
+	maxRetries := 5
+	maxDuration := 5 * time.Second
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= maxRetries; retryCount++ {
+		fmt.Println("try\t", retryCount)
+		if time.Since(startTime) > maxDuration {
+			break // Time limit exceeded
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+
+		done := make(chan struct{})
+		go func() {
+			defer close(done)
+			<-ctx.Done() // Listen for cancellation
+		}()
+
+		select {
+		case <-done:
+			// Handle cancellation
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.UserLogin(ctx1, &pb.LoginRequest{
+				Email:    request.Email,
+				Password: request.Password,
+			})
+			cancel() // Cancel the context after the request
+			if err == nil {
+				return res, nil // Request succeeded, return response
+			}
+			// Request failed, continue to retry if possible
+		}
+
+		select {
+		case <-ctx.Done():
+			// Handle cancellation
+			return nil, ctx.Err()
+		case <-time.After(time.Second): // Wait before retrying
+		}
+	}
+
+	return nil, err // Return last error after maxRetries or maxDuration
 }
+
+// func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestBody) (*pb.LoginResponse, error) {
+// 	var res *pb.LoginResponse
+// 	var err error
+// 	maxRetries := 2
+// 	for i := 0; i <= maxRetries; i++ {
+// 		fmt.Println("try\t", i)
+// 		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+// 		defer cancel()
+
+// 		done := make(chan struct{})
+// 		go func() {
+// 			defer close(done)
+// 			<-ctx.Done() // Listen for cancellation
+// 		}()
+
+// 		select {
+// 		case <-done:
+// 			// Handle cancellation
+// 			return nil, context.Canceled
+// 		default:
+// 			res, err = c.Server.UserLogin(ctx1, &pb.LoginRequest{
+// 				Email:    request.Email,
+// 				Password: request.Password,
+// 			})
+// 			if err == nil {
+// 				return res, nil // Request succeeded, return response
+// 			}
+// 			// Request failed, continue to retry if possible
+// 		}
+
+// 		select {
+// 		case <-ctx.Done():
+// 			// Handle timeout
+// 			return nil, context.DeadlineExceeded
+// 		case <-time.After(time.Second): // Wait before retrying
+// 		}
+// 	}
+
+// 	return nil, err // Return last error after maxRetries
+// }
 
 func (c *authClient) ValidName(ctx context.Context, request models.ValidName) (*pb.ValidNameResponse, error) {
 	res, err := c.Server.ValidName(ctx, &pb.ValidNameRequest{

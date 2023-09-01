@@ -144,13 +144,14 @@ message user{
     string userName =2;
     string email = 3;
     string phoneNumber = 4;
+    bool status = 5;
 }
 
 message GetUsersResponse{
     int32 status = 1;
     repeated user users = 2;
     string message = 3;
-    string error = 4;
+    string error = 4;  
 }
 
 message ManageUserRequest{
@@ -170,7 +171,7 @@ message GetInterestRequest{
 message interest{
     string id =1;
     string interest = 2;
-    string status = 3;
+    bool status = 3;
 }
 
 message GetInterestResponse{

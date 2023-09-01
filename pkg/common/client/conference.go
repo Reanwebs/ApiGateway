@@ -2,6 +2,8 @@ package client
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
@@ -31,40 +33,128 @@ func NewConferenceClient(server conference.ConferenceClient) interfaces.Conferen
 }
 
 func (c *conferenceClient) HealthCheck(ctx context.Context, request string) (*conference.Response, error) {
-	res, err := c.Server.HealthCheck(ctx, &conference.Request{
-		Data: request,
-	})
-	if err != nil {
-		return nil, err
+	var res *conference.Response
+	var err error
+
+	maxRetries := 5
+	maxDuration := 5 * time.Second
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= maxRetries; retryCount++ {
+		if time.Since(startTime) > maxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+
+		done := make(chan struct{})
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+
+		default:
+			res, err = c.Server.HealthCheck(ctx, &conference.Request{
+				Data: request,
+			})
+			cancel()
+			if err == nil {
+				return res, nil
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(time.Second):
+		}
 	}
-	return res, nil
+
+	return nil, err
 
 }
 
+// func (c *conferenceClient) ScheduleConference(ctx context.Context, request models.ScheduleConferenceRequest) (*conference.ScheduleConferenceResponse, error) {
+// 	ctx1, _ := context.WithTimeout(ctx, 30*time.Second)
+// 	go func() {
+// 		<-ctx.Done()
+// 		// log golang done channel patterns, golang generated channel pattern
+// 	}()
+// 	res, err := c.Server.ScheduleConference(ctx1, &conference.ScheduleConferenceRequest{
+// 		UserID:           request.UserID,
+// 		Type:             request.Type,
+// 		Title:            request.Type,
+// 		Description:      request.Description,
+// 		Interest:         request.Interest,
+// 		Recording:        request.Recording,
+// 		Chat:             request.Chat,
+// 		Broadcast:        request.Broadcast,
+// 		Participantlimit: request.Participantlimit,
+// 		Date:             request.Date,
+// 		TimeSeconds:      request.Time_seconds,
+// 		TimeNanos:        request.Time_nanos,
+// 	})
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return res, nil
+// }
+
 func (c *conferenceClient) ScheduleConference(ctx context.Context, request models.ScheduleConferenceRequest) (*conference.ScheduleConferenceResponse, error) {
-	ctx1, _ := context.WithTimeout(ctx, 30*time.Second)
-	go func() {
-		<-ctx.Done()
-		// log golang done channel patterns, golang generated channel pattern
-	}()
-	res, err := c.Server.ScheduleConference(ctx1, &conference.ScheduleConferenceRequest{
-		UserID:           request.UserID,
-		Type:             request.Type,
-		Title:            request.Type,
-		Description:      request.Description,
-		Interest:         request.Interest,
-		Recording:        request.Recording,
-		Chat:             request.Chat,
-		Broadcast:        request.Broadcast,
-		Participantlimit: request.Participantlimit,
-		Date:             request.Date,
-		TimeSeconds:      request.Time_seconds,
-		TimeNanos:        request.Time_nanos,
-	})
-	if err != nil {
-		return nil, err
+	var res *conference.ScheduleConferenceResponse
+	var err error
+	maxRetries := 3
+	for i := 0; i <= maxRetries; i++ {
+		fmt.Println("try.........", i)
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		defer cancel()
+
+		done := make(chan struct{})
+		go func() {
+			defer close(done)
+			<-ctx.Done() // Listen for cancellation
+		}()
+
+		select {
+		case <-done:
+			// Handle cancellation
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ScheduleConference(ctx1, &conference.ScheduleConferenceRequest{
+				UserID:           request.UserID,
+				Type:             request.Type,
+				Title:            request.Title,
+				Description:      request.Description,
+				Interest:         request.Interest,
+				Recording:        request.Recording,
+				Chat:             request.Chat,
+				Broadcast:        request.Broadcast,
+				Participantlimit: request.Participantlimit,
+				Date:             request.Date,
+				TimeSeconds:      3000,
+				TimeNanos:        500,
+			})
+			if err == nil {
+				return res, nil // Request succeeded, return response
+			}
+			// Request failed, continue to retry if possible
+		}
+
+		select {
+		case <-ctx.Done():
+			// Handle timeout
+			return nil, context.DeadlineExceeded
+		case <-time.After(time.Second): // Wait before retrying
+		}
 	}
-	return res, nil
+
+	return nil, err // Return last error after maxRetries
 }
 
 func (c *conferenceClient) StartPrivateConference(ctx context.Context, request models.StartPrivateConferenceRequest) (*conference.StartPrivateConferenceResponse, error) {
