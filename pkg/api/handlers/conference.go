@@ -5,6 +5,7 @@ import (
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/models"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -42,7 +43,13 @@ func (h *ConferenceHandler) HealthCheck(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.HealthCheck(ctx, body.Data)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   5 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.HealthCheck(ctx, body.Data, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "conference service down",
@@ -75,7 +82,13 @@ func (h *ConferenceHandler) ScheduleConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ScheduleConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ScheduleConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in scheduleConference",
@@ -109,7 +122,13 @@ func (h *ConferenceHandler) StartPrivateConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.StartPrivateConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.StartPrivateConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in StartPrivateConference",
@@ -142,7 +161,13 @@ func (h *ConferenceHandler) StartPublicConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.StartPublicConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.StartPublicConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in StartPublicConference",
@@ -175,7 +200,13 @@ func (h *ConferenceHandler) JoinPrivateConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.JoinPrivateConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.JoinPrivateConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in JoinPrivateConference",
@@ -208,7 +239,13 @@ func (h *ConferenceHandler) JoinPublicConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.JoinPublicConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.JoinPublicConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in JoinPublicConference",
@@ -241,7 +278,13 @@ func (h *ConferenceHandler) JoinGroupConfernce(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.JoinGroupConfernce(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.JoinGroupConfernce(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in JoinGroupConfernce",
@@ -261,7 +304,13 @@ func (h *ConferenceHandler) LeavePrivateConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.LeavePrivateConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.LeavePrivateConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in LeavePrivateConference",
@@ -281,7 +330,13 @@ func (h *ConferenceHandler) EndPublicConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.EndPublicConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.EndPublicConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in EndPublicConference",
@@ -301,7 +356,13 @@ func (h *ConferenceHandler) EndGroupConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.EndGroupConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.EndGroupConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in EndGroupConference",
@@ -321,7 +382,13 @@ func (h *ConferenceHandler) EndPrivateConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.EndPrivateConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.EndPrivateConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in EndPrivateConference",
@@ -341,7 +408,13 @@ func (h *ConferenceHandler) RemovePublicParticipant(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.RemovePublicParticipant(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.RemovePublicParticipant(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in RemovePublicParticipant",
@@ -361,7 +434,13 @@ func (h *ConferenceHandler) RemoveGroupParticipant(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.RemoveGroupParticipant(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.RemoveGroupParticipant(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in RemoveGroupParticipant",
@@ -381,7 +460,13 @@ func (h *ConferenceHandler) RemovePrivateParticipant(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.RemovePrivateParticipant(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.RemovePrivateParticipant(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in RemovePrivateParticipant",
@@ -401,7 +486,13 @@ func (h *ConferenceHandler) LeavePublicConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.LeavePublicConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.LeavePublicConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in LeavePublicConference",
@@ -420,7 +511,13 @@ func (h *ConferenceHandler) LeaveGroupConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.LeaveGroupConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.LeaveGroupConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in LeaveGroupConference",
@@ -440,7 +537,13 @@ func (h *ConferenceHandler) StartGroupConference(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.StartGroupConference(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.StartGroupConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "error in StartGroupConference",
@@ -460,7 +563,13 @@ func (h *ConferenceHandler) AcceptJoining(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.AcceptJoining(context.Background(), body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.AcceptJoining(context.Background(), body, retryConfig)
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadGateway, err)
 		return
@@ -478,7 +587,13 @@ func (h *ConferenceHandler) DeclineJoining(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.DeclineJoining(context.Background(), body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.DeclineJoining(context.Background(), body, retryConfig)
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadGateway, err)
 		return
