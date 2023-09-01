@@ -142,7 +142,7 @@ func (h *AdminHandler) ManageInterest(ctx *gin.Context) {
 }
 
 func (h *AdminHandler) LogoutAdmin(ctx *gin.Context) {
-	ctx.SetCookie("user-auth", "", -1, "", "", false, true)
+	ctx.SetCookie("admin-auth", "", -1, "", "", false, true)
 	ctx.JSON(http.StatusOK, gin.H{
 		"message": "Log out successful",
 	})
