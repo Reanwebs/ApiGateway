@@ -135,6 +135,12 @@ func (c *conferenceClient) ScheduleConference(ctx context.Context, request model
 	var res *conference.ScheduleConferenceResponse
 	var err error
 
+	// Retrieve the "userId" from the context.
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -159,7 +165,7 @@ func (c *conferenceClient) ScheduleConference(ctx context.Context, request model
 			return nil, context.Canceled
 		default:
 			res, err = c.Server.ScheduleConference(ctx1, &conference.ScheduleConferenceRequest{
-				UserID:           request.UserID,
+				UserID:           userId,
 				Type:             request.Type,
 				Title:            request.Title,
 				Description:      request.Description,
@@ -249,6 +255,12 @@ func (c *conferenceClient) StartPrivateConference(ctx context.Context, request m
 	var res *conference.StartPrivateConferenceResponse
 	var err error
 
+	// Retrieve the "userId" from the context.
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -274,7 +286,7 @@ func (c *conferenceClient) StartPrivateConference(ctx context.Context, request m
 
 		default:
 			res, err = c.Server.StartPrivateConference(ctx1, &conference.StartPrivateConferenceRequest{
-				UserID:           request.UserID,
+				UserID:           userId,
 				Title:            request.Title,
 				Description:      request.Description,
 				Interest:         request.Interest,
@@ -310,6 +322,11 @@ func (c *conferenceClient) StartGroupConference(ctx context.Context, request mod
 	var res *conference.StartGroupConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -335,7 +352,7 @@ func (c *conferenceClient) StartGroupConference(ctx context.Context, request mod
 
 		default:
 			res, err = c.Server.StartGroupConference(ctx1, &conference.StartGroupConferenceRequest{
-				UserID:           request.UserID,
+				UserID:           userId,
 				GroupID:          request.GroupID,
 				Title:            request.Title,
 				Description:      request.Description,
@@ -371,6 +388,11 @@ func (c *conferenceClient) StartPublicConference(ctx context.Context, request mo
 	var res *conference.StartPublicConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -396,7 +418,7 @@ func (c *conferenceClient) StartPublicConference(ctx context.Context, request mo
 
 		default:
 			res, err = c.Server.StartPublicConference(ctx1, &conference.StartPublicConferenceRequest{
-				UserID:           request.UserID,
+				UserID:           userId,
 				Title:            request.Title,
 				Description:      request.Description,
 				Interest:         request.Interest,
@@ -432,6 +454,11 @@ func (c *conferenceClient) JoinPrivateConference(ctx context.Context, request mo
 	var res *conference.JoinPrivateConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -457,7 +484,7 @@ func (c *conferenceClient) JoinPrivateConference(ctx context.Context, request mo
 
 		default:
 			res, err = c.Server.JoinPrivateConference(ctx1, &conference.JoinPrivateConferenceRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				ConferenceID: request.ConferenceID,
 			})
 			cancel()
@@ -484,6 +511,11 @@ func (c *conferenceClient) JoinGroupConfernce(ctx context.Context, request model
 	var res *conference.JoinGroupConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -509,7 +541,7 @@ func (c *conferenceClient) JoinGroupConfernce(ctx context.Context, request model
 
 		default:
 			res, err = c.Server.JoinGroupConfernce(ctx1, &conference.JoinGroupConferenceRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				GroupID:      request.GroupID,
 				ConferenceID: request.ConferenceID,
 			})
@@ -538,6 +570,11 @@ func (c *conferenceClient) JoinPublicConference(ctx context.Context, request mod
 	var res *conference.JoinPublicConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -563,7 +600,7 @@ func (c *conferenceClient) JoinPublicConference(ctx context.Context, request mod
 
 		default:
 			res, err = c.Server.JoinPublicConference(ctx1, &conference.JoinPublicConferenceRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				ConferenceID: request.ConferenceID,
 			})
 			cancel()
@@ -591,6 +628,11 @@ func (c *conferenceClient) AcceptJoining(ctx context.Context, request models.Acc
 	var res *conference.AcceptJoiningResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -616,7 +658,7 @@ func (c *conferenceClient) AcceptJoining(ctx context.Context, request models.Acc
 
 		default:
 			res, err = c.Server.AcceptJoining(ctx1, &conference.AcceptJoiningRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				ConferenceID: request.ConferenceID,
 			})
 			cancel()
@@ -645,6 +687,11 @@ func (c *conferenceClient) DeclineJoining(ctx context.Context, request models.De
 	var res *conference.DeclineJoiningResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -670,7 +717,7 @@ func (c *conferenceClient) DeclineJoining(ctx context.Context, request models.De
 
 		default:
 			res, err = c.Server.DeclineJoining(ctx1, &conference.DeclineJoiningRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				ConferenceID: request.ConferenceID,
 			})
 			cancel()
@@ -698,6 +745,11 @@ func (c *conferenceClient) LeavePrivateConference(ctx context.Context, request m
 	var res *conference.LeavePrivateConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -723,7 +775,7 @@ func (c *conferenceClient) LeavePrivateConference(ctx context.Context, request m
 
 		default:
 			res, err = c.Server.LeavePrivateConference(ctx1, &conference.LeavePrivateConferenceRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				ConferenceID: request.ConferenceID,
 			})
 			cancel()
@@ -751,6 +803,11 @@ func (c *conferenceClient) LeaveGroupConference(ctx context.Context, request mod
 	var res *conference.LeaveGroupConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -776,7 +833,7 @@ func (c *conferenceClient) LeaveGroupConference(ctx context.Context, request mod
 
 		default:
 			res, err = c.Server.LeaveGroupConference(ctx1, &conference.LeaveGroupConferenceRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				ConferenceID: request.ConferenceID,
 			})
 			cancel()
@@ -804,6 +861,11 @@ func (c *conferenceClient) LeavePublicConference(ctx context.Context, request mo
 	var res *conference.LeavePublicConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -829,7 +891,7 @@ func (c *conferenceClient) LeavePublicConference(ctx context.Context, request mo
 
 		default:
 			res, err = c.Server.LeavePublicConference(ctx1, &conference.LeavePublicConferenceRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				ConferenceID: request.ConferenceID,
 			})
 			cancel()
@@ -857,6 +919,11 @@ func (c *conferenceClient) RemovePrivateParticipant(ctx context.Context, request
 	var res *conference.RemovePrivateParticipantResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -882,7 +949,7 @@ func (c *conferenceClient) RemovePrivateParticipant(ctx context.Context, request
 
 		default:
 			res, err = c.Server.RemovePrivateParticipant(ctx1, &conference.RemovePrivateParticipantRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				HostID:       request.HostID,
 				ConferenceID: request.ConferenceID,
 				Block:        request.Block,
@@ -912,6 +979,11 @@ func (c *conferenceClient) RemoveGroupParticipant(ctx context.Context, request m
 	var res *conference.RemoveGroupParticipantResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -937,7 +1009,7 @@ func (c *conferenceClient) RemoveGroupParticipant(ctx context.Context, request m
 
 		default:
 			res, err = c.Server.RemoveGroupParticipant(ctx1, &conference.RemoveGroupParticipantRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				HostID:       request.HostID,
 				ConferenceID: request.ConferenceID,
 				Block:        request.Block,
@@ -967,6 +1039,11 @@ func (c *conferenceClient) RemovePublicParticipant(ctx context.Context, request 
 	var res *conference.RemovePublicParticipantResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -992,7 +1069,7 @@ func (c *conferenceClient) RemovePublicParticipant(ctx context.Context, request 
 
 		default:
 			res, err = c.Server.RemovePublicParticipant(ctx1, &conference.RemovePublicParticipantRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				HostID:       request.HostID,
 				ConferenceID: request.ConferenceID,
 				Block:        request.Block,
@@ -1022,6 +1099,11 @@ func (c *conferenceClient) EndPrivateConference(ctx context.Context, request mod
 	var res *conference.EndPrivateConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -1047,7 +1129,7 @@ func (c *conferenceClient) EndPrivateConference(ctx context.Context, request mod
 
 		default:
 			res, err = c.Server.EndPrivateConference(ctx1, &conference.EndPrivateConferenceRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				ConferenceID: request.ConferenceID,
 			})
 			cancel()
@@ -1075,6 +1157,11 @@ func (c *conferenceClient) EndGroupConference(ctx context.Context, request model
 	var res *conference.EndGroupConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -1100,7 +1187,7 @@ func (c *conferenceClient) EndGroupConference(ctx context.Context, request model
 
 		default:
 			res, err = c.Server.EndGroupConference(ctx1, &conference.EndGroupConferenceRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				ConferenceID: request.ConferenceID,
 			})
 			cancel()
@@ -1128,6 +1215,11 @@ func (c *conferenceClient) EndPublicConference(ctx context.Context, request mode
 	var res *conference.EndPublicConferenceResponse
 	var err error
 
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -1153,7 +1245,7 @@ func (c *conferenceClient) EndPublicConference(ctx context.Context, request mode
 
 		default:
 			res, err = c.Server.EndPublicConference(ctx1, &conference.EndPublicConferenceRequest{
-				UserID:       request.UserID,
+				UserID:       userId,
 				ConferenceID: request.ConferenceID,
 			})
 			cancel()
@@ -1178,8 +1270,13 @@ func (c *conferenceClient) EndPublicConference(ctx context.Context, request mode
 }
 
 func (c *conferenceClient) ToggleCamera(ctx context.Context, request models.ToggleCameraRequest) (*conference.ToggleCameraResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	res, err := c.Server.ToggleCamera(ctx, &conference.ToggleCameraRequest{
-		UserID:       request.UserID,
+		UserID:       userId,
 		ConferenceID: request.ConferenceID,
 	})
 	if err != nil {
@@ -1189,8 +1286,13 @@ func (c *conferenceClient) ToggleCamera(ctx context.Context, request models.Togg
 }
 
 func (c *conferenceClient) ToggleMic(ctx context.Context, request models.ToggleMicRequest) (*conference.ToggleMicResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	res, err := c.Server.ToggleMic(ctx, &conference.ToggleMicRequest{
-		UserID:       request.UserID,
+		UserID:       userId,
 		ConferenceID: request.ConferenceID,
 	})
 	if err != nil {
@@ -1200,8 +1302,13 @@ func (c *conferenceClient) ToggleMic(ctx context.Context, request models.ToggleM
 }
 
 func (c *conferenceClient) ToggleParticipantCamera(ctx context.Context, request models.ToggleParticipantCameraRequest) (*conference.ToggleParticipantCameraResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	res, err := c.Server.ToggleParticipantCamera(ctx, &conference.ToggleParticipantCameraRequest{
-		UserID:       request.UserID,
+		UserID:       userId,
 		ConferenceID: request.ConferenceID,
 	})
 	if err != nil {
@@ -1211,8 +1318,13 @@ func (c *conferenceClient) ToggleParticipantCamera(ctx context.Context, request 
 }
 
 func (c *conferenceClient) ToggleParticipantMic(ctx context.Context, request models.ToggleParticipantMicRequest) (*conference.ToggleParticipantMicResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
 	res, err := c.Server.ToggleParticipantMic(ctx, &conference.ToggleParticipantMicRequest{
-		UserID:       request.UserID,
+		UserID:       userId,
 		ConferenceID: request.ConferenceID,
 	})
 	if err != nil {

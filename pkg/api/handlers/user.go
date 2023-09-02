@@ -226,9 +226,9 @@ func (h *UserHandler) LogoutUser(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			FORGOT-PASSWORD-REQUEST	body		models.ForgotPasswordOtpRequest	false	"enter phone number"
-//	@Success		200			{object}	pb.ForgotPasswordOtpResponse
-//	@Failure		400			{object}	pb.ForgotPasswordOtpResponse
-//	@Failure		400			{object}	pb.ForgotPasswordOtpResponse
+//	@Success		200						{object}	pb.ForgotPasswordOtpResponse
+//	@Failure		400						{object}	pb.ForgotPasswordOtpResponse
+//	@Failure		400						{object}	pb.ForgotPasswordOtpResponse
 //	@Router			/api/user/forgot-pass-otp [post]
 func (h *UserHandler) ForgotPasswordOtp(ctx *gin.Context) {
 	body := models.ForgotPasswordOtpRequest{}
@@ -260,9 +260,9 @@ func (h *UserHandler) ForgotPasswordOtp(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			FORGOT-PASSWORD-VALIDATION	body		models.ForgotPasswordValidateOtpRequest	false	"enter phone number"
-//	@Success		200			{object}	pb.ForgotPasswordValidateOtpResponse
-//	@Failure		400			{object}	pb.ForgotPasswordValidateOtpResponse
-//	@Failure		400			{object}	pb.ForgotPasswordValidateOtpResponse
+//	@Success		200							{object}	pb.ForgotPasswordValidateOtpResponse
+//	@Failure		400							{object}	pb.ForgotPasswordValidateOtpResponse
+//	@Failure		400							{object}	pb.ForgotPasswordValidateOtpResponse
 //	@Router			/api/user/forgot-pass-validate [post]
 func (h *UserHandler) ForgotPasswordValidateOtp(ctx *gin.Context) {
 	body := models.ForgotPasswordValidateOtpRequest{}
@@ -293,9 +293,9 @@ func (h *UserHandler) ForgotPasswordValidateOtp(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			RESET-PASSWORD	body		models.ForgotPasswordChangePasswordRequest	false	"enter new password"
-//	@Success		200			{object}	pb.ForgotPasswordOtpResponse
-//	@Failure		400			{object}	pb.ForgotPasswordOtpResponse
-//	@Failure		400			{object}	pb.ForgotPasswordOtpResponse
+//	@Success		200				{object}	pb.ForgotPasswordOtpResponse
+//	@Failure		400				{object}	pb.ForgotPasswordOtpResponse
+//	@Failure		400				{object}	pb.ForgotPasswordOtpResponse
 //	@Router			/api/user/forgot-pass-reset [patch]
 func (h *UserHandler) ForgotPasswordChangePassword(ctx *gin.Context) {
 	body := models.ForgotPasswordChangePasswordRequest{}

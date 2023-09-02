@@ -348,6 +348,126 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/user/forgot-pass-otp": {
+            "post": {
+                "description": "FORGOT PASSWORD OTP REQUEST",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "USER"
+                ],
+                "summary": "API FOR FORGOT PASSWORD OTP REQUEST",
+                "operationId": "FORGOT-PASSWORD-REQUEST",
+                "parameters": [
+                    {
+                        "description": "enter phone number",
+                        "name": "FORGOT-PASSWORD-REQUEST",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ForgotPasswordOtpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.ForgotPasswordOtpResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.ForgotPasswordOtpResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/forgot-pass-reset": {
+            "patch": {
+                "description": "RESETING PASSWORD AFTER VERIFICATION",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "USER"
+                ],
+                "summary": "API FOR RESETING PASSWORD AFTER VERIFICATION",
+                "operationId": "RESET-PASSWORD",
+                "parameters": [
+                    {
+                        "description": "enter new password",
+                        "name": "RESET-PASSWORD",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ForgotPasswordChangePasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.ForgotPasswordOtpResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.ForgotPasswordOtpResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/forgot-pass-validate": {
+            "post": {
+                "description": "FORGOT PASSWORD OTP VALIDATION",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "USER"
+                ],
+                "summary": "API FOR FORGOT PASSWORD OTP VALIDATION",
+                "operationId": "FORGOT-PASSWORD-VALIDATION",
+                "parameters": [
+                    {
+                        "description": "enter phone number",
+                        "name": "FORGOT-PASSWORD-VALIDATION",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ForgotPasswordValidateOtpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.ForgotPasswordValidateOtpResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.ForgotPasswordValidateOtpResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/login": {
             "post": {
                 "description": "VERIFY THE EMAIL,PASSWORD AND GENERATE A JWT TOKEN AND SET IT TO A COOKIE",
@@ -665,6 +785,36 @@ const docTemplate = `{
                 }
             }
         },
+        "models.ForgotPasswordChangePasswordRequest": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ForgotPasswordOtpRequest": {
+            "type": "object",
+            "properties": {
+                "phoneNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.ForgotPasswordValidateOtpRequest": {
+            "type": "object",
+            "properties": {
+                "otp": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                }
+            }
+        },
         "models.HealthCheck": {
             "type": "object",
             "properties": {
@@ -681,9 +831,6 @@ const docTemplate = `{
                 },
                 "groupID": {
                     "type": "string"
-                },
-                "userID": {
-                    "type": "string"
                 }
             }
         },
@@ -692,9 +839,6 @@ const docTemplate = `{
             "properties": {
                 "conferenceID": {
                     "type": "string"
-                },
-                "userID": {
-                    "type": "string"
                 }
             }
         },
@@ -702,9 +846,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "conferenceID": {
-                    "type": "string"
-                },
-                "userID": {
                     "type": "string"
                 }
             }
@@ -809,9 +950,6 @@ const docTemplate = `{
                 },
                 "type": {
                     "type": "string"
-                },
-                "userID": {
-                    "type": "string"
                 }
             }
         },
@@ -837,9 +975,6 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "title": {
-                    "type": "string"
-                },
-                "userID": {
                     "type": "string"
                 }
             }
@@ -870,9 +1005,6 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
-                },
-                "userID": {
-                    "type": "string"
                 }
             }
         },
@@ -881,6 +1013,34 @@ const docTemplate = `{
             "properties": {
                 "userName": {
                     "type": "string"
+                }
+            }
+        },
+        "pb.ForgotPasswordOtpResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "pb.ForgotPasswordValidateOtpResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
                 }
             }
         },
