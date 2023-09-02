@@ -1,7 +1,6 @@
 package models
 
 type StartConferenceRequest struct {
-	UserID           string `json:"userID"`
 	Type             string `json:"type"`
 	Title            string `json:"title"`
 	Description      string `json:"description"`
@@ -13,7 +12,6 @@ type StartConferenceRequest struct {
 }
 
 type JoinConferenceRequest struct {
-	UserID       string `json:"userId"`
 	ConferenceID string `json:"conferenceID"`
 }
 
@@ -57,16 +55,13 @@ type HealthCheck struct {
 }
 
 type LeaveConferenceRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 type EndConferenceRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 type ScheduleConferenceRequest struct {
-	UserID           string `json:"userID"`
 	Type             string `json:"type"`
 	Title            string `json:"title"`
 	Description      string `json:"description"`
@@ -83,7 +78,6 @@ type ScheduleConferenceRequest struct {
 // Start Conference
 
 type StartPrivateConferenceRequest struct {
-	UserID           string `json:"userID"`
 	Title            string `json:"title"`
 	Description      string `json:"description"`
 	Interest         string `json:"interest"`
@@ -94,7 +88,6 @@ type StartPrivateConferenceRequest struct {
 }
 
 type StartGroupConferenceRequest struct {
-	UserID           string `json:"userID"`
 	GroupID          string `json:"groupID"`
 	Title            string `json:"title"`
 	Description      string `json:"description"`
@@ -106,7 +99,6 @@ type StartGroupConferenceRequest struct {
 }
 
 type StartPublicConferenceRequest struct {
-	UserID           string `json:"userID"`
 	Title            string `json:"title"`
 	Description      string `json:"description"`
 	Interest         string `json:"interest"`
@@ -120,53 +112,45 @@ type StartPublicConferenceRequest struct {
 //  Join Conference
 
 type JoinPrivateConferenceRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 type JoinGroupConferenceRequest struct {
-	UserID       string `json:"userID"`
 	GroupID      string `json:"groupID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 type JoinPublicConferenceRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 //  AcceptJoinRequest
 
 type AcceptJoiningRequest struct {
-	UserID       string `json:"userID"`
 	HostID       string `json:"hostID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 // Decline Joining
 type DeclineJoiningRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 // RemoveParticipant
 
 type RemovePrivateParticipantRequest struct {
-	UserID       string `json:"userID"`
 	HostID       string `json:"hostID"`
 	ConferenceID string `json:"conferenceID"`
 	Block        bool   `json:"block"`
 }
 
 type RemoveGroupParticipantRequest struct {
-	UserID       string `json:"userID"`
 	HostID       string `json:"hostID"`
 	ConferenceID string `json:"conferenceID"`
 	Block        bool   `json:"block"`
 }
 
 type RemovePublicParticipantRequest struct {
-	UserID       string `json:"userID"`
 	HostID       string `json:"hostID"`
 	ConferenceID string `json:"conferenceID"`
 	Block        bool   `json:"block"`
@@ -175,61 +159,51 @@ type RemovePublicParticipantRequest struct {
 // ToggleCamera
 
 type ToggleCameraRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 // ToggleMic
 
 type ToggleMicRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 // ToggleParticipantCamera
 
 type ToggleParticipantCameraRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 // ToggleParticipantMic
 
 type ToggleParticipantMicRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 // LeaveConference
 
 type LeavePrivateConferenceRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 type LeaveGroupConferenceRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 type LeavePublicConferenceRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 // EndConference
 
 type EndPrivateConferenceRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 type EndGroupConferenceRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
 
 type EndPublicConferenceRequest struct {
-	UserID       string `json:"userID"`
 	ConferenceID string `json:"conferenceID"`
 }
