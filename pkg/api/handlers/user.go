@@ -7,6 +7,7 @@ import (
 	middleware "gateway/pkg/common/midleware"
 	"gateway/pkg/common/models"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -109,7 +110,13 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.UserLogin(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.UserLogin(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "failed to login",
