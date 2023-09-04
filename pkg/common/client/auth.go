@@ -219,3 +219,23 @@ func (c *authClient) ForgotPasswordChangePassword(ctx context.Context, request m
 	}
 	return res, nil
 }
+
+func (c *authClient) ValidateUser(ctx context.Context, request models.ValidateUserRequest) (*pb.ValidateUserResponse, error) {
+	res, err := c.Server.ValidateUser(ctx, &pb.ValidateUserRequest{
+		Email: request.Email,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) GoogleLogin(ctx context.Context, request models.GoogleLoginRequest) (*pb.GoogleLoginResponse, error) {
+	res, err := c.Server.GoogleLogin(ctx, &pb.GoogleLoginRequest{
+		Token: request.Token,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

@@ -317,3 +317,69 @@ func (h *UserHandler) ForgotPasswordChangePassword(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 }
 
+// USER VALIDATE USER
+//
+//	@Summary		API FOR VALIDATE USER
+//	@ID				VALIDATE USER
+//	@Description	VALIDATING USER BLOCKED OR NOT
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			VALIDATE-USER 	body		models.ValidateUserRequest	false	"enter mail"
+//	@Success		200				{object}	pb.ValidateUserResponse
+//	@Failure		400				{object}	pb.ValidateUserResponse
+//	@Failure		400				{object}	pb.ValidateUserResponse
+//	@Router			/api/user/validate-user [post]
+func (h *UserHandler) ValidateUser(ctx *gin.Context) {
+	body := models.ValidateUserRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ValidateUser(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "validate user failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+
+}
+
+// USER GOOGLE LOGIN
+//
+//	@Summary		API FOR GOOGLE LOGIN
+//	@ID				GOOGLE LOGIN
+//	@Description	USER CAN LOGIN USING GMAIL
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			GOOGLE-LOGIN 	body		models.GoogleLoginReques	false	"enter gmail"
+//	@Success		200				{object}	pb.GoogleLoginResponse
+//	@Failure		400				{object}	pb.GoogleLoginResponse
+//	@Failure		400				{object}	pb.GoogleLoginResponse
+//	@Router			/api/user/google-login [post]
+func (h *UserHandler) GoogleLogin(ctx *gin.Context) {
+	body := models.GoogleLoginRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.GoogleLogin(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "google login failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}

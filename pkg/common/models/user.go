@@ -46,3 +46,11 @@ type Connection struct {
 	ConnectedUserID uint
 	ConnectionDate  string
 }
+
+type ValidateUserRequest struct {
+	Email string `json:"email"`
+}
+
+type GoogleLoginRequest struct {
+	Token string `json:"token"`
+}

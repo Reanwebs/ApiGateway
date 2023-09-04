@@ -20,6 +20,8 @@ service Autharization {
     rpc GetInterest(GetInterestRequest) returns (GetInterestResponse){}
     rpc AddInterest(AddInterestRequest) returns (AddInterestResponse) {}
     rpc ManageInterest(ManageInterestRequest) returns (ManageInterestResponse){}
+    rpc ValidateUser(ValidateUserRequest) returns (ValidateUserResponse){}
+    rpc GoogleLogin(GoogleLoginRequest) returns (GoogleLoginResponse){}
 
 
 }
@@ -199,4 +201,30 @@ message ManageInterestResponse{
     int64 status = 1;
     string message = 2;
     string error = 3;
+}
+
+
+message ValidateUserRequest{
+    string email=1;
+}
+
+message ValidateUserResponse{
+    int64 status =1;
+    string message =2;
+    bool isBlocked = 3;
+    string error = 4;
+}
+
+message GoogleLoginRequest{
+    string token = 1;
+}
+
+message GoogleLoginResponse{
+    int64 status = 1;
+    string username = 2;
+    string email = 3;
+    string phoneNumber = 4;
+    string error = 5;
+    string uid = 6;
+    string message = 7;
 }

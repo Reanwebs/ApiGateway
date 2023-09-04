@@ -17,5 +17,6 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	routes.POST("/forgot-pass-otp", userHandler.ForgotPasswordOtp)
 	routes.POST("/forgot-pass-validate", userHandler.ForgotPasswordValidateOtp)
 	routes.PATCH("/forgot-pass-reset", userHandler.ForgotPasswordChangePassword)
-
+	routes.POST("/validate-user", userHandler.ValidateUser)
+	routes.POST("/google-login", userHandler.GoogleLogin)
 }

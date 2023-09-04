@@ -32,6 +32,8 @@ type AutharizationClient interface {
 	GetInterest(ctx context.Context, in *GetInterestRequest, opts ...grpc.CallOption) (*GetInterestResponse, error)
 	AddInterest(ctx context.Context, in *AddInterestRequest, opts ...grpc.CallOption) (*AddInterestResponse, error)
 	ManageInterest(ctx context.Context, in *ManageInterestRequest, opts ...grpc.CallOption) (*ManageInterestResponse, error)
+	ValidateUser(ctx context.Context, in *ValidateUserRequest, opts ...grpc.CallOption) (*ValidateUserResponse, error)
+	GoogleLogin(ctx context.Context, in *GoogleLoginRequest, opts ...grpc.CallOption) (*GoogleLoginResponse, error)
 }
 
 type autharizationClient struct {
@@ -168,6 +170,24 @@ func (c *autharizationClient) ManageInterest(ctx context.Context, in *ManageInte
 	return out, nil
 }
 
+func (c *autharizationClient) ValidateUser(ctx context.Context, in *ValidateUserRequest, opts ...grpc.CallOption) (*ValidateUserResponse, error) {
+	out := new(ValidateUserResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ValidateUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) GoogleLogin(ctx context.Context, in *GoogleLoginRequest, opts ...grpc.CallOption) (*GoogleLoginResponse, error) {
+	out := new(GoogleLoginResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/GoogleLogin", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
@@ -186,6 +206,8 @@ type AutharizationServer interface {
 	GetInterest(context.Context, *GetInterestRequest) (*GetInterestResponse, error)
 	AddInterest(context.Context, *AddInterestRequest) (*AddInterestResponse, error)
 	ManageInterest(context.Context, *ManageInterestRequest) (*ManageInterestResponse, error)
+	ValidateUser(context.Context, *ValidateUserRequest) (*ValidateUserResponse, error)
+	GoogleLogin(context.Context, *GoogleLoginRequest) (*GoogleLoginResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -234,6 +256,12 @@ func (UnimplementedAutharizationServer) AddInterest(context.Context, *AddInteres
 }
 func (UnimplementedAutharizationServer) ManageInterest(context.Context, *ManageInterestRequest) (*ManageInterestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ManageInterest not implemented")
+}
+func (UnimplementedAutharizationServer) ValidateUser(context.Context, *ValidateUserRequest) (*ValidateUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ValidateUser not implemented")
+}
+func (UnimplementedAutharizationServer) GoogleLogin(context.Context, *GoogleLoginRequest) (*GoogleLoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GoogleLogin not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -500,6 +528,42 @@ func _Autharization_ManageInterest_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Autharization_ValidateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ValidateUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ValidateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ValidateUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ValidateUser(ctx, req.(*ValidateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_GoogleLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GoogleLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).GoogleLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/GoogleLogin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).GoogleLogin(ctx, req.(*GoogleLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -562,6 +626,14 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ManageInterest",
 			Handler:    _Autharization_ManageInterest_Handler,
+		},
+		{
+			MethodName: "ValidateUser",
+			Handler:    _Autharization_ValidateUser_Handler,
+		},
+		{
+			MethodName: "GoogleLogin",
+			Handler:    _Autharization_GoogleLogin_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

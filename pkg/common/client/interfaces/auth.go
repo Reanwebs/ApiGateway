@@ -15,4 +15,6 @@ type AuthClient interface {
 	ForgotPasswordOtp(context.Context, models.ForgotPasswordOtpRequest) (*pb.ForgotPasswordOtpResponse, error)
 	ForgotPasswordValidateOtp(context.Context, models.ForgotPasswordValidateOtpRequest) (*pb.ForgotPasswordValidateOtpResponse, error)
 	ForgotPasswordChangePassword(context.Context, models.ForgotPasswordChangePasswordRequest) (*pb.ForgotPasswordChangePasswordResponse, error)
+	ValidateUser(context.Context, models.ValidateUserRequest) (*pb.ValidateUserResponse, error)
+	GoogleLogin(context.Context, models.GoogleLoginRequest) (*pb.GoogleLoginResponse, error)
 }
