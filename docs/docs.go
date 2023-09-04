@@ -468,6 +468,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/user/google-login": {
+            "post": {
+                "description": "USER CAN LOGIN USING GMAIL",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "USER"
+                ],
+                "summary": "API FOR GOOGLE LOGIN",
+                "operationId": "GOOGLE LOGIN",
+                "parameters": [
+                    {
+                        "description": "enter gmail",
+                        "name": "GOOGLE-LOGIN",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.GoogleLoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.GoogleLoginResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.GoogleLoginResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/api/user/login": {
             "post": {
                 "description": "VERIFY THE EMAIL,PASSWORD AND GENERATE A JWT TOKEN AND SET IT TO A COOKIE",
@@ -717,6 +757,46 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/user/validate-user": {
+            "post": {
+                "description": "VALIDATING USER BLOCKED OR NOT",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "USER"
+                ],
+                "summary": "API FOR VALIDATE USER",
+                "operationId": "VALIDATE USER",
+                "parameters": [
+                    {
+                        "description": "enter mail",
+                        "name": "VALIDATE-USER",
+                        "in": "body",
+                        "schema": {
+                            "$ref": "#/definitions/models.ValidateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/pb.ValidateUserResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/pb.ValidateUserResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -811,6 +891,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "phoneNumber": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.GoogleLoginRequest": {
+            "type": "object",
+            "properties": {
+                "token": {
                     "type": "string"
                 }
             }
@@ -1016,6 +1104,14 @@ const docTemplate = `{
                 }
             }
         },
+        "models.ValidateUserRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
         "pb.ForgotPasswordOtpResponse": {
             "type": "object",
             "properties": {
@@ -1041,6 +1137,32 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
+                }
+            }
+        },
+        "pb.GoogleLoginResponse": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "phoneNumber": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "uid": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },
@@ -1120,6 +1242,23 @@ const docTemplate = `{
             "properties": {
                 "error": {
                     "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "pb.ValidateUserResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                },
+                "isBlocked": {
+                    "type": "boolean"
                 },
                 "message": {
                     "type": "string"
