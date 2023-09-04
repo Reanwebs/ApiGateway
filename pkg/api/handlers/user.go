@@ -332,7 +332,7 @@ func (h *UserHandler) ForgotPasswordChangePassword(ctx *gin.Context) {
 //	@Tags			USER
 //	@Accept			json
 //	@Produce		json
-//	@Param			VALIDATE-USER 	body		models.ValidateUserRequest	false	"enter mail"
+//	@Param			VALIDATE-USER	body		models.ValidateUserRequest	false	"enter mail"
 //	@Success		200				{object}	pb.ValidateUserResponse
 //	@Failure		400				{object}	pb.ValidateUserResponse
 //	@Failure		400				{object}	pb.ValidateUserResponse
@@ -366,7 +366,7 @@ func (h *UserHandler) ValidateUser(ctx *gin.Context) {
 //	@Tags			USER
 //	@Accept			json
 //	@Produce		json
-//	@Param			GOOGLE-LOGIN 	body		models.GoogleLoginReques	false	"enter gmail"
+//	@Param			GOOGLE-LOGIN	body		models.GoogleLoginRequest	false	"enter gmail"
 //	@Success		200				{object}	pb.GoogleLoginResponse
 //	@Failure		400				{object}	pb.GoogleLoginResponse
 //	@Failure		400				{object}	pb.GoogleLoginResponse

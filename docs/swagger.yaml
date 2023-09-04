@@ -59,6 +59,11 @@ definitions:
       phoneNumber:
         type: string
     type: object
+  models.GoogleLoginRequest:
+    properties:
+      token:
+        type: string
+    type: object
   models.HealthCheck:
     properties:
       data:
@@ -189,6 +194,11 @@ definitions:
       userName:
         type: string
     type: object
+  models.ValidateUserRequest:
+    properties:
+      email:
+        type: string
+    type: object
   pb.ForgotPasswordOtpResponse:
     properties:
       error:
@@ -206,6 +216,23 @@ definitions:
         type: string
       status:
         type: integer
+    type: object
+  pb.GoogleLoginResponse:
+    properties:
+      email:
+        type: string
+      error:
+        type: string
+      message:
+        type: string
+      phoneNumber:
+        type: string
+      status:
+        type: integer
+      uid:
+        type: string
+      username:
+        type: string
     type: object
   pb.LoginResponse:
     properties:
@@ -257,6 +284,17 @@ definitions:
     properties:
       error:
         type: string
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  pb.ValidateUserResponse:
+    properties:
+      error:
+        type: string
+      isBlocked:
+        type: boolean
       message:
         type: string
       status:
@@ -560,6 +598,32 @@ paths:
       summary: API FOR FORGOT PASSWORD OTP VALIDATION
       tags:
       - USER
+  /api/user/google-login:
+    post:
+      consumes:
+      - application/json
+      description: USER CAN LOGIN USING GMAIL
+      operationId: GOOGLE LOGIN
+      parameters:
+      - description: enter gmail
+        in: body
+        name: GOOGLE-LOGIN
+        schema:
+          $ref: '#/definitions/models.GoogleLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.GoogleLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.GoogleLoginResponse'
+      summary: API FOR GOOGLE LOGIN
+      tags:
+      - USER
   /api/user/login:
     post:
       consumes:
@@ -723,6 +787,32 @@ paths:
           schema:
             $ref: '#/definitions/pb.ValidNameResponse'
       summary: API FOR USERNAME VALIDATION
+      tags:
+      - USER
+  /api/user/validate-user:
+    post:
+      consumes:
+      - application/json
+      description: VALIDATING USER BLOCKED OR NOT
+      operationId: VALIDATE USER
+      parameters:
+      - description: enter mail
+        in: body
+        name: VALIDATE-USER
+        schema:
+          $ref: '#/definitions/models.ValidateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pb.ValidateUserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/pb.ValidateUserResponse'
+      summary: API FOR VALIDATE USER
       tags:
       - USER
 swagger: "2.0"
