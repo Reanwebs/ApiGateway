@@ -32,7 +32,12 @@ func InitializeAPI(c *config.Config) (*api.Server, error) {
 		return nil, err
 	}
 	adminHandler := handlers.NewAdminHandler(adminClient)
-	server, err := api.NewServeHTTP(c, userHandler, conferenceHandler, adminHandler)
+	videoClient, err := client.InitVideoStreamingClient(c)
+	if err != nil {
+		return nil, err
+	}
+	videoHandler := handlers.NewVideoHandler(videoClient)
+	server, err := api.NewServeHTTP(c, userHandler, conferenceHandler, adminHandler, videoHandler)
 	if err != nil {
 		return nil, err
 	}
