@@ -513,6 +513,7 @@ func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUs
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
 	}
 
 	var res *pb.ChangeUserNameResponse
@@ -571,6 +572,7 @@ func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmail
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
 	}
 
 	var res *pb.ChangeEmailResponse
@@ -630,6 +632,7 @@ func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePa
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
 	}
 
 	var res *pb.ChangePasswordResponse
@@ -688,6 +691,7 @@ func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.Ch
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
 	}
 
 	var res *pb.ChangeEmailVerifyOtpResponse
@@ -748,6 +752,7 @@ func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.Ch
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
 	}
 
 	var res *pb.ChangePhoneNumberOtpResponse
@@ -807,6 +812,7 @@ func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.Chang
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
 	}
 
 	var res *pb.ChangePhoneNumberResponse
