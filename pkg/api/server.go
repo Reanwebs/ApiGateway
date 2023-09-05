@@ -17,7 +17,7 @@ type Server struct {
 }
 
 func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler,
-	conferenceHandler handlers.ConferenceHandler, adminHandler handlers.AdminHandler) (*Server, error) {
+	conferenceHandler handlers.ConferenceHandler, adminHandler handlers.AdminHandler, videoHandler handlers.VideoHandler) (*Server, error) {
 
 	engine := gin.New()
 	engine.Use(gin.Logger())
@@ -27,6 +27,7 @@ func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler,
 	routes.UserRoutes(engine.Group("/api"), userHandler)
 	routes.AdminRoutes(engine.Group("/api"), adminHandler)
 	routes.ConferenceRoutes(engine.Group("/api"), conferenceHandler)
+	routes.VideoRoutes(engine.Group("/api"), videoHandler)
 
 	engine.NoRoute(func(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{

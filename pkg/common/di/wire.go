@@ -18,9 +18,11 @@ func InitializeAPI(c *config.Config) (*api.Server, error) {
 		client.InitClient,
 		client.InitConferenceClient,
 		client.InitAdminClient,
+		client.InitVideoStreamingClient,
 		handlers.NewAuthHandler,
 		handlers.NewAdminHandler,
 		handlers.NewConferenceHandler,
+		handlers.NewVideoHandler,
 		api.NewServeHTTP,
 	)
 	return &api.Server{}, nil
