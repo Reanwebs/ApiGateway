@@ -33,7 +33,7 @@ func NewAuthClient(server pb.AutharizationClient) interfaces.AuthClient {
 	}
 }
 
-func (c *authClient) UserSignup(ctx context.Context, request models.RegisterRequestBody) (*pb.SignupResponse, error) {
+func (c *authClient) UserSignup(ctx context.Context, request models.RegisterRequestBody, retryConfig models.RetryConfig) (*pb.SignupResponse, error) {
 
 	res, err := c.Server.UserSignup(ctx, &pb.SignupRequest{
 		Email:       request.Email,
@@ -50,7 +50,7 @@ func (c *authClient) UserSignup(ctx context.Context, request models.RegisterRequ
 	return res, nil
 }
 
-func (c *authClient) OtpRequest(ctx context.Context, request models.OtpValidation) (*pb.OtpSignUpResponse, error) {
+func (c *authClient) OtpRequest(ctx context.Context, request models.OtpValidation, retryConfig models.RetryConfig) (*pb.OtpSignUpResponse, error) {
 	res, err := c.Server.OtpRequest(ctx, &pb.OtpSignUpRequest{
 		Username:    request.UserName,
 		Email:       request.Email,
@@ -130,216 +130,735 @@ func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestB
 	return nil, err
 }
 
-// func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestBody) (*pb.LoginResponse, error) {
-// 	var res *pb.LoginResponse
-// 	var err error
-// 	maxRetries := 2
-// 	for i := 0; i <= maxRetries; i++ {
-// 		fmt.Println("try\t", i)
-// 		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
-// 		defer cancel()
+func (c *authClient) ValidName(ctx context.Context, request models.ValidName, retryConfig models.RetryConfig) (*pb.ValidNameResponse, error) {
+	var res *pb.ValidNameResponse
+	var err error
 
-// 		done := make(chan struct{})
-// 		go func() {
-// 			defer close(done)
-// 			<-ctx.Done() // Listen for cancellation
-// 		}()
+	startTime := time.Now()
 
-// 		select {
-// 		case <-done:
-// 			// Handle cancellation
-// 			return nil, context.Canceled
-// 		default:
-// 			res, err = c.Server.UserLogin(ctx1, &pb.LoginRequest{
-// 				Email:    request.Email,
-// 				Password: request.Password,
-// 			})
-// 			if err == nil {
-// 				return res, nil // Request succeeded, return response
-// 			}
-// 			// Request failed, continue to retry if possible
-// 		}
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
 
-// 		select {
-// 		case <-ctx.Done():
-// 			// Handle timeout
-// 			return nil, context.DeadlineExceeded
-// 		case <-time.After(time.Second): // Wait before retrying
-// 		}
-// 	}
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
 
-// 	return nil, err // Return last error after maxRetries
-// }
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
 
-func (c *authClient) ValidName(ctx context.Context, request models.ValidName) (*pb.ValidNameResponse, error) {
-	res, err := c.Server.ValidName(ctx, &pb.ValidNameRequest{
-		Username: request.UserName,
-	})
-	if err != nil {
-		return nil, err
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ValidName(ctx1, &pb.ValidNameRequest{
+				Username: request.UserName,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
 
-func (c *authClient) ResendOtp(ctx context.Context, request models.ResendOtp) (*pb.ResendOtpResponse, error) {
-	res, err := c.Server.ResendOtp(ctx, &pb.ResendOtpRequest{
-		PhoneNumber: request.PhoneNumber,
-	})
-	if err != nil {
-		return nil, err
+func (c *authClient) ResendOtp(ctx context.Context, request models.ResendOtp, retryConfig models.RetryConfig) (*pb.ResendOtpResponse, error) {
+
+	var res *pb.ResendOtpResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ResendOtp(ctx1, &pb.ResendOtpRequest{
+				PhoneNumber: request.PhoneNumber,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
 
-func (c *authClient) ForgotPasswordOtp(ctx context.Context, request models.ForgotPasswordOtpRequest) (*pb.ForgotPasswordOtpResponse, error) {
-	res, err := c.Server.ForgotPasswordOtp(ctx, &pb.ForgotPasswordOtpRequest{
-		PhoneNumber: request.PhoneNumber,
-	})
-	if err != nil {
-		return nil, err
+func (c *authClient) ForgotPasswordOtp(ctx context.Context, request models.ForgotPasswordOtpRequest, retryConfig models.RetryConfig) (*pb.ForgotPasswordOtpResponse, error) {
+
+	var res *pb.ForgotPasswordOtpResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ForgotPasswordOtp(ctx1, &pb.ForgotPasswordOtpRequest{
+				PhoneNumber: request.PhoneNumber,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
 
-func (c *authClient) ForgotPasswordValidateOtp(ctx context.Context, request models.ForgotPasswordValidateOtpRequest) (*pb.ForgotPasswordValidateOtpResponse, error) {
-	res, err := c.Server.ForgotPasswordValidateOtp(ctx, &pb.ForgotPasswordValidateOtpRequest{
-		PhoneNumber: request.PhoneNumber,
-		Otp:         request.Otp,
-	})
-	if err != nil {
-		return nil, err
+func (c *authClient) ForgotPasswordValidateOtp(ctx context.Context, request models.ForgotPasswordValidateOtpRequest, retryConfig models.RetryConfig) (*pb.ForgotPasswordValidateOtpResponse, error) {
+
+	var res *pb.ForgotPasswordValidateOtpResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ForgotPasswordValidateOtp(ctx1, &pb.ForgotPasswordValidateOtpRequest{
+				PhoneNumber: request.PhoneNumber,
+				Otp:         request.Otp,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
 
-func (c *authClient) ForgotPasswordChangePassword(ctx context.Context, request models.ForgotPasswordChangePasswordRequest) (*pb.ForgotPasswordChangePasswordResponse, error) {
-	res, err := c.Server.ForgotPasswordChangePassword(ctx, &pb.ForgotPasswordChangePasswordRequest{
-		PhoneNumber: request.PhoneNumber,
-		Password:    request.Password,
-	})
-	if err != nil {
-		return nil, err
+func (c *authClient) ForgotPasswordChangePassword(ctx context.Context, request models.ForgotPasswordChangePasswordRequest, retryConfig models.RetryConfig) (*pb.ForgotPasswordChangePasswordResponse, error) {
+
+	var res *pb.ForgotPasswordChangePasswordResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ForgotPasswordChangePassword(ctx1, &pb.ForgotPasswordChangePasswordRequest{
+				PhoneNumber: request.PhoneNumber,
+				Password:    request.Password,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
 
-func (c *authClient) ValidateUser(ctx context.Context, request models.ValidateUserRequest) (*pb.ValidateUserResponse, error) {
-	res, err := c.Server.ValidateUser(ctx, &pb.ValidateUserRequest{
-		Email: request.Email,
-	})
-	if err != nil {
-		return nil, err
+func (c *authClient) ValidateUser(ctx context.Context, request models.ValidateUserRequest, retryConfig models.RetryConfig) (*pb.ValidateUserResponse, error) {
+
+	var res *pb.ValidateUserResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ValidateUser(ctx1, &pb.ValidateUserRequest{
+				Email: request.Email,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
 
-func (c *authClient) GoogleLogin(ctx context.Context, request models.GoogleLoginRequest) (*pb.GoogleLoginResponse, error) {
-	res, err := c.Server.GoogleLogin(ctx, &pb.GoogleLoginRequest{
-		Token: request.Token,
-	})
-	if err != nil {
-		return nil, err
+func (c *authClient) GoogleLogin(ctx context.Context, request models.GoogleLoginRequest, retryConfig models.RetryConfig) (*pb.GoogleLoginResponse, error) {
+
+	var res *pb.GoogleLoginResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.GoogleLogin(ctx1, &pb.GoogleLoginRequest{
+				Token: request.Token,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
 }
 
-func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUserNameRequest) (*pb.ChangeUserNameResponse, error) {
+func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUserNameRequest, retryConfig models.RetryConfig) (*pb.ChangeUserNameResponse, error) {
 	// Retrieve the "userId" from the context.
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 	}
 
-	res, err := c.Server.ChangeUserName(ctx, &pb.ChangeUserNameRequest{
-		UserId:   userId,
-		UserName: request.UserName,
-	})
+	var res *pb.ChangeUserNameResponse
+	var err error
 
-	if err != nil {
-		return nil, err
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ChangeUserName(ctx1, &pb.ChangeUserNameRequest{
+				UserId:   userId,
+				UserName: request.UserName,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
 
 }
-func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmailRequest) (*pb.ChangeEmailResponse, error) {
+func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmailRequest, retryConfig models.RetryConfig) (*pb.ChangeEmailResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 	}
 
-	res, err := c.Server.ChangeEmail(ctx, &pb.ChangeEmailRequest{
-		UserId: userId,
-		Email:  request.Email,
-	})
-	if err != nil {
-		return nil, err
+	var res *pb.ChangeEmailResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ChangeEmail(ctx1, &pb.ChangeEmailRequest{
+				UserId: userId,
+				Email:  request.Email,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
 
-func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePasswordRequest) (*pb.ChangePasswordResponse, error) {
+func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePasswordRequest, retryConfig models.RetryConfig) (*pb.ChangePasswordResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 	}
 
-	res, err := c.Server.ChangePassword(ctx, &pb.ChangePasswordRequest{
-		UserId:   userId,
-		Password: request.Password,
-	})
+	var res *pb.ChangePasswordResponse
+	var err error
 
-	if err != nil {
-		return nil, err
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ChangePassword(ctx1, &pb.ChangePasswordRequest{
+				UserId:   userId,
+				Password: request.Password,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
-func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.ChangeEmailVerifyOtpRequest) (*pb.ChangeEmailVerifyOtpResponse, error) {
+func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.ChangeEmailVerifyOtpRequest, retryConfig models.RetryConfig) (*pb.ChangeEmailVerifyOtpResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 	}
 
-	res, err := c.Server.ChangeEmailVerifyOtp(ctx, &pb.ChangeEmailVerifyOtpRequest{
-		UserId: userId,
-		Email:  request.Email,
-		Otp:    request.Otp,
-	})
-	if err != nil {
-		return nil, err
+	var res *pb.ChangeEmailVerifyOtpResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ChangeEmailVerifyOtp(ctx1, &pb.ChangeEmailVerifyOtpRequest{
+				UserId: userId,
+				Email:  request.Email,
+				Otp:    request.Otp,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
 
-func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.ChangePhoneNumberOtpRequest) (*pb.ChangePhoneNumberOtpResponse, error) {
+func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.ChangePhoneNumberOtpRequest, retryConfig models.RetryConfig) (*pb.ChangePhoneNumberOtpResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 	}
 
-	res, err := c.Server.ChangePhoneNumberOtp(ctx, &pb.ChangePhoneNumberOtpRequest{
-		UserId:      userId,
-		PhoneNumber: request.PhoneNumber,
-	})
+	var res *pb.ChangePhoneNumberOtpResponse
+	var err error
 
-	if err != nil {
-		return nil, err
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ChangePhoneNumberOtp(ctx1, &pb.ChangePhoneNumberOtpRequest{
+				UserId:      userId,
+				PhoneNumber: request.PhoneNumber,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
 
-func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.ChangePhoneNumberRequest) (*pb.ChangePhoneNumberResponse, error) {
+func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.ChangePhoneNumberRequest, retryConfig models.RetryConfig) (*pb.ChangePhoneNumberResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 	}
 
-	res, err := c.Server.ChangePhoneNumber(ctx, &pb.ChangePhoneNumberRequest{
-		UserId:      userId,
-		PhoneNumber: request.PhoneNumber,
-		Otp:         request.Otp,
-	})
-	if err != nil {
-		return nil, err
+	var res *pb.ChangePhoneNumberResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ChangePhoneNumber(ctx1, &pb.ChangePhoneNumberRequest{
+				UserId:      userId,
+				PhoneNumber: request.PhoneNumber,
+				Otp:         request.Otp,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
 	}
-	return res, nil
+
+	return nil, err
+
 }
