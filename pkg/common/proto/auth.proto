@@ -22,6 +22,12 @@ service Autharization {
     rpc ManageInterest(ManageInterestRequest) returns (ManageInterestResponse){}
     rpc ValidateUser(ValidateUserRequest) returns (ValidateUserResponse){}
     rpc GoogleLogin(GoogleLoginRequest) returns (GoogleLoginResponse){}
+    rpc ChangeUserName(ChangeUserNameRequest) returns (ChangeUserNameResponse){}
+    rpc ChangeEmail(ChangeEmailRequest) returns (ChangeEmailResponse){}
+    rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {}
+    rpc ChangeEmailVerifyOtp(ChangeEmailVerifyOtpRequest) returns (ChangeEmailVerifyOtpResponse) {}
+    rpc ChangePhoneNumberOtp(ChangePhoneNumberOtpRequest) returns (ChangePhoneNumberOtpResponse) {}
+    rpc ChangePhoneNumber(ChangePhoneNumberRequest) returns (ChangePhoneNumberResponse) {}
 
 
 }
@@ -228,3 +234,85 @@ message GoogleLoginResponse{
     string uid = 6;
     string message = 7;
 }
+
+message ChangeUserNameRequest{
+    string userId = 1;
+    string userName=2;
+}
+
+message ChangeUserNameResponse{
+    int64 status = 1;
+    string username = 2;
+    string email = 3;
+    string phoneNumber = 4;
+    string message = 5;
+    string error = 6;
+    
+}
+
+message ChangeEmailRequest{
+    string userId =1;
+    string email =2;
+}
+
+message ChangeEmailResponse{
+    int64 status = 1;
+    string error = 2;
+    string message = 3;
+}
+
+message ChangeEmailVerifyOtpRequest{
+    string userId = 1;
+    string email =2;
+    string otp =3;
+}
+
+message ChangeEmailVerifyOtpResponse{
+    int64 status = 1;
+    string username = 2;
+    string email = 3;
+    string phoneNumber = 4;
+    string message = 5;
+    string error = 6;
+}
+
+message ChangePasswordRequest{
+    string userId =1;
+    string password =2;
+}
+
+message ChangePasswordResponse{
+    int64 status = 1;
+    string username = 2;
+    string email = 3;
+    string phoneNumber = 4;
+    string error = 5;
+    string message = 6;
+}
+
+message ChangePhoneNumberOtpRequest{
+    string userId = 1;
+    string phoneNumber=2;
+}
+
+message ChangePhoneNumberOtpResponse{
+    int64 status =1;
+    string message =2;
+    string error =3;
+}
+
+message ChangePhoneNumberRequest{
+    string userId =1;
+    string phoneNumber = 2;
+    string otp =3;
+}
+
+message ChangePhoneNumberResponse{
+    int64 status = 1;
+    string username = 2;
+    string email = 3;
+    string phoneNumber = 4;
+    string error = 5;
+    string message = 6;
+}
+

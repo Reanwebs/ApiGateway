@@ -34,6 +34,12 @@ type AutharizationClient interface {
 	ManageInterest(ctx context.Context, in *ManageInterestRequest, opts ...grpc.CallOption) (*ManageInterestResponse, error)
 	ValidateUser(ctx context.Context, in *ValidateUserRequest, opts ...grpc.CallOption) (*ValidateUserResponse, error)
 	GoogleLogin(ctx context.Context, in *GoogleLoginRequest, opts ...grpc.CallOption) (*GoogleLoginResponse, error)
+	ChangeUserName(ctx context.Context, in *ChangeUserNameRequest, opts ...grpc.CallOption) (*ChangeUserNameResponse, error)
+	ChangeEmail(ctx context.Context, in *ChangeEmailRequest, opts ...grpc.CallOption) (*ChangeEmailResponse, error)
+	ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*ChangePasswordResponse, error)
+	ChangeEmailVerifyOtp(ctx context.Context, in *ChangeEmailVerifyOtpRequest, opts ...grpc.CallOption) (*ChangeEmailVerifyOtpResponse, error)
+	ChangePhoneNumberOtp(ctx context.Context, in *ChangePhoneNumberOtpRequest, opts ...grpc.CallOption) (*ChangePhoneNumberOtpResponse, error)
+	ChangePhoneNumber(ctx context.Context, in *ChangePhoneNumberRequest, opts ...grpc.CallOption) (*ChangePhoneNumberResponse, error)
 }
 
 type autharizationClient struct {
@@ -188,6 +194,60 @@ func (c *autharizationClient) GoogleLogin(ctx context.Context, in *GoogleLoginRe
 	return out, nil
 }
 
+func (c *autharizationClient) ChangeUserName(ctx context.Context, in *ChangeUserNameRequest, opts ...grpc.CallOption) (*ChangeUserNameResponse, error) {
+	out := new(ChangeUserNameResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ChangeUserName", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) ChangeEmail(ctx context.Context, in *ChangeEmailRequest, opts ...grpc.CallOption) (*ChangeEmailResponse, error) {
+	out := new(ChangeEmailResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ChangeEmail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) ChangePassword(ctx context.Context, in *ChangePasswordRequest, opts ...grpc.CallOption) (*ChangePasswordResponse, error) {
+	out := new(ChangePasswordResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ChangePassword", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) ChangeEmailVerifyOtp(ctx context.Context, in *ChangeEmailVerifyOtpRequest, opts ...grpc.CallOption) (*ChangeEmailVerifyOtpResponse, error) {
+	out := new(ChangeEmailVerifyOtpResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ChangeEmailVerifyOtp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) ChangePhoneNumberOtp(ctx context.Context, in *ChangePhoneNumberOtpRequest, opts ...grpc.CallOption) (*ChangePhoneNumberOtpResponse, error) {
+	out := new(ChangePhoneNumberOtpResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ChangePhoneNumberOtp", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) ChangePhoneNumber(ctx context.Context, in *ChangePhoneNumberRequest, opts ...grpc.CallOption) (*ChangePhoneNumberResponse, error) {
+	out := new(ChangePhoneNumberResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ChangePhoneNumber", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
@@ -208,6 +268,12 @@ type AutharizationServer interface {
 	ManageInterest(context.Context, *ManageInterestRequest) (*ManageInterestResponse, error)
 	ValidateUser(context.Context, *ValidateUserRequest) (*ValidateUserResponse, error)
 	GoogleLogin(context.Context, *GoogleLoginRequest) (*GoogleLoginResponse, error)
+	ChangeUserName(context.Context, *ChangeUserNameRequest) (*ChangeUserNameResponse, error)
+	ChangeEmail(context.Context, *ChangeEmailRequest) (*ChangeEmailResponse, error)
+	ChangePassword(context.Context, *ChangePasswordRequest) (*ChangePasswordResponse, error)
+	ChangeEmailVerifyOtp(context.Context, *ChangeEmailVerifyOtpRequest) (*ChangeEmailVerifyOtpResponse, error)
+	ChangePhoneNumberOtp(context.Context, *ChangePhoneNumberOtpRequest) (*ChangePhoneNumberOtpResponse, error)
+	ChangePhoneNumber(context.Context, *ChangePhoneNumberRequest) (*ChangePhoneNumberResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -262,6 +328,24 @@ func (UnimplementedAutharizationServer) ValidateUser(context.Context, *ValidateU
 }
 func (UnimplementedAutharizationServer) GoogleLogin(context.Context, *GoogleLoginRequest) (*GoogleLoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GoogleLogin not implemented")
+}
+func (UnimplementedAutharizationServer) ChangeUserName(context.Context, *ChangeUserNameRequest) (*ChangeUserNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeUserName not implemented")
+}
+func (UnimplementedAutharizationServer) ChangeEmail(context.Context, *ChangeEmailRequest) (*ChangeEmailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeEmail not implemented")
+}
+func (UnimplementedAutharizationServer) ChangePassword(context.Context, *ChangePasswordRequest) (*ChangePasswordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangePassword not implemented")
+}
+func (UnimplementedAutharizationServer) ChangeEmailVerifyOtp(context.Context, *ChangeEmailVerifyOtpRequest) (*ChangeEmailVerifyOtpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeEmailVerifyOtp not implemented")
+}
+func (UnimplementedAutharizationServer) ChangePhoneNumberOtp(context.Context, *ChangePhoneNumberOtpRequest) (*ChangePhoneNumberOtpResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangePhoneNumberOtp not implemented")
+}
+func (UnimplementedAutharizationServer) ChangePhoneNumber(context.Context, *ChangePhoneNumberRequest) (*ChangePhoneNumberResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangePhoneNumber not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -564,6 +648,114 @@ func _Autharization_GoogleLogin_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Autharization_ChangeUserName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeUserNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ChangeUserName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ChangeUserName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ChangeUserName(ctx, req.(*ChangeUserNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_ChangeEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ChangeEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ChangeEmail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ChangeEmail(ctx, req.(*ChangeEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_ChangePassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangePasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ChangePassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ChangePassword",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ChangePassword(ctx, req.(*ChangePasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_ChangeEmailVerifyOtp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeEmailVerifyOtpRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ChangeEmailVerifyOtp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ChangeEmailVerifyOtp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ChangeEmailVerifyOtp(ctx, req.(*ChangeEmailVerifyOtpRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_ChangePhoneNumberOtp_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangePhoneNumberOtpRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ChangePhoneNumberOtp(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ChangePhoneNumberOtp",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ChangePhoneNumberOtp(ctx, req.(*ChangePhoneNumberOtpRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_ChangePhoneNumber_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangePhoneNumberRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ChangePhoneNumber(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ChangePhoneNumber",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ChangePhoneNumber(ctx, req.(*ChangePhoneNumberRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -634,6 +826,30 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GoogleLogin",
 			Handler:    _Autharization_GoogleLogin_Handler,
+		},
+		{
+			MethodName: "ChangeUserName",
+			Handler:    _Autharization_ChangeUserName_Handler,
+		},
+		{
+			MethodName: "ChangeEmail",
+			Handler:    _Autharization_ChangeEmail_Handler,
+		},
+		{
+			MethodName: "ChangePassword",
+			Handler:    _Autharization_ChangePassword_Handler,
+		},
+		{
+			MethodName: "ChangeEmailVerifyOtp",
+			Handler:    _Autharization_ChangeEmailVerifyOtp_Handler,
+		},
+		{
+			MethodName: "ChangePhoneNumberOtp",
+			Handler:    _Autharization_ChangePhoneNumberOtp_Handler,
+		},
+		{
+			MethodName: "ChangePhoneNumber",
+			Handler:    _Autharization_ChangePhoneNumber_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

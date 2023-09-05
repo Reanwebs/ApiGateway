@@ -19,4 +19,10 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	routes.PATCH("/forgot-pass-reset", userHandler.ForgotPasswordChangePassword)
 	routes.POST("/validate-user", userHandler.ValidateUser)
 	routes.POST("/google-login", userHandler.GoogleLogin)
+	routes.PATCH("/change-user-name", userHandler.ChangeUserName)
+	routes.PATCH("/change-email", userHandler.ChangeEmail)
+	routes.PATCH("/change-password", userHandler.ChangePassword)
+	routes.POST("/change-email-verify-otp", userHandler.ChangeEmailVerifyOtp)
+	routes.POST("/change-phone-number-verify-otp", userHandler.ChangePhoneNumberOtp)
+	routes.PATCH("/change-phone-number", userHandler.ChangePhoneNumber)
 }

@@ -242,3 +242,104 @@ func (c *authClient) GoogleLogin(ctx context.Context, request models.GoogleLogin
 	}
 	return res, nil
 }
+
+func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUserNameRequest) (*pb.ChangeUserNameResponse, error) {
+	// Retrieve the "userId" from the context.
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
+	res, err := c.Server.ChangeUserName(ctx, &pb.ChangeUserNameRequest{
+		UserId:   userId,
+		UserName: request.UserName,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
+}
+func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmailRequest) (*pb.ChangeEmailResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
+	res, err := c.Server.ChangeEmail(ctx, &pb.ChangeEmailRequest{
+		UserId: userId,
+		Email:  request.Email,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePasswordRequest) (*pb.ChangePasswordResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
+	res, err := c.Server.ChangePassword(ctx, &pb.ChangePasswordRequest{
+		UserId:   userId,
+		Password: request.Password,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.ChangeEmailVerifyOtpRequest) (*pb.ChangeEmailVerifyOtpResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
+	res, err := c.Server.ChangeEmailVerifyOtp(ctx, &pb.ChangeEmailVerifyOtpRequest{
+		UserId: userId,
+		Email:  request.Email,
+		Otp:    request.Otp,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.ChangePhoneNumberOtpRequest) (*pb.ChangePhoneNumberOtpResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
+	res, err := c.Server.ChangePhoneNumberOtp(ctx, &pb.ChangePhoneNumberOtpRequest{
+		UserId:      userId,
+		PhoneNumber: request.PhoneNumber,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.ChangePhoneNumberRequest) (*pb.ChangePhoneNumberResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+	}
+
+	res, err := c.Server.ChangePhoneNumber(ctx, &pb.ChangePhoneNumberRequest{
+		UserId:      userId,
+		PhoneNumber: request.PhoneNumber,
+		Otp:         request.Otp,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
