@@ -390,3 +390,201 @@ func (h *UserHandler) GoogleLogin(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &res)
 }
+
+// USER CHANGE USER NAME
+//
+//	@Summary		API FOR CHANGE USER NAME
+//	@ID				CHANGE USER NAME
+//	@Description	USER CAN CHANGE USER NAME
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			CHANGE-USER-NAME	body		models.ChangeUserNameRequest	false	"enter user name"
+//	@Success		200				{object}	pb.ChangeUserNameResponse
+//	@Failure		400				{object}	pb.ChangeUserNameResponse
+//	@Failure		400				{object}	pb.ChangeUserNameResponse
+//	@Router			/api/user/change-user-name [patch]
+func (h *UserHandler) ChangeUserName(ctx *gin.Context) {
+	body := models.ChangeUserNameRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ChangeUserName(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to change user name",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+// USER CHANGE EMAIL
+//
+//	@Summary		API FOR CHANGE EMAIL
+//	@ID				CHANGE EMAIL
+//	@Description	USER CAN CHANGE EMAIL
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			CHANGE-EMAIL	body		models.ChangeEmailRequest	false	"enter email"
+//	@Success		200				{object}	pb.ChangeEmailResponse
+//	@Failure		400				{object}	pb.ChangeEmailResponse
+//	@Failure		400				{object}	pb.ChangeEmailResponse
+//	@Router			/api/user/change-email[patch]
+func (h *UserHandler) ChangeEmail(ctx *gin.Context) {
+	body := models.ChangeEmailRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ChangeEmail(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to change email",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+// USER CHANGE PASSWORD
+//
+//	@Summary		API FOR CHANGE PASSWORD
+//	@ID				CHANGE PASSWORD
+//	@Description	USER CAN CHANGE PASSWORD
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			CHANGE-PASSWORD	body		models.ChangePasswordRequest	false	"enter password"
+//	@Success		200				{object}	pb.ChangePasswordResponse
+//	@Failure		400				{object}	pb.ChangePasswordResponse
+//	@Failure		400				{object}	pb.ChangePasswordResponse
+//	@Router			/api/user/change-password[patch]
+func (h *UserHandler) ChangePassword(ctx *gin.Context) {
+	body := models.ChangePasswordRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ChangePassword(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to change password",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+// USER CHANGE EMAIL OTP
+//
+//	@Summary		API FOR CHANGE EMAIL OTP
+//	@ID				CHANGE EMAIL OTP
+//	@Description	CHANGE EMAIL OTP VERIFICATION
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			EMAIL-OTP	body		models.ChangeEmailVerifyOtpRequest	false	"enter otp"
+//	@Success		200				{object}	pb.ChangeEmailVerifyOtpResponse
+//	@Failure		400				{object}	pb.ChangeEmailVerifyOtpResponse
+//	@Failure		400				{object}	pb.ChangeEmailVerifyOtpResponse
+//	@Router			/api/user/change-email-verify-otp[post]
+func (h *UserHandler) ChangeEmailVerifyOtp(ctx *gin.Context) {
+	body := models.ChangeEmailVerifyOtpRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ChangeEmailVerifyOtp(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "otp validation failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+// USER CHANGE PHONE NUMBER OTP
+//
+//	@Summary		API FOR CHANGE PHONE NUMBER OTP
+//	@ID				CHANGE PHONE NUMBER OTP
+//	@Description	CHANGE PHONE NUMBER OTP VERIFICATION
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			PHONE-NUMBER-OTP	body		models.ChangePhoneNumberOtpRequest	false	"enter otp"
+//	@Success		200				{object}	pb.ChangePhoneNumberOtpResponse
+//	@Failure		400				{object}	pb.ChangePhoneNumberOtpResponse
+//	@Failure		400				{object}	pb.ChangePhoneNumberOtpResponse
+//	@Router			/api/user/change-phone-number-verify-otp[post]
+func (h *UserHandler) ChangePhoneNumberOtp(ctx *gin.Context) {
+	body := models.ChangePhoneNumberOtpRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ChangePhoneNumberOtp(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "otp validation failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+// USER CHANGE PHONE NUMBER
+//
+//	@Summary		API FOR CHANGE PHONE NUMBER
+//	@ID				CHANGE PHONE NUMBER
+//	@Description	USER CAN CHANGE PHONE NUMBER
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			PHONE-NUMBER	body		models.ChangePhoneNumberOtpRequest	false	"enter phone number"
+//	@Success		200				{object}	pb.ChangePhoneNumberRequest
+//	@Failure		400				{object}	pb.ChangePhoneNumberRequest
+//	@Failure		400				{object}	pb.ChangePhoneNumberRequest
+//	@Router			/api/user/change-phone-number[patch]
+func (h *UserHandler) ChangePhoneNumber(ctx *gin.Context) {
+	body := models.ChangePhoneNumberRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ChangePhoneNumber(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to change phone number",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}

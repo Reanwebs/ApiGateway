@@ -17,4 +17,10 @@ type AuthClient interface {
 	ForgotPasswordChangePassword(context.Context, models.ForgotPasswordChangePasswordRequest) (*pb.ForgotPasswordChangePasswordResponse, error)
 	ValidateUser(context.Context, models.ValidateUserRequest) (*pb.ValidateUserResponse, error)
 	GoogleLogin(context.Context, models.GoogleLoginRequest) (*pb.GoogleLoginResponse, error)
+	ChangeUserName(context.Context, models.ChangeUserNameRequest) (*pb.ChangeUserNameResponse, error)
+	ChangeEmail(context.Context, models.ChangeEmailRequest) (*pb.ChangeEmailResponse, error)
+	ChangePassword(context.Context, models.ChangePasswordRequest) (*pb.ChangePasswordResponse, error)
+	ChangeEmailVerifyOtp(context.Context, models.ChangeEmailVerifyOtpRequest) (*pb.ChangeEmailVerifyOtpResponse, error)
+	ChangePhoneNumberOtp(context.Context, models.ChangePhoneNumberOtpRequest) (*pb.ChangePhoneNumberOtpResponse, error)
+	ChangePhoneNumber(context.Context, models.ChangePhoneNumberRequest) (*pb.ChangePhoneNumberResponse, error)
 }

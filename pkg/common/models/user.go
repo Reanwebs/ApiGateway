@@ -54,3 +54,29 @@ type ValidateUserRequest struct {
 type GoogleLoginRequest struct {
 	Token string `json:"token"`
 }
+
+type ChangeUserNameRequest struct {
+	UserName string `json:"userName"`
+}
+
+type ChangeEmailRequest struct {
+	Email string `json:"email"`
+}
+
+type ChangeEmailVerifyOtpRequest struct {
+	Email string `json:"email"`
+	Otp   string `json:"otp"`
+}
+
+type ChangePasswordRequest struct {
+	Password string `json:"password"`
+}
+
+type ChangePhoneNumberOtpRequest struct {
+	PhoneNumber string `json:"phoneNumber"`
+}
+
+type ChangePhoneNumberRequest struct {
+	PhoneNumber string `json:"phoneNumber"`
+	Otp         string `json:"otp"`
+}
