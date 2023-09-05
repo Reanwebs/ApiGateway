@@ -43,7 +43,13 @@ func (h *UserHandler) UserSignup(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.UserSignup(context.Background(), body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.UserSignup(context.Background(), body, retryConfig)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
@@ -76,7 +82,14 @@ func (h *UserHandler) OtpRequest(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-	res, err := h.Client.OtpRequest(ctx, body)
+
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.OtpRequest(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "otp sending failed",
@@ -158,7 +171,13 @@ func (h *UserHandler) ValidName(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ValidName(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ValidName(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "User name not available",
@@ -192,7 +211,13 @@ func (h *UserHandler) ResendOtp(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ResendOtp(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ResendOtp(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "resending otp failed",
@@ -245,7 +270,13 @@ func (h *UserHandler) ForgotPasswordOtp(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ForgotPasswordOtp(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ForgotPasswordOtp(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "sending otp failed",
@@ -279,7 +310,13 @@ func (h *UserHandler) ForgotPasswordValidateOtp(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ForgotPasswordValidateOtp(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ForgotPasswordValidateOtp(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "otp validation failed",
@@ -312,7 +349,13 @@ func (h *UserHandler) ForgotPasswordChangePassword(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ForgotPasswordChangePassword(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ForgotPasswordChangePassword(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "otp verification failed",
@@ -345,7 +388,13 @@ func (h *UserHandler) ValidateUser(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ValidateUser(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ValidateUser(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "validate user failed",
@@ -379,7 +428,13 @@ func (h *UserHandler) GoogleLogin(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.GoogleLogin(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.GoogleLogin(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "google login failed",
@@ -412,7 +467,13 @@ func (h *UserHandler) ChangeUserName(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ChangeUserName(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ChangeUserName(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to change user name",
@@ -445,7 +506,13 @@ func (h *UserHandler) ChangeEmail(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ChangeEmail(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ChangeEmail(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to change email",
@@ -478,7 +545,13 @@ func (h *UserHandler) ChangePassword(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ChangePassword(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ChangePassword(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to change password",
@@ -511,7 +584,13 @@ func (h *UserHandler) ChangeEmailVerifyOtp(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ChangeEmailVerifyOtp(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ChangeEmailVerifyOtp(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "otp validation failed",
@@ -544,7 +623,13 @@ func (h *UserHandler) ChangePhoneNumberOtp(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ChangePhoneNumberOtp(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ChangePhoneNumberOtp(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "otp validation failed",
@@ -577,7 +662,13 @@ func (h *UserHandler) ChangePhoneNumber(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ChangePhoneNumber(ctx, body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ChangePhoneNumber(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to change phone number",
