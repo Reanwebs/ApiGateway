@@ -13,9 +13,7 @@ import (
 	"gateway/pkg/common/config"
 )
 
-// Injectors from wire.go:
 
-// InitializeAPI initializes the API server with dependencies
 func InitializeAPI(c *config.Config) (*api.Server, error) {
 	authClient, err := client.InitClient(c)
 	if err != nil {

@@ -11,7 +11,7 @@ func ConferenceRoutes(api *gin.RouterGroup, conferenceHandler handlers.Conferenc
 
 	confernce := api.Group("/conference")
 
-	confernce.POST("/healthCheck")
+	confernce.POST("/healthCheck", conferenceHandler.HealthCheck)
 
 	confernce.Use(middleware.AuthenticateUser)
 
