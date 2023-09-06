@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/models"
 	"net/http"
@@ -61,21 +62,34 @@ func (h *ConferenceHandler) HealthCheck(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 }
 
-// CONFERENCE SCHEDULE CONFERENCE
-//
-//	@Summary		API FOR SCHEDULE CONFERENCE
-//	@ID				SCHEDULE-CONFERENCE
-//	@Description	CONFERENCE SCHEDULE CONFERENCE
-//	@Tags			CONFERENCE
-//	@Accept			json
-//	@Produce		json
-//	@Param			SCHEDULE-CONFERENCE	body		models.ScheduleConferenceRequest false	"Request body for schedule conference"
-//	@Success		200					{object}	conference.ScheduleConferenceResponse
-//	@Failure		400					{object}	conference.ScheduleConferenceResponse
-//	@Failure		502					{object}	conference.ScheduleConferenceResponse
-//	@Router			/api/conference/schedule-conference [post]
-func (h *ConferenceHandler) ScheduleConference(ctx *gin.Context) {
-	body := models.ScheduleConferenceRequest{}
+func (h *ConferenceHandler) SchedulePrivateConference(ctx *gin.Context) {
+	body := models.SchedulePrivateConferenceRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	fmt.Println("\n\n", body.Time, "\n\n", body)
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   5 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.SchedulePrivateConference(ctx, body, retryConfig)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "can't schedule conference",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *ConferenceHandler) ScheduleGroupConference(ctx *gin.Context) {
+	body := models.ScheduleGroupConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
@@ -84,21 +98,45 @@ func (h *ConferenceHandler) ScheduleConference(ctx *gin.Context) {
 
 	retryConfig := models.RetryConfig{
 		MaxRetries:    5,
-		MaxDuration:   3 * time.Second,
+		MaxDuration:   5 * time.Second,
 		RetryInterval: 1 * time.Second, // Wait 1 second between retries
 	}
 
-	res, err := h.Client.ScheduleConference(ctx, body, retryConfig)
+	res, err := h.Client.ScheduleGroupConference(ctx, body, retryConfig)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in scheduleConference",
+			"message": "can't schedule conference",
 			"error":   err.Error(),
 		})
 		return
 	}
 
 	ctx.JSON(http.StatusOK, &res)
+}
+func (h *ConferenceHandler) SchedulePublicConference(ctx *gin.Context) {
+	body := models.SchedulePublicConferenceRequest{}
 
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   5 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.SchedulePublicConference(ctx, body, retryConfig)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "can't schedule conference",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
 }
 
 // CONFERENCE START PRIVATE CONFERENCE
