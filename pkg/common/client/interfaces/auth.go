@@ -23,4 +23,6 @@ type AuthClient interface {
 	ChangeEmailVerifyOtp(context.Context, models.ChangeEmailVerifyOtpRequest, models.RetryConfig) (*pb.ChangeEmailVerifyOtpResponse, error)
 	ChangePhoneNumberOtp(context.Context, models.ChangePhoneNumberOtpRequest, models.RetryConfig) (*pb.ChangePhoneNumberOtpResponse, error)
 	ChangePhoneNumber(context.Context, models.ChangePhoneNumberRequest, models.RetryConfig) (*pb.ChangePhoneNumberResponse, error)
+	ChangeAvatar(context.Context, models.ChangeAvatarRequest, models.RetryConfig) (*pb.ChangeAvatarResponse, error)
+	RemoveAvatar(context.Context, models.RetryConfig) (*pb.RemoveAvatarResponse, error)
 }

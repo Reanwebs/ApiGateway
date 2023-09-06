@@ -868,3 +868,120 @@ func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.Chang
 	return nil, err
 
 }
+
+func (c *authClient) ChangeAvatar(ctx context.Context, request models.ChangeAvatarRequest, retryConfig models.RetryConfig) (*pb.ChangeAvatarResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	var res *pb.ChangeAvatarResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.ChangeAvatar(ctx1, &pb.ChangeAvatarRequest{
+				UserId:   userId,
+				AvatarId: request.AvatarId,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
+	}
+
+	return nil, err
+}
+
+func (c *authClient) RemoveAvatar(ctx context.Context, retryConfig models.RetryConfig) (*pb.RemoveAvatarResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	var res *pb.RemoveAvatarResponse
+	var err error
+
+	startTime := time.Now()
+
+	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
+		fmt.Println("try.........", retryCount)
+
+		if time.Since(startTime) > retryConfig.MaxDuration {
+			err = errors.New("time limit exceeded")
+			break
+		}
+
+		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
+		done := make(chan struct{})
+
+		go func() {
+			defer close(done)
+			<-ctx.Done()
+		}()
+
+		select {
+		case <-done:
+			cancel()
+			return nil, context.Canceled
+		default:
+			res, err = c.Server.RemoveAvatar(ctx1, &pb.RemoveAvatarRequest{
+				UserId: userId,
+			})
+			cancel()
+
+			if err == nil {
+				return res, nil
+			}
+
+			// Check if the error is non-retryable
+			if utils.IsNonRetryableError(err) {
+				return nil, err
+			}
+		}
+
+		select {
+		case <-ctx.Done():
+			return nil, ctx.Err()
+		case <-time.After(retryConfig.RetryInterval):
+		}
+	}
+
+	return nil, err
+}
