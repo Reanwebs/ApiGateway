@@ -87,13 +87,16 @@ func (c *conferenceClient) HealthCheck(ctx context.Context, request string, retr
 }
 
 func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, request models.SchedulePrivateConferenceRequest, retryConfig models.RetryConfig) (*conference.SchedulePrivateConferenceResponse, error) {
+	var res *conference.SchedulePrivateConferenceResponse
+	var err error
+	startTime := time.Now()
 
 	// Retrieve the "userId" from the context.
-	// userId, ok := ctx.Value("userId").(string)
-	// if !ok {
-	// 	fmt.Println("userId not found in context.")
-	// 	return nil, errors.New("login again")
-	// }
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
 
 	participantlimit, err := strconv.Atoi(request.Participantlimit)
 	if err != nil {
@@ -102,16 +105,13 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 
 	schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
 	if err != nil {
-		return nil, errors.New("try again time.Parse")
+		return nil, errors.New("incorrect date or time format")
 	}
 	// Convert time.Time to google.protobuf.Timestamp
 	timestamp := &timestamp.Timestamp{
 		Seconds: schedulingTime.Unix(),
 		Nanos:   int32(schedulingTime.Nanosecond()),
 	}
-
-	var res *conference.SchedulePrivateConferenceResponse
-	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
 		fmt.Println("try.........", retryCount)
@@ -135,7 +135,7 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 			return nil, context.Canceled
 		default:
 			res, err = c.Server.SchedulePrivateConference(ctx1, &conference.SchedulePrivateConferenceRequest{
-				// UserID:           userId,
+				UserID:           userId,
 				Title:            request.Title,
 				Description:      request.Description,
 				Interest:         request.Interest,
@@ -173,9 +173,14 @@ func (c *conferenceClient) ScheduleGroupConference(ctx context.Context, request 
 	var err error
 	startTime := time.Now()
 
+	schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
+	if err != nil {
+		return nil, errors.New("incorrect date or time format")
+	}
+
 	timestamp := &timestamp.Timestamp{
-		Seconds: request.Time.Unix(),
-		Nanos:   int32(request.Time.Nanosecond()),
+		Seconds: schedulingTime.Unix(),
+		Nanos:   int32(schedulingTime.Nanosecond()),
 	}
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -233,6 +238,10 @@ func (c *conferenceClient) ScheduleGroupConference(ctx context.Context, request 
 }
 
 func (c *conferenceClient) SchedulePublicConference(ctx context.Context, request models.SchedulePublicConferenceRequest, retryConfig models.RetryConfig) (*conference.SchedulePublicConferenceResponse, error) {
+	var res *conference.SchedulePublicConferenceResponse
+	var err error
+	startTime := time.Now()
+
 	// Retrieve the "userId" from the context.
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
@@ -240,14 +249,15 @@ func (c *conferenceClient) SchedulePublicConference(ctx context.Context, request
 		return nil, errors.New("login again")
 	}
 
-	timestamp := &timestamp.Timestamp{
-		Seconds: request.Time.Unix(),
-		Nanos:   int32(request.Time.Nanosecond()),
+	schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
+	if err != nil {
+		return nil, errors.New("incorrect date or time format")
 	}
 
-	var res *conference.SchedulePublicConferenceResponse
-	var err error
-	startTime := time.Now()
+	timestamp := &timestamp.Timestamp{
+		Seconds: schedulingTime.Unix(),
+		Nanos:   int32(schedulingTime.Nanosecond()),
+	}
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
 		fmt.Println("try.........", retryCount)
@@ -306,6 +316,7 @@ func (c *conferenceClient) SchedulePublicConference(ctx context.Context, request
 func (c *conferenceClient) StartPrivateConference(ctx context.Context, request models.StartPrivateConferenceRequest, retryConfig models.RetryConfig) (*conference.StartPrivateConferenceResponse, error) {
 	var res *conference.StartPrivateConferenceResponse
 	var err error
+	startTime := time.Now()
 
 	// Retrieve the "userId" from the context.
 	userId, ok := ctx.Value("userId").(string)
@@ -313,8 +324,6 @@ func (c *conferenceClient) StartPrivateConference(ctx context.Context, request m
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
-
-	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
 		fmt.Println("try.........", retryCount)

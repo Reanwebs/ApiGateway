@@ -1,9 +1,5 @@
 package models
 
-import (
-	"time"
-)
-
 type StartConferenceRequest struct {
 	Type             string `json:"type"`
 	Title            string `json:"title"`
@@ -170,10 +166,9 @@ type SchedulePrivateConferenceRequest struct {
 	Recording        bool   `json:"recording"`
 	Chat             bool   `json:"chat"`
 	Participantlimit string `json:"participantlimit"`
-	// google.protobuf.Timestamp time = 8;
-	Time     string `json:"time"`
-	Status   string `json:"status"`
-	Duration int32  `json:"duration"`
+	Time             string `json:"time"`
+	Status           string `json:"status"`
+	Duration         int32  `json:"duration"`
 }
 
 type ScheduleGroupConferenceRequest struct {
@@ -184,10 +179,9 @@ type ScheduleGroupConferenceRequest struct {
 	Recording        bool   `json:"recording"`
 	Chat             bool   `json:"chat"`
 	Participantlimit int32  `json:"Participantlimit"`
-	// google.protobuf.Timestamp time = 8;
-	Time     time.Time `json:"time"`
-	Status   string    `json:"status"`
-	Duration int32     `json:"duration"`
+	Time             string `json:"time"`
+	Status           string `json:"status"`
+	Duration         int32  `json:"duration"`
 }
 
 type SchedulePublicConferenceRequest struct {
@@ -197,8 +191,7 @@ type SchedulePublicConferenceRequest struct {
 	Recording        bool   `json:"recording"`
 	Chat             bool   `json:"chat"`
 	Participantlimit int32  `json:"participantlimit"`
-	// google.protobuf.Timestamp time = 8;
-	Time     time.Time `json:"time"`
-	Status   string    `json:"status"`
-	Duration int32     `json:"duration"`
+	Time             string `json:"time"`
+	Status           string `json:"status"`
+	Duration         int32  `json:"duration"`
 }
