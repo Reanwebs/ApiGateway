@@ -443,6 +443,15 @@ func (h *UserHandler) GoogleLogin(ctx *gin.Context) {
 		return
 	}
 
+	// setup JWT
+	ok := middleware.JwtCookieSetup(ctx, "user-auth", res.Uid)
+	if !ok {
+		res := errors.New("failed to login")
+		ctx.JSON(http.StatusInternalServerError, res)
+		return
+
+	}
+
 	ctx.JSON(http.StatusOK, &res)
 }
 
