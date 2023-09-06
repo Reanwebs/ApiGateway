@@ -1,7 +1,7 @@
 proto:
-	protoc --go_out=. --go-grpc_out=. ./pkg/common/proto/*.proto
+	protoc --go_out=. --go-grpc_out=. ./pkg/common/proto/auth.proto
 	protoc --go_out=. --go-grpc_out=. ./pkg/common/proto/conference.proto
-	protoc --go_out=. --go-grpc_out=. ./pkg/common/proto/*.proto
+	protoc --go_out=. --go-grpc_out=. ./pkg/common/proto/videoStreaming.proto
 
 wire:
 	cd pkg/common/di/ && wire
