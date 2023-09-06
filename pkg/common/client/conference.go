@@ -9,6 +9,7 @@ import (
 	"gateway/pkg/common/models"
 	"gateway/pkg/common/pb/conference"
 	"gateway/pkg/utils"
+	"strconv"
 	"time"
 
 	"github.com/golang/protobuf/ptypes/timestamp"
@@ -94,6 +95,11 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 		return nil, errors.New("login again")
 	}
 
+	participantlimit, err := strconv.Atoi(request.Participantlimit)
+	if err != nil {
+		return nil, errors.New("try again")
+	}
+
 	// Convert time.Time to google.protobuf.Timestamp
 	timestamp := &timestamp.Timestamp{
 		Seconds: request.Time.Unix(),
@@ -101,7 +107,6 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 	}
 
 	var res *conference.SchedulePrivateConferenceResponse
-	var err error
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
@@ -132,7 +137,7 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 				Interest:         request.Interest,
 				Recording:        request.Recording,
 				Chat:             request.Chat,
-				Participantlimit: request.Participantlimit,
+				Participantlimit: int32(participantlimit),
 				Time:             timestamp,
 				Status:           request.Status,
 				Duration:         request.Duration,

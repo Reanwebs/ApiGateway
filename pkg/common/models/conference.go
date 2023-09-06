@@ -169,7 +169,7 @@ type SchedulePrivateConferenceRequest struct {
 	Interest         string `json:"interest"`
 	Recording        bool   `json:"recording"`
 	Chat             bool   `json:"chat"`
-	Participantlimit int32  `json:"participantlimit"`
+	Participantlimit string `json:"participantlimit"`
 	// google.protobuf.Timestamp time = 8;
 	Time     time.Time `json:"time"`
 	Status   string    `json:"status"`
