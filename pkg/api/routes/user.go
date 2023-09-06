@@ -29,4 +29,6 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	routes.POST("/change-email-verify-otp", userHandler.ChangeEmailVerifyOtp)
 	routes.POST("/change-phno-request", userHandler.ChangePhoneNumberOtp)
 	routes.PATCH("/change-phno", userHandler.ChangePhoneNumber)
+	routes.PATCH("/change-avatar", userHandler.ChangeAvatar)
+	routes.PATCH("/delete-avatar", userHandler.RemoveAvatar)
 }

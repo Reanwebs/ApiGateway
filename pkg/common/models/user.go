@@ -80,3 +80,7 @@ type ChangePhoneNumberRequest struct {
 	PhoneNumber string `json:"phoneNumber"`
 	Otp         string `json:"otp"`
 }
+
+type ChangeAvatarRequest struct {
+	AvatarId string `json:"avatarId"`
+}

@@ -40,6 +40,8 @@ type AutharizationClient interface {
 	ChangeEmailVerifyOtp(ctx context.Context, in *ChangeEmailVerifyOtpRequest, opts ...grpc.CallOption) (*ChangeEmailVerifyOtpResponse, error)
 	ChangePhoneNumberOtp(ctx context.Context, in *ChangePhoneNumberOtpRequest, opts ...grpc.CallOption) (*ChangePhoneNumberOtpResponse, error)
 	ChangePhoneNumber(ctx context.Context, in *ChangePhoneNumberRequest, opts ...grpc.CallOption) (*ChangePhoneNumberResponse, error)
+	ChangeAvatar(ctx context.Context, in *ChangeAvatarRequest, opts ...grpc.CallOption) (*ChangeAvatarResponse, error)
+	RemoveAvatar(ctx context.Context, in *RemoveAvatarRequest, opts ...grpc.CallOption) (*RemoveAvatarResponse, error)
 }
 
 type autharizationClient struct {
@@ -248,6 +250,24 @@ func (c *autharizationClient) ChangePhoneNumber(ctx context.Context, in *ChangeP
 	return out, nil
 }
 
+func (c *autharizationClient) ChangeAvatar(ctx context.Context, in *ChangeAvatarRequest, opts ...grpc.CallOption) (*ChangeAvatarResponse, error) {
+	out := new(ChangeAvatarResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ChangeAvatar", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) RemoveAvatar(ctx context.Context, in *RemoveAvatarRequest, opts ...grpc.CallOption) (*RemoveAvatarResponse, error) {
+	out := new(RemoveAvatarResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/RemoveAvatar", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
@@ -274,6 +294,8 @@ type AutharizationServer interface {
 	ChangeEmailVerifyOtp(context.Context, *ChangeEmailVerifyOtpRequest) (*ChangeEmailVerifyOtpResponse, error)
 	ChangePhoneNumberOtp(context.Context, *ChangePhoneNumberOtpRequest) (*ChangePhoneNumberOtpResponse, error)
 	ChangePhoneNumber(context.Context, *ChangePhoneNumberRequest) (*ChangePhoneNumberResponse, error)
+	ChangeAvatar(context.Context, *ChangeAvatarRequest) (*ChangeAvatarResponse, error)
+	RemoveAvatar(context.Context, *RemoveAvatarRequest) (*RemoveAvatarResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -346,6 +368,12 @@ func (UnimplementedAutharizationServer) ChangePhoneNumberOtp(context.Context, *C
 }
 func (UnimplementedAutharizationServer) ChangePhoneNumber(context.Context, *ChangePhoneNumberRequest) (*ChangePhoneNumberResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ChangePhoneNumber not implemented")
+}
+func (UnimplementedAutharizationServer) ChangeAvatar(context.Context, *ChangeAvatarRequest) (*ChangeAvatarResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeAvatar not implemented")
+}
+func (UnimplementedAutharizationServer) RemoveAvatar(context.Context, *RemoveAvatarRequest) (*RemoveAvatarResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveAvatar not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -756,6 +784,42 @@ func _Autharization_ChangePhoneNumber_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Autharization_ChangeAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeAvatarRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ChangeAvatar(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ChangeAvatar",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ChangeAvatar(ctx, req.(*ChangeAvatarRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_RemoveAvatar_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveAvatarRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).RemoveAvatar(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/RemoveAvatar",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).RemoveAvatar(ctx, req.(*RemoveAvatarRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -850,6 +914,14 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ChangePhoneNumber",
 			Handler:    _Autharization_ChangePhoneNumber_Handler,
+		},
+		{
+			MethodName: "ChangeAvatar",
+			Handler:    _Autharization_ChangeAvatar_Handler,
+		},
+		{
+			MethodName: "RemoveAvatar",
+			Handler:    _Autharization_RemoveAvatar_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

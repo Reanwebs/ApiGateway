@@ -455,9 +455,9 @@ func (h *UserHandler) GoogleLogin(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			CHANGE-USER-NAME	body		models.ChangeUserNameRequest	false	"enter user name"
-//	@Success		200				{object}	pb.ChangeUserNameResponse
-//	@Failure		400				{object}	pb.ChangeUserNameResponse
-//	@Failure		400				{object}	pb.ChangeUserNameResponse
+//	@Success		200					{object}	pb.ChangeUserNameResponse
+//	@Failure		400					{object}	pb.ChangeUserNameResponse
+//	@Failure		400					{object}	pb.ChangeUserNameResponse
 //	@Router			/api/user/change-user-name [patch]
 func (h *UserHandler) ChangeUserName(ctx *gin.Context) {
 	body := models.ChangeUserNameRequest{}
@@ -572,9 +572,9 @@ func (h *UserHandler) ChangePassword(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			EMAIL-OTP	body		models.ChangeEmailVerifyOtpRequest	false	"enter otp"
-//	@Success		200				{object}	pb.ChangeEmailVerifyOtpResponse
-//	@Failure		400				{object}	pb.ChangeEmailVerifyOtpResponse
-//	@Failure		400				{object}	pb.ChangeEmailVerifyOtpResponse
+//	@Success		200			{object}	pb.ChangeEmailVerifyOtpResponse
+//	@Failure		400			{object}	pb.ChangeEmailVerifyOtpResponse
+//	@Failure		400			{object}	pb.ChangeEmailVerifyOtpResponse
 //	@Router			/api/user/change-email-verify-otp[post]
 func (h *UserHandler) ChangeEmailVerifyOtp(ctx *gin.Context) {
 	body := models.ChangeEmailVerifyOtpRequest{}
@@ -611,9 +611,9 @@ func (h *UserHandler) ChangeEmailVerifyOtp(ctx *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			PHONE-NUMBER-OTP	body		models.ChangePhoneNumberOtpRequest	false	"enter otp"
-//	@Success		200				{object}	pb.ChangePhoneNumberOtpResponse
-//	@Failure		400				{object}	pb.ChangePhoneNumberOtpResponse
-//	@Failure		400				{object}	pb.ChangePhoneNumberOtpResponse
+//	@Success		200					{object}	pb.ChangePhoneNumberOtpResponse
+//	@Failure		400					{object}	pb.ChangePhoneNumberOtpResponse
+//	@Failure		400					{object}	pb.ChangePhoneNumberOtpResponse
 //	@Router			/api/user/change-phone-number-verify-otp[post]
 func (h *UserHandler) ChangePhoneNumberOtp(ctx *gin.Context) {
 	body := models.ChangePhoneNumberOtpRequest{}
@@ -672,6 +672,76 @@ func (h *UserHandler) ChangePhoneNumber(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to change phone number",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+// USER CHANGE AVATAR
+//
+//	@Summary		API FOR CHANGE AVATAR
+//	@ID				CHANGE AVATAR
+//	@Description	USER CAN CHANGE AVATAR IMAGE
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Param			CHANGE-AVATAR	body		models.ChangeAvatarRequest	false	"needed avatar id"
+//	@Success		200				{object}	pb.ChangeAvatarResponse
+//	@Failure		400				{object}	pb.ChangeAvatarResponse
+//	@Failure		400				{object}	pb.ChangeAvatarResponse
+//	@Router			/api/user/change-avatar[patch]
+func (h *UserHandler) ChangeAvatar(ctx *gin.Context) {
+	body := models.ChangeAvatarRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.ChangeAvatar(ctx, body, retryConfig)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "can't change avatar",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+
+}
+
+// USER REMOVE AVATAR
+//
+//	@Summary		API FOR REMOVE AVATAR
+//	@ID				REMOVE AVATAR
+//	@Description	USER CAN REMOVE AVATAR IMAGE
+//	@Tags			USER
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	pb.ChangeAvatarResponse
+//	@Failure		400	{object}	pb.ChangeAvatarResponse
+//	@Router			/api/user/delete-avatar[patch]
+func (h *UserHandler) RemoveAvatar(ctx *gin.Context) {
+	retryConfig := models.RetryConfig{
+		MaxRetries:    5,
+		MaxDuration:   3 * time.Second,
+		RetryInterval: 1 * time.Second, // Wait 1 second between retries
+	}
+
+	res, err := h.Client.RemoveAvatar(ctx, retryConfig)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "remove avatar failed",
 			"error":   err.Error(),
 		})
 		return
