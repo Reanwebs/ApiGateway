@@ -4,9 +4,14 @@ option go_package = "./pkg/common/pb/conference";
 
 package conference;
 
+import "google/protobuf/timestamp.proto";
+
+
 service Conference{
     rpc HealthCheck(Request) returns (Response);
-    rpc ScheduleConference(ScheduleConferenceRequest) returns (ScheduleConferenceResponse){}
+    rpc SchedulePrivateConference(SchedulePrivateConferenceRequest) returns (SchedulePrivateConferenceResponse){}
+    rpc ScheduleGroupConference(ScheduleGroupConferenceRequest) returns (ScheduleGroupConferenceResponse){}
+    rpc SchedulePublicConference(SchedulePublicConferenceRequest)returns(SchedulePublicConferenceResponse){}
     rpc StartPrivateConference (StartPrivateConferenceRequest) returns (StartPrivateConferenceResponse){}
     rpc StartGroupConference (StartGroupConferenceRequest) returns (StartGroupConferenceResponse){}
     rpc StartPublicConference (StartPublicConferenceRequest) returns (StartPublicConferenceResponse){}
@@ -31,7 +36,6 @@ service Conference{
     
   }
   
-  
   message Request {
     string data = 1;
   }
@@ -40,25 +44,61 @@ service Conference{
     string result = 1;
   }
   
-  message ScheduleConferenceRequest {
+  message SchedulePrivateConferenceRequest {
       string userID  = 1;
-      string type    = 2;
-      string title   = 3;
-      string description = 4;
-      string interest    = 5;
-      bool   recording   = 6;
-      bool   chat        = 7;
-      bool   broadcast   = 8;
-      int32  participantlimit = 9;
-      string date          = 10;
-      int64  time_seconds = 11;
-      int32  time_nanos = 12;
+      string title   = 2;
+      string description = 3;
+      string interest    = 4;
+      bool   recording   = 5;
+      bool   chat        = 6;
+      int32  participantlimit = 7;
+      google.protobuf.Timestamp time = 8;
+      string status      = 9;
+      int32  duration    = 10;
    }
   
   
-  message ScheduleConferenceResponse{
+  message SchedulePrivateConferenceResponse{
       string Result = 1;
-      string ConferenceID = 2;
+      string ScheduleID = 2;
+  }
+  
+  message ScheduleGroupConferenceRequest {
+      string groupID  = 1;
+      string title   = 2;
+      string description = 3;
+      string interest    = 4;
+      bool   recording   = 5;
+      bool   chat        = 6;
+      int32  participantlimit = 7;
+      google.protobuf.Timestamp time = 8;
+      string status      = 9;
+      int32  duration    = 10;
+   }
+  
+  
+  message ScheduleGroupConferenceResponse{
+      string Result = 1;
+      string ScheduleID = 2;
+  }
+  
+  message SchedulePublicConferenceRequest {
+      string userID  = 1;
+      string title   = 2;
+      string description = 3;
+      string interest    = 4;
+      bool   recording   = 5;
+      bool   chat        = 6;
+      int32  participantlimit = 7;
+      google.protobuf.Timestamp time = 8;
+      string status      = 9;
+      int32  duration    = 10;
+   }
+  
+  
+  message SchedulePublicConferenceResponse{
+      string Result = 1;
+      string ScheduleID = 2;
   }
   
   // Start Conference

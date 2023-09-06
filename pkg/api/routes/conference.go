@@ -15,7 +15,9 @@ func ConferenceRoutes(api *gin.RouterGroup, conferenceHandler handlers.Conferenc
 
 	confernce.Use(middleware.AuthenticateUser)
 
-	confernce.POST("/schedule-conference", conferenceHandler.ScheduleConference)
+	confernce.POST("/schedule-private-conference", conferenceHandler.SchedulePrivateConference)
+	confernce.POST("/schedule-group-conference", conferenceHandler.ScheduleGroupConference)
+	confernce.POST("/schedule-public-conference", conferenceHandler.SchedulePublicConference)
 	confernce.POST("/start-private-conference", conferenceHandler.StartPrivateConference)
 	confernce.POST("/start-group-conference", conferenceHandler.StartGroupConference)
 	confernce.POST("/start-public-conference", conferenceHandler.StartPublicConference)

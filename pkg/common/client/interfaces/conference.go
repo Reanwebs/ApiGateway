@@ -8,7 +8,9 @@ import (
 
 type ConferenceClient interface {
 	HealthCheck(context.Context, string, models.RetryConfig) (*conference.Response, error)
-	ScheduleConference(context.Context, models.ScheduleConferenceRequest, models.RetryConfig) (*conference.ScheduleConferenceResponse, error)
+	SchedulePrivateConference(context.Context, models.SchedulePrivateConferenceRequest, models.RetryConfig) (*conference.SchedulePrivateConferenceResponse, error)
+	ScheduleGroupConference(context.Context, models.ScheduleGroupConferenceRequest, models.RetryConfig) (*conference.ScheduleGroupConferenceResponse, error)
+	SchedulePublicConference(context.Context, models.SchedulePublicConferenceRequest, models.RetryConfig) (*conference.SchedulePublicConferenceResponse, error)
 	StartPrivateConference(context.Context, models.StartPrivateConferenceRequest, models.RetryConfig) (*conference.StartPrivateConferenceResponse, error)
 	StartGroupConference(context.Context, models.StartGroupConferenceRequest, models.RetryConfig) (*conference.StartGroupConferenceResponse, error)
 	StartPublicConference(context.Context, models.StartPublicConferenceRequest, models.RetryConfig) (*conference.StartPublicConferenceResponse, error)

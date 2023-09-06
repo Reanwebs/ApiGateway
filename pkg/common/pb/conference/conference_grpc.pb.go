@@ -19,7 +19,9 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ConferenceClient interface {
 	HealthCheck(ctx context.Context, in *Request, opts ...grpc.CallOption) (*Response, error)
-	ScheduleConference(ctx context.Context, in *ScheduleConferenceRequest, opts ...grpc.CallOption) (*ScheduleConferenceResponse, error)
+	SchedulePrivateConference(ctx context.Context, in *SchedulePrivateConferenceRequest, opts ...grpc.CallOption) (*SchedulePrivateConferenceResponse, error)
+	ScheduleGroupConference(ctx context.Context, in *ScheduleGroupConferenceRequest, opts ...grpc.CallOption) (*ScheduleGroupConferenceResponse, error)
+	SchedulePublicConference(ctx context.Context, in *SchedulePublicConferenceRequest, opts ...grpc.CallOption) (*SchedulePublicConferenceResponse, error)
 	StartPrivateConference(ctx context.Context, in *StartPrivateConferenceRequest, opts ...grpc.CallOption) (*StartPrivateConferenceResponse, error)
 	StartGroupConference(ctx context.Context, in *StartGroupConferenceRequest, opts ...grpc.CallOption) (*StartGroupConferenceResponse, error)
 	StartPublicConference(ctx context.Context, in *StartPublicConferenceRequest, opts ...grpc.CallOption) (*StartPublicConferenceResponse, error)
@@ -60,9 +62,27 @@ func (c *conferenceClient) HealthCheck(ctx context.Context, in *Request, opts ..
 	return out, nil
 }
 
-func (c *conferenceClient) ScheduleConference(ctx context.Context, in *ScheduleConferenceRequest, opts ...grpc.CallOption) (*ScheduleConferenceResponse, error) {
-	out := new(ScheduleConferenceResponse)
-	err := c.cc.Invoke(ctx, "/conference.Conference/ScheduleConference", in, out, opts...)
+func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, in *SchedulePrivateConferenceRequest, opts ...grpc.CallOption) (*SchedulePrivateConferenceResponse, error) {
+	out := new(SchedulePrivateConferenceResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/SchedulePrivateConference", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *conferenceClient) ScheduleGroupConference(ctx context.Context, in *ScheduleGroupConferenceRequest, opts ...grpc.CallOption) (*ScheduleGroupConferenceResponse, error) {
+	out := new(ScheduleGroupConferenceResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/ScheduleGroupConference", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *conferenceClient) SchedulePublicConference(ctx context.Context, in *SchedulePublicConferenceRequest, opts ...grpc.CallOption) (*SchedulePublicConferenceResponse, error) {
+	out := new(SchedulePublicConferenceResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/SchedulePublicConference", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -263,7 +283,9 @@ func (c *conferenceClient) ToggleParticipantMic(ctx context.Context, in *ToggleP
 // for forward compatibility
 type ConferenceServer interface {
 	HealthCheck(context.Context, *Request) (*Response, error)
-	ScheduleConference(context.Context, *ScheduleConferenceRequest) (*ScheduleConferenceResponse, error)
+	SchedulePrivateConference(context.Context, *SchedulePrivateConferenceRequest) (*SchedulePrivateConferenceResponse, error)
+	ScheduleGroupConference(context.Context, *ScheduleGroupConferenceRequest) (*ScheduleGroupConferenceResponse, error)
+	SchedulePublicConference(context.Context, *SchedulePublicConferenceRequest) (*SchedulePublicConferenceResponse, error)
 	StartPrivateConference(context.Context, *StartPrivateConferenceRequest) (*StartPrivateConferenceResponse, error)
 	StartGroupConference(context.Context, *StartGroupConferenceRequest) (*StartGroupConferenceResponse, error)
 	StartPublicConference(context.Context, *StartPublicConferenceRequest) (*StartPublicConferenceResponse, error)
@@ -295,8 +317,14 @@ type UnimplementedConferenceServer struct {
 func (UnimplementedConferenceServer) HealthCheck(context.Context, *Request) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
 }
-func (UnimplementedConferenceServer) ScheduleConference(context.Context, *ScheduleConferenceRequest) (*ScheduleConferenceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ScheduleConference not implemented")
+func (UnimplementedConferenceServer) SchedulePrivateConference(context.Context, *SchedulePrivateConferenceRequest) (*SchedulePrivateConferenceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SchedulePrivateConference not implemented")
+}
+func (UnimplementedConferenceServer) ScheduleGroupConference(context.Context, *ScheduleGroupConferenceRequest) (*ScheduleGroupConferenceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ScheduleGroupConference not implemented")
+}
+func (UnimplementedConferenceServer) SchedulePublicConference(context.Context, *SchedulePublicConferenceRequest) (*SchedulePublicConferenceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SchedulePublicConference not implemented")
 }
 func (UnimplementedConferenceServer) StartPrivateConference(context.Context, *StartPrivateConferenceRequest) (*StartPrivateConferenceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StartPrivateConference not implemented")
@@ -392,20 +420,56 @@ func _Conference_HealthCheck_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Conference_ScheduleConference_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ScheduleConferenceRequest)
+func _Conference_SchedulePrivateConference_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SchedulePrivateConferenceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ConferenceServer).ScheduleConference(ctx, in)
+		return srv.(ConferenceServer).SchedulePrivateConference(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/conference.Conference/ScheduleConference",
+		FullMethod: "/conference.Conference/SchedulePrivateConference",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConferenceServer).ScheduleConference(ctx, req.(*ScheduleConferenceRequest))
+		return srv.(ConferenceServer).SchedulePrivateConference(ctx, req.(*SchedulePrivateConferenceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Conference_ScheduleGroupConference_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ScheduleGroupConferenceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConferenceServer).ScheduleGroupConference(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/conference.Conference/ScheduleGroupConference",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConferenceServer).ScheduleGroupConference(ctx, req.(*ScheduleGroupConferenceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Conference_SchedulePublicConference_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SchedulePublicConferenceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConferenceServer).SchedulePublicConference(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/conference.Conference/SchedulePublicConference",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConferenceServer).SchedulePublicConference(ctx, req.(*SchedulePublicConferenceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -800,8 +864,16 @@ var Conference_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Conference_HealthCheck_Handler,
 		},
 		{
-			MethodName: "ScheduleConference",
-			Handler:    _Conference_ScheduleConference_Handler,
+			MethodName: "SchedulePrivateConference",
+			Handler:    _Conference_SchedulePrivateConference_Handler,
+		},
+		{
+			MethodName: "ScheduleGroupConference",
+			Handler:    _Conference_ScheduleGroupConference_Handler,
+		},
+		{
+			MethodName: "SchedulePublicConference",
+			Handler:    _Conference_SchedulePublicConference_Handler,
 		},
 		{
 			MethodName: "StartPrivateConference",

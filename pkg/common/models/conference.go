@@ -1,5 +1,9 @@
 package models
 
+import (
+	"time"
+)
+
 type StartConferenceRequest struct {
 	Type             string `json:"type"`
 	Title            string `json:"title"`
@@ -15,41 +19,6 @@ type JoinConferenceRequest struct {
 	ConferenceID string `json:"conferenceID"`
 }
 
-// type AcceptJoiningRequest struct {
-// 	UserID       string `json:"userId"`
-// 	ConferenceID string `json:"conferenceID"`
-// }
-
-// type DeclineJoiningRequest struct {
-// 	UserID       string `json:"userId"`
-// 	ConferenceID string `json:"conferenceID"`
-// }
-
-// type RemoveParticipantRequest struct {
-// 	UserID       string `json:"userId"`
-// 	ConferenceID string `json:"conferenceID"`
-// 	Block        bool   `json:"block"`
-// }
-
-// type ToggleCameraRequest struct {
-// 	UserID       string `json:"userID"`
-// 	ConferenceID string `json:"conferenceID"`
-// }
-
-// type ToggleMicRequest struct {
-// 	UserID       string `json:"userId"`
-// 	ConferenceID string `json:"conferenceID"`
-// }
-
-// type ToggleParticipantCameraRequest struct {
-// 	UserID       string `json:"userID"`
-// 	ConferenceID string `json:"conferenceID"`
-// }
-
-//	type ToggleParticipantMicRequest struct {
-//		UserID       string `json:"userID"`
-//		ConferenceID string `json:"conferenceID"`
-//	}
 type HealthCheck struct {
 	Data string `json:"data"`
 }
@@ -60,19 +29,6 @@ type LeaveConferenceRequest struct {
 
 type EndConferenceRequest struct {
 	ConferenceID string `json:"conferenceID"`
-}
-type ScheduleConferenceRequest struct {
-	Type             string `json:"type"`
-	Title            string `json:"title"`
-	Description      string `json:"description"`
-	Interest         string `json:"interest"`
-	Recording        bool   `json:"recording"`
-	Chat             bool   `json:"chat"`
-	Broadcast        bool   `json:"broadcast"`
-	Participantlimit int32  `json:"participantlimit"`
-	Date             string `json:"date"`
-	Time_seconds     int64  `json:"time_seconds"`
-	Time_nanos       int32  `json:"time_nanos"`
 }
 
 // Start Conference
@@ -206,4 +162,43 @@ type EndGroupConferenceRequest struct {
 
 type EndPublicConferenceRequest struct {
 	ConferenceID string `json:"conferenceID"`
+}
+type SchedulePrivateConferenceRequest struct {
+	Title            string `json:"title"`
+	Description      string `json:"description"`
+	Interest         string `json:"interest"`
+	Recording        bool   `json:"recording"`
+	Chat             bool   `json:"chat"`
+	Participantlimit int32  `json:"participantlimit"`
+	// google.protobuf.Timestamp time = 8;
+	Time     time.Time `json:"time"`
+	Status   string    `json:"status"`
+	Duration int32     `json:"duration"`
+}
+
+type ScheduleGroupConferenceRequest struct {
+	GroupID          string `json:"groupID"`
+	Title            string `json:"title"`
+	Description      string `json:"description"`
+	Interest         string `json:"interest"`
+	Recording        bool   `json:"recording"`
+	Chat             bool   `json:"chat"`
+	Participantlimit int32  `json:"Participantlimit"`
+	// google.protobuf.Timestamp time = 8;
+	Time     time.Time `json:"time"`
+	Status   string    `json:"status"`
+	Duration int32     `json:"duration"`
+}
+
+type SchedulePublicConferenceRequest struct {
+	Title            string `json:"title"`
+	Description      string `json:"description"`
+	Interest         string `json:"interest"`
+	Recording        bool   `json:"recording"`
+	Chat             bool   `json:"chat"`
+	Participantlimit int32  `json:"participantlimit"`
+	// google.protobuf.Timestamp time = 8;
+	Time     time.Time `json:"time"`
+	Status   string    `json:"status"`
+	Duration int32     `json:"duration"`
 }
