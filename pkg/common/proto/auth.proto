@@ -232,6 +232,7 @@ message GoogleLoginResponse{
     string error = 5;
     string uid = 6;
     string message = 7;
+    string avatarId = 8;
 }
 
 message ChangeUserNameRequest{
