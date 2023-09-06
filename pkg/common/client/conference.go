@@ -89,21 +89,25 @@ func (c *conferenceClient) HealthCheck(ctx context.Context, request string, retr
 func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, request models.SchedulePrivateConferenceRequest, retryConfig models.RetryConfig) (*conference.SchedulePrivateConferenceResponse, error) {
 
 	// Retrieve the "userId" from the context.
-	userId, ok := ctx.Value("userId").(string)
-	if !ok {
-		fmt.Println("userId not found in context.")
-		return nil, errors.New("login again")
-	}
+	// userId, ok := ctx.Value("userId").(string)
+	// if !ok {
+	// 	fmt.Println("userId not found in context.")
+	// 	return nil, errors.New("login again")
+	// }
 
 	participantlimit, err := strconv.Atoi(request.Participantlimit)
 	if err != nil {
 		return nil, errors.New("try again")
 	}
 
+	schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
+	if err != nil {
+		return nil, errors.New("try again time.Parse")
+	}
 	// Convert time.Time to google.protobuf.Timestamp
 	timestamp := &timestamp.Timestamp{
-		Seconds: request.Time.Unix(),
-		Nanos:   int32(request.Time.Nanosecond()),
+		Seconds: schedulingTime.Unix(),
+		Nanos:   int32(schedulingTime.Nanosecond()),
 	}
 
 	var res *conference.SchedulePrivateConferenceResponse
@@ -131,7 +135,7 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 			return nil, context.Canceled
 		default:
 			res, err = c.Server.SchedulePrivateConference(ctx1, &conference.SchedulePrivateConferenceRequest{
-				UserID:           userId,
+				// UserID:           userId,
 				Title:            request.Title,
 				Description:      request.Description,
 				Interest:         request.Interest,
