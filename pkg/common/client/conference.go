@@ -108,7 +108,7 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 		return nil, errors.New("try again")
 	}
 
-	schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
+	schedulingTime, err := time.Parse("2006-01-02 15:04", request.Time)
 	if err != nil {
 		return nil, errors.New("incorrect date or time format")
 	}
@@ -188,7 +188,7 @@ func (c *conferenceClient) ScheduleGroupConference(ctx context.Context, request 
 		return nil, errors.New("try again")
 	}
 
-	schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
+	schedulingTime, err := time.Parse("2006-01-02 15:04", request.Time)
 	if err != nil {
 		return nil, errors.New("incorrect date or time format")
 	}
@@ -271,7 +271,7 @@ func (c *conferenceClient) SchedulePublicConference(ctx context.Context, request
 			return nil, errors.New("try again")
 		}
 
-		schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
+		schedulingTime, err := time.Parse("2006-01-02 15:04", request.Time)
 		if err != nil {
 			return nil, errors.New("incorrect date or time format")
 		}
