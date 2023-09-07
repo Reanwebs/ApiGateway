@@ -985,3 +985,162 @@ func (c *authClient) RemoveAvatar(ctx context.Context, retryConfig models.RetryC
 
 	return nil, err
 }
+
+func (c *authClient) CreateCommunity(ctx context.Context, request models.CreateCommunityRequest) (*pb.CreateCommunityResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.CreateCommunity(ctx, &pb.CreateCommunityRequest{
+		AdminId:       userId,
+		CommunityName: request.CommunityName,
+		Moderators:    request.Moderator,
+		Members:       request.Members,
+		Description:   request.Description,
+		JoinedType:    request.JoinedType,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) JoinCommunity(ctx context.Context, request models.JoinCommunityRequest) (*pb.JoinCommunityResponse, error) {
+
+	res, err := c.Server.JoinCommunity(ctx, &pb.JoinCommunityRequest{
+		UserId:      request.MemberUserID,
+		CommunityId: request.CommunityId,
+		JoinType:    request.JoinType,
+		Message:     request.Message,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) LeaveCommunity(ctx context.Context, request models.LeaveCommunityRequest) (*pb.LeaveCommunityResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.LeaveCommunity(ctx, &pb.LeaveCommunityRequest{
+		UserId:      userId,
+		CommunityId: request.CommunityId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
+}
+
+func (c *authClient) AcceptJoinCommunity(ctx context.Context, request models.AcceptJoinCommunityRequest) (*pb.AcceptJoinCommunityResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.AcceptJoinCommunity(ctx, &pb.AcceptJoinCommunityRequest{
+		UserId:      request.RequstedUserId,
+		CommunityId: request.CommunityId,
+		AdminId:     userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) RemoveMember(ctx context.Context, request models.RemoveMemberRequest) (*pb.RemoveMemberResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.RemoveMember(ctx, &pb.RemoveMemberRequest{
+		CommunityId: request.CommunityId,
+		AdminId:     userId,
+		UserId:      request.MemberUserId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) AddModerator(ctx context.Context, request models.AddModeratorRequest) (*pb.AddModeratorResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.AddModerator(ctx, &pb.AddModeratorRequest{
+		AdminId:     userId,
+		UserId:      request.ModeratorUserId,
+		CommunityId: request.CommunityId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) AddMember(ctx context.Context, request models.AddMemberRequest) (*pb.AddMemberResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.AddMember(ctx, &pb.AddMemberRequest{
+		UserId:      request.MemberUserId,
+		AdminId:     userId,
+		CommunityId: request.CommunityId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) ChangeCommunityJoinType(ctx context.Context, request models.ChangeCommunityJoinTypeRequest) (*pb.ChangeCommunityJoinTypeResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.ChangeCommunityJoinType(ctx, &pb.ChangeCommunityJoinTypeRequest{
+		UserId:      userId,
+		CommunityId: request.CommunityId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) DeleteCommunity(ctx context.Context, request models.DeleteCommunityRequest) (*pb.DeleteCommunityResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.DeleteCommunity(ctx, &pb.DeleteCommunityRequest{
+		UserId:      userId,
+		CommunityId: request.CommunityId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

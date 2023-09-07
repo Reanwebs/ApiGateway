@@ -1,5 +1,7 @@
 package models
 
+import "gateway/pkg/common/pb"
+
 type RegisterRequestBody struct {
 	Email       string `json:"email"`
 	Password    string `json:"password"`
@@ -83,4 +85,64 @@ type ChangePhoneNumberRequest struct {
 
 type ChangeAvatarRequest struct {
 	AvatarId string `json:"avatarId"`
+}
+
+type Moderator struct {
+	moderatorId string
+}
+
+type Members struct {
+	memberId string
+}
+
+type CreateCommunityRequest struct {
+	AdminId       string          `json:"adminId"`
+	CommunityName string          `json:"communityName"`
+	Moderator     []*pb.Moderator `json:"moderator"`
+	Members       []*pb.Members   `json:"members"`
+	Description   string          `json:"description"`
+	JoinedType    string          `json:"joinedType"`
+}
+
+type JoinCommunityRequest struct {
+	MemberUserID string `json:"joiningUserID"`
+	CommunityId  string `json:"communityId"`
+	JoinType     string `json:"joinType"`
+	Message      string `json:"message"`
+}
+
+type LeaveCommunityRequest struct {
+	CommunityId string `json:"communityId"`
+}
+
+type AcceptJoinCommunityRequest struct {
+	CommunityId    string `json:"communityId"`
+	RequstedUserId string `json:"userId"`
+}
+
+type RemoveMemberRequest struct {
+	CommunityId  string `json:"communityId"`
+	MemberUserId string `json:"userId"`
+}
+
+type AddModeratorRequest struct {
+	ModeratorUserId string `json:"userId"`
+	CommunityId     string `json:""`
+}
+
+type AddMemberRequest struct {
+	MemberUserId string `json:"userId"`
+	CommunityId  string `json:"communityId"`
+}
+
+type ChangeCommunityJoinTypeRequest struct {
+	CommunityId string `json:"communityId"`
+}
+
+type DeleteCommunityRequest struct {
+	CommunityId string `json:"communityId"`
+}
+
+type BlockCommunityRequest struct {
+	CommunityId string `json:"communityId"`
 }

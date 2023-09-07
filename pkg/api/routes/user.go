@@ -31,4 +31,13 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	routes.PATCH("/change-phno", userHandler.ChangePhoneNumber)
 	routes.PATCH("/change-avatar", userHandler.ChangeAvatar)
 	routes.PATCH("/delete-avatar", userHandler.RemoveAvatar)
+	routes.POST("/create-community", userHandler.CreateCommunity)
+	routes.PATCH("/join-community", userHandler.JoinCommunity)
+	routes.DELETE("/leave-community", userHandler.LeaveCommunity)
+	routes.PATCH("/accept-join-community", userHandler.AcceptJoinCommunity)
+	routes.DELETE("/remove-member", userHandler.RemoveMember)
+	routes.POST("/add-moderator", userHandler.AddModerator)
+	routes.POST("/add-member", userHandler.AddMember)
+	routes.PATCH("/change-community-join-type", userHandler.ChangeCommunityJoinType)
+	routes.DELETE("/delete-community", userHandler.DeleteCommunity)
 }

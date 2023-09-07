@@ -25,4 +25,13 @@ type AuthClient interface {
 	ChangePhoneNumber(context.Context, models.ChangePhoneNumberRequest, models.RetryConfig) (*pb.ChangePhoneNumberResponse, error)
 	ChangeAvatar(context.Context, models.ChangeAvatarRequest, models.RetryConfig) (*pb.ChangeAvatarResponse, error)
 	RemoveAvatar(context.Context, models.RetryConfig) (*pb.RemoveAvatarResponse, error)
+	CreateCommunity(context.Context, models.CreateCommunityRequest) (*pb.CreateCommunityResponse, error)
+	JoinCommunity(context.Context, models.JoinCommunityRequest) (*pb.JoinCommunityResponse, error)
+	LeaveCommunity(context.Context, models.LeaveCommunityRequest) (*pb.LeaveCommunityResponse, error)
+	AcceptJoinCommunity(context.Context, models.AcceptJoinCommunityRequest) (*pb.AcceptJoinCommunityResponse, error)
+	RemoveMember(context.Context, models.RemoveMemberRequest) (*pb.RemoveMemberResponse, error)
+	AddModerator(context.Context, models.AddModeratorRequest) (*pb.AddModeratorResponse, error)
+	AddMember(context.Context, models.AddMemberRequest) (*pb.AddMemberResponse, error)
+	ChangeCommunityJoinType(context.Context, models.ChangeCommunityJoinTypeRequest) (*pb.ChangeCommunityJoinTypeResponse, error)
+	DeleteCommunity(context.Context, models.DeleteCommunityRequest) (*pb.DeleteCommunityResponse, error)
 }

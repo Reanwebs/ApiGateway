@@ -30,6 +30,16 @@ service Autharization {
     rpc ChangePhoneNumber(ChangePhoneNumberRequest) returns (ChangePhoneNumberResponse) {}
     rpc ChangeAvatar(ChangeAvatarRequest) returns (ChangeAvatarResponse){}
     rpc RemoveAvatar(RemoveAvatarRequest) returns (RemoveAvatarResponse) {}
+    rpc CreateCommunity(CreateCommunityRequest) returns (CreateCommunityResponse) {}
+    rpc JoinCommunity(JoinCommunityRequest) returns (JoinCommunityResponse) {}
+    rpc LeaveCommunity(LeaveCommunityRequest) returns (LeaveCommunityResponse) {}
+    rpc AcceptJoinCommunity(AcceptJoinCommunityRequest) returns (AcceptJoinCommunityResponse) {}
+    rpc RemoveMember(RemoveMemberRequest) returns (RemoveMemberResponse) {}
+    rpc AddModerator(AddModeratorRequest) returns (AddModeratorResponse) {}
+    rpc AddMember(AddMemberRequest) returns (AddMemberResponse){}
+    rpc ChangeCommunityJoinType(ChangeCommunityJoinTypeRequest) returns (ChangeCommunityJoinTypeResponse){}
+    rpc DeleteCommunity(DeleteCommunityRequest) returns (DeleteCommunityResponse) {}
+    rpc BlockCommunity(BlockCommunityRequest) returns (BlockCommunityResponse){}
 }
 
 message SignupRequest {
@@ -346,4 +356,131 @@ message RemoveAvatarResponse{
     string error = 5;
     string message = 6;
     string avatarId=7;
+}
+
+message Moderator{
+    string moderatorId=1;
+}
+
+message Members{
+    string memberId=1;
+}
+
+message CreateCommunityRequest{
+    string adminId =1;
+    string communityName=2;
+    repeated Moderator moderators=3;
+    repeated Members members=4;
+    string description = 5;
+    string joinedType = 6;
+}
+
+message CreateCommunityResponse{
+    int64 status = 1;
+    string message =2;
+    string error =3;
+}
+
+message JoinCommunityRequest{
+    string userId =1;
+    string communityId=2;
+    string joinType =3;
+    string message =4;
+}
+
+message JoinCommunityResponse{
+    int64 status =1;
+    string message =2;
+    string error = 3;
+}
+
+message LeaveCommunityRequest{
+    string userId =1;
+    string communityId=2;
+}
+
+message LeaveCommunityResponse{
+    int64 status =1;
+    string message =2;
+    string error = 3;
+}
+
+message AcceptJoinCommunityRequest{
+    string communityId = 1;
+    string adminId = 2;
+    string userId = 3;
+}
+
+message AcceptJoinCommunityResponse{
+    string status = 1;
+    string message = 2;
+    string error =3;
+}
+
+message RemoveMemberRequest{
+    string userId = 1;
+    string adminId = 2;
+    string communityId =3;
+}
+
+message RemoveMemberResponse{
+    string status = 1;
+    string message = 2;
+    string error =3;
+}
+
+message AddModeratorRequest{
+    string userId = 1;
+    string adminId =2;
+    string communityId =3;
+}
+
+message AddModeratorResponse{
+    string status = 1;
+    string message = 2;
+    string error =3;
+}
+
+message AddMemberRequest{
+    string userId = 1;
+    string adminId = 2;
+    string communityId =3;
+}
+
+message AddMemberResponse{
+    string status = 1;
+    string message = 2;
+    string error =3;
+}
+
+message ChangeCommunityJoinTypeRequest{
+    string userId = 1;
+    string communityId =2;
+}
+
+message ChangeCommunityJoinTypeResponse{
+    string status = 1;
+    string message = 2;
+    string error =3;
+}
+
+message DeleteCommunityRequest{
+    string userId = 1;
+    string communityId =2;
+}
+
+message DeleteCommunityResponse{
+    string status = 1;
+    string message = 2;
+    string error =3;
+}
+
+message BlockCommunityRequest{
+    string communityId=1;
+}
+
+message BlockCommunityResponse{
+    int64 status =1;
+    string message = 2;
+    string error =3;
 }

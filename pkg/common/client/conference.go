@@ -344,7 +344,7 @@ func (c *conferenceClient) StartPrivateConference(ctx context.Context, request m
 			Participantlimit: int32(participantlimit),
 		})
 
-		return res, err
+		return res, nil
 	}
 
 	result, err := utils.RetryOperation(ctx, retryConfig, operation)
