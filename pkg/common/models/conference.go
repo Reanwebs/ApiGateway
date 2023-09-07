@@ -36,7 +36,7 @@ type StartPrivateConferenceRequest struct {
 	Recording        bool   `json:"recording"`
 	Chat             bool   `json:"chat"`
 	Broadcast        bool   `json:"broadcast"`
-	Participantlimit int32  `json:"participantlimit"`
+	Participantlimit string `json:"participantlimit"`
 }
 
 type StartGroupConferenceRequest struct {
@@ -168,7 +168,7 @@ type SchedulePrivateConferenceRequest struct {
 	Participantlimit string `json:"participantlimit"`
 	Time             string `json:"time"`
 	Status           string `json:"status"`
-	Duration         int32  `json:"duration"`
+	Duration         string `json:"duration"`
 }
 
 type ScheduleGroupConferenceRequest struct {
@@ -178,10 +178,10 @@ type ScheduleGroupConferenceRequest struct {
 	Interest         string `json:"interest"`
 	Recording        bool   `json:"recording"`
 	Chat             bool   `json:"chat"`
-	Participantlimit int32  `json:"Participantlimit"`
+	Participantlimit string `json:"Participantlimit"`
 	Time             string `json:"time"`
 	Status           string `json:"status"`
-	Duration         int32  `json:"duration"`
+	Duration         string `json:"duration"`
 }
 
 type SchedulePublicConferenceRequest struct {
@@ -190,8 +190,8 @@ type SchedulePublicConferenceRequest struct {
 	Interest         string `json:"interest"`
 	Recording        bool   `json:"recording"`
 	Chat             bool   `json:"chat"`
-	Participantlimit int32  `json:"participantlimit"`
+	Participantlimit string `json:"participantlimit"`
 	Time             string `json:"time"`
 	Status           string `json:"status"`
-	Duration         int32  `json:"duration"`
+	Duration         string `json:"duration"`
 }

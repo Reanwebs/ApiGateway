@@ -103,6 +103,11 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 		return nil, errors.New("try again")
 	}
 
+	duration, err := strconv.Atoi(request.Duration)
+	if err != nil {
+		return nil, errors.New("try again")
+	}
+
 	schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
 	if err != nil {
 		return nil, errors.New("incorrect date or time format")
@@ -144,7 +149,7 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 				Participantlimit: int32(participantlimit),
 				Time:             timestamp,
 				Status:           request.Status,
-				Duration:         request.Duration,
+				Duration:         int32(duration),
 			})
 			cancel()
 			if err == nil {
@@ -172,6 +177,16 @@ func (c *conferenceClient) ScheduleGroupConference(ctx context.Context, request 
 	var res *conference.ScheduleGroupConferenceResponse
 	var err error
 	startTime := time.Now()
+
+	participantlimit, err := strconv.Atoi(request.Participantlimit)
+	if err != nil {
+		return nil, errors.New("try again")
+	}
+
+	duration, err := strconv.Atoi(request.Duration)
+	if err != nil {
+		return nil, errors.New("try again")
+	}
 
 	schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
 	if err != nil {
@@ -211,10 +226,10 @@ func (c *conferenceClient) ScheduleGroupConference(ctx context.Context, request 
 				Interest:         request.Interest,
 				Recording:        request.Recording,
 				Chat:             request.Chat,
-				Participantlimit: request.Participantlimit,
+				Participantlimit: int32(participantlimit),
 				Time:             timestamp,
 				Status:           request.Status,
-				Duration:         request.Duration,
+				Duration:         int32(duration),
 			})
 			cancel()
 			if err == nil {
@@ -238,76 +253,60 @@ func (c *conferenceClient) ScheduleGroupConference(ctx context.Context, request 
 }
 
 func (c *conferenceClient) SchedulePublicConference(ctx context.Context, request models.SchedulePublicConferenceRequest, retryConfig models.RetryConfig) (*conference.SchedulePublicConferenceResponse, error) {
-	var res *conference.SchedulePublicConferenceResponse
-	var err error
-	startTime := time.Now()
 
-	// Retrieve the "userId" from the context.
-	userId, ok := ctx.Value("userId").(string)
-	if !ok {
-		fmt.Println("userId not found in context.")
-		return nil, errors.New("login again")
-	}
-
-	schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
-	if err != nil {
-		return nil, errors.New("incorrect date or time format")
-	}
-
-	timestamp := &timestamp.Timestamp{
-		Seconds: schedulingTime.Unix(),
-		Nanos:   int32(schedulingTime.Nanosecond()),
-	}
-
-	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
-
-		if time.Since(startTime) > retryConfig.MaxDuration {
-			err = errors.New("time limit exceeded")
-			break
+	operation := func() (interface{}, error) {
+		userId, ok := ctx.Value("userId").(string)
+		if !ok {
+			fmt.Println("userId not found in context.")
+			return nil, errors.New("login again")
 		}
 
-		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
-
-		done := make(chan struct{})
-		go func() {
-			defer close(done)
-			<-ctx.Done()
-		}()
-
-		select {
-		case <-done:
-			cancel()
-			return nil, context.Canceled
-		default:
-			res, err = c.Server.SchedulePublicConference(ctx1, &conference.SchedulePublicConferenceRequest{
-				UserID:           userId,
-				Title:            request.Title,
-				Description:      request.Description,
-				Interest:         request.Interest,
-				Recording:        request.Recording,
-				Chat:             request.Chat,
-				Participantlimit: request.Participantlimit,
-				Time:             timestamp,
-				Status:           request.Status,
-				Duration:         request.Duration,
-			})
-			cancel()
-			if err == nil {
-				return res, nil
-			}
-
-			// Check if the error is non-retryable
-			if utils.IsNonRetryableError(err) {
-				return nil, err
-			}
+		participantlimit, err := strconv.Atoi(request.Participantlimit)
+		if err != nil {
+			return nil, errors.New("try again")
 		}
 
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		case <-time.After(retryConfig.RetryInterval):
+		duration, err := strconv.Atoi(request.Duration)
+		if err != nil {
+			return nil, errors.New("try again")
 		}
+
+		schedulingTime, err := time.Parse("2006-01-02-15:04:05", request.Time)
+		if err != nil {
+			return nil, errors.New("incorrect date or time format")
+		}
+
+		timestamp := &timestamp.Timestamp{
+			Seconds: schedulingTime.Unix(),
+			Nanos:   int32(schedulingTime.Nanosecond()),
+		}
+
+		ctx, cancel := context.WithCancel(ctx)
+		ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
+		defer cancel()
+
+		res, err := c.Server.SchedulePublicConference(ctx, &conference.SchedulePublicConferenceRequest{
+			UserID:           userId,
+			Title:            request.Title,
+			Description:      request.Description,
+			Interest:         request.Interest,
+			Recording:        request.Recording,
+			Chat:             request.Chat,
+			Participantlimit: int32(participantlimit),
+			Time:             timestamp,
+			Status:           request.Status,
+			Duration:         int32(duration),
+		})
+
+		return res, err
+	}
+
+	// Call retryOperation with the encapsulated operation
+	result, err := utils.RetryOperation(ctx, retryConfig, operation)
+
+	// Type assert the result and return it
+	if res, ok := result.(*conference.SchedulePublicConferenceResponse); ok {
+		return res, err
 	}
 
 	return nil, err
@@ -316,68 +315,45 @@ func (c *conferenceClient) SchedulePublicConference(ctx context.Context, request
 func (c *conferenceClient) StartPrivateConference(ctx context.Context, request models.StartPrivateConferenceRequest, retryConfig models.RetryConfig) (*conference.StartPrivateConferenceResponse, error) {
 	var res *conference.StartPrivateConferenceResponse
 	var err error
-	startTime := time.Now()
 
-	// Retrieve the "userId" from the context.
-	userId, ok := ctx.Value("userId").(string)
-	if !ok {
-		fmt.Println("userId not found in context.")
-		return nil, errors.New("login again")
+	operation := func() (interface{}, error) {
+
+		userId, ok := ctx.Value("userId").(string)
+		if !ok {
+			fmt.Println("userId not found in context.")
+			return nil, errors.New("login again")
+		}
+
+		participantlimit, err := strconv.Atoi(request.Participantlimit)
+		if err != nil {
+			return nil, errors.New("try again")
+		}
+
+		ctx, cancel := context.WithCancel(ctx)
+		ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
+		defer cancel()
+
+		res, err = c.Server.StartPrivateConference(ctx, &conference.StartPrivateConferenceRequest{
+			UserID:           userId,
+			Title:            request.Title,
+			Description:      request.Description,
+			Interest:         request.Interest,
+			Recording:        request.Recording,
+			Chat:             request.Chat,
+			Broadcast:        request.Broadcast,
+			Participantlimit: int32(participantlimit),
+		})
+
+		return res, err
 	}
 
-	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+	result, err := utils.RetryOperation(ctx, retryConfig, operation)
 
-		if time.Since(startTime) > retryConfig.MaxDuration {
-			err = errors.New("time limit exceeded")
-			break
-		}
-
-		ctx1, cancel := context.WithTimeout(ctx, 30*time.Second)
-		done := make(chan struct{})
-
-		go func() {
-			defer close(done)
-			<-ctx.Done()
-		}()
-
-		select {
-		case <-done:
-			cancel()
-			return nil, context.Canceled
-
-		default:
-			res, err = c.Server.StartPrivateConference(ctx1, &conference.StartPrivateConferenceRequest{
-				UserID:           userId,
-				Title:            request.Title,
-				Description:      request.Description,
-				Interest:         request.Interest,
-				Recording:        request.Recording,
-				Chat:             request.Chat,
-				Broadcast:        request.Broadcast,
-				Participantlimit: request.Participantlimit,
-			})
-			cancel()
-
-			if err == nil {
-				return res, nil
-			}
-
-			// Check if the error is non-retryable
-			if utils.IsNonRetryableError(err) {
-				return nil, err
-			}
-		}
-
-		select {
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		case <-time.After(retryConfig.RetryInterval):
-		}
+	if res, ok := result.(*conference.StartPrivateConferenceResponse); ok {
+		return res, err
 	}
 
 	return nil, err
-
 }
 
 func (c *conferenceClient) StartGroupConference(ctx context.Context, request models.StartGroupConferenceRequest, retryConfig models.RetryConfig) (*conference.StartGroupConferenceResponse, error) {
