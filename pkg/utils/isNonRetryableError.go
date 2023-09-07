@@ -21,3 +21,5 @@ func IsNonRetryableError(err error) bool {
 
 	return true
 }
+
+// https://github1s.com/hashicorp/vault/blob/HEAD/builtin/logical/aws/backend_test.go#L828

@@ -42,6 +42,16 @@ type AutharizationClient interface {
 	ChangePhoneNumber(ctx context.Context, in *ChangePhoneNumberRequest, opts ...grpc.CallOption) (*ChangePhoneNumberResponse, error)
 	ChangeAvatar(ctx context.Context, in *ChangeAvatarRequest, opts ...grpc.CallOption) (*ChangeAvatarResponse, error)
 	RemoveAvatar(ctx context.Context, in *RemoveAvatarRequest, opts ...grpc.CallOption) (*RemoveAvatarResponse, error)
+	CreateCommunity(ctx context.Context, in *CreateCommunityRequest, opts ...grpc.CallOption) (*CreateCommunityResponse, error)
+	JoinCommunity(ctx context.Context, in *JoinCommunityRequest, opts ...grpc.CallOption) (*JoinCommunityResponse, error)
+	LeaveCommunity(ctx context.Context, in *LeaveCommunityRequest, opts ...grpc.CallOption) (*LeaveCommunityResponse, error)
+	AcceptJoinCommunity(ctx context.Context, in *AcceptJoinCommunityRequest, opts ...grpc.CallOption) (*AcceptJoinCommunityResponse, error)
+	RemoveMember(ctx context.Context, in *RemoveMemberRequest, opts ...grpc.CallOption) (*RemoveMemberResponse, error)
+	AddModerator(ctx context.Context, in *AddModeratorRequest, opts ...grpc.CallOption) (*AddModeratorResponse, error)
+	AddMember(ctx context.Context, in *AddMemberRequest, opts ...grpc.CallOption) (*AddMemberResponse, error)
+	ChangeCommunityJoinType(ctx context.Context, in *ChangeCommunityJoinTypeRequest, opts ...grpc.CallOption) (*ChangeCommunityJoinTypeResponse, error)
+	DeleteCommunity(ctx context.Context, in *DeleteCommunityRequest, opts ...grpc.CallOption) (*DeleteCommunityResponse, error)
+	BlockCommunity(ctx context.Context, in *BlockCommunityRequest, opts ...grpc.CallOption) (*BlockCommunityResponse, error)
 }
 
 type autharizationClient struct {
@@ -268,6 +278,96 @@ func (c *autharizationClient) RemoveAvatar(ctx context.Context, in *RemoveAvatar
 	return out, nil
 }
 
+func (c *autharizationClient) CreateCommunity(ctx context.Context, in *CreateCommunityRequest, opts ...grpc.CallOption) (*CreateCommunityResponse, error) {
+	out := new(CreateCommunityResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/CreateCommunity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) JoinCommunity(ctx context.Context, in *JoinCommunityRequest, opts ...grpc.CallOption) (*JoinCommunityResponse, error) {
+	out := new(JoinCommunityResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/JoinCommunity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) LeaveCommunity(ctx context.Context, in *LeaveCommunityRequest, opts ...grpc.CallOption) (*LeaveCommunityResponse, error) {
+	out := new(LeaveCommunityResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/LeaveCommunity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) AcceptJoinCommunity(ctx context.Context, in *AcceptJoinCommunityRequest, opts ...grpc.CallOption) (*AcceptJoinCommunityResponse, error) {
+	out := new(AcceptJoinCommunityResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/AcceptJoinCommunity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) RemoveMember(ctx context.Context, in *RemoveMemberRequest, opts ...grpc.CallOption) (*RemoveMemberResponse, error) {
+	out := new(RemoveMemberResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/RemoveMember", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) AddModerator(ctx context.Context, in *AddModeratorRequest, opts ...grpc.CallOption) (*AddModeratorResponse, error) {
+	out := new(AddModeratorResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/AddModerator", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) AddMember(ctx context.Context, in *AddMemberRequest, opts ...grpc.CallOption) (*AddMemberResponse, error) {
+	out := new(AddMemberResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/AddMember", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) ChangeCommunityJoinType(ctx context.Context, in *ChangeCommunityJoinTypeRequest, opts ...grpc.CallOption) (*ChangeCommunityJoinTypeResponse, error) {
+	out := new(ChangeCommunityJoinTypeResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ChangeCommunityJoinType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) DeleteCommunity(ctx context.Context, in *DeleteCommunityRequest, opts ...grpc.CallOption) (*DeleteCommunityResponse, error) {
+	out := new(DeleteCommunityResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/DeleteCommunity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) BlockCommunity(ctx context.Context, in *BlockCommunityRequest, opts ...grpc.CallOption) (*BlockCommunityResponse, error) {
+	out := new(BlockCommunityResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/BlockCommunity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
@@ -296,6 +396,16 @@ type AutharizationServer interface {
 	ChangePhoneNumber(context.Context, *ChangePhoneNumberRequest) (*ChangePhoneNumberResponse, error)
 	ChangeAvatar(context.Context, *ChangeAvatarRequest) (*ChangeAvatarResponse, error)
 	RemoveAvatar(context.Context, *RemoveAvatarRequest) (*RemoveAvatarResponse, error)
+	CreateCommunity(context.Context, *CreateCommunityRequest) (*CreateCommunityResponse, error)
+	JoinCommunity(context.Context, *JoinCommunityRequest) (*JoinCommunityResponse, error)
+	LeaveCommunity(context.Context, *LeaveCommunityRequest) (*LeaveCommunityResponse, error)
+	AcceptJoinCommunity(context.Context, *AcceptJoinCommunityRequest) (*AcceptJoinCommunityResponse, error)
+	RemoveMember(context.Context, *RemoveMemberRequest) (*RemoveMemberResponse, error)
+	AddModerator(context.Context, *AddModeratorRequest) (*AddModeratorResponse, error)
+	AddMember(context.Context, *AddMemberRequest) (*AddMemberResponse, error)
+	ChangeCommunityJoinType(context.Context, *ChangeCommunityJoinTypeRequest) (*ChangeCommunityJoinTypeResponse, error)
+	DeleteCommunity(context.Context, *DeleteCommunityRequest) (*DeleteCommunityResponse, error)
+	BlockCommunity(context.Context, *BlockCommunityRequest) (*BlockCommunityResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -374,6 +484,36 @@ func (UnimplementedAutharizationServer) ChangeAvatar(context.Context, *ChangeAva
 }
 func (UnimplementedAutharizationServer) RemoveAvatar(context.Context, *RemoveAvatarRequest) (*RemoveAvatarResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveAvatar not implemented")
+}
+func (UnimplementedAutharizationServer) CreateCommunity(context.Context, *CreateCommunityRequest) (*CreateCommunityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateCommunity not implemented")
+}
+func (UnimplementedAutharizationServer) JoinCommunity(context.Context, *JoinCommunityRequest) (*JoinCommunityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method JoinCommunity not implemented")
+}
+func (UnimplementedAutharizationServer) LeaveCommunity(context.Context, *LeaveCommunityRequest) (*LeaveCommunityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LeaveCommunity not implemented")
+}
+func (UnimplementedAutharizationServer) AcceptJoinCommunity(context.Context, *AcceptJoinCommunityRequest) (*AcceptJoinCommunityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AcceptJoinCommunity not implemented")
+}
+func (UnimplementedAutharizationServer) RemoveMember(context.Context, *RemoveMemberRequest) (*RemoveMemberResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveMember not implemented")
+}
+func (UnimplementedAutharizationServer) AddModerator(context.Context, *AddModeratorRequest) (*AddModeratorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddModerator not implemented")
+}
+func (UnimplementedAutharizationServer) AddMember(context.Context, *AddMemberRequest) (*AddMemberResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddMember not implemented")
+}
+func (UnimplementedAutharizationServer) ChangeCommunityJoinType(context.Context, *ChangeCommunityJoinTypeRequest) (*ChangeCommunityJoinTypeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeCommunityJoinType not implemented")
+}
+func (UnimplementedAutharizationServer) DeleteCommunity(context.Context, *DeleteCommunityRequest) (*DeleteCommunityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteCommunity not implemented")
+}
+func (UnimplementedAutharizationServer) BlockCommunity(context.Context, *BlockCommunityRequest) (*BlockCommunityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BlockCommunity not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -820,6 +960,186 @@ func _Autharization_RemoveAvatar_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Autharization_CreateCommunity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCommunityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).CreateCommunity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/CreateCommunity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).CreateCommunity(ctx, req.(*CreateCommunityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_JoinCommunity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(JoinCommunityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).JoinCommunity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/JoinCommunity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).JoinCommunity(ctx, req.(*JoinCommunityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_LeaveCommunity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeaveCommunityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).LeaveCommunity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/LeaveCommunity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).LeaveCommunity(ctx, req.(*LeaveCommunityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_AcceptJoinCommunity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AcceptJoinCommunityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).AcceptJoinCommunity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/AcceptJoinCommunity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).AcceptJoinCommunity(ctx, req.(*AcceptJoinCommunityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_RemoveMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveMemberRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).RemoveMember(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/RemoveMember",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).RemoveMember(ctx, req.(*RemoveMemberRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_AddModerator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddModeratorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).AddModerator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/AddModerator",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).AddModerator(ctx, req.(*AddModeratorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_AddMember_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddMemberRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).AddMember(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/AddMember",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).AddMember(ctx, req.(*AddMemberRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_ChangeCommunityJoinType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeCommunityJoinTypeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ChangeCommunityJoinType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ChangeCommunityJoinType",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ChangeCommunityJoinType(ctx, req.(*ChangeCommunityJoinTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_DeleteCommunity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteCommunityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).DeleteCommunity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/DeleteCommunity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).DeleteCommunity(ctx, req.(*DeleteCommunityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_BlockCommunity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BlockCommunityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).BlockCommunity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/BlockCommunity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).BlockCommunity(ctx, req.(*BlockCommunityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -922,6 +1242,46 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveAvatar",
 			Handler:    _Autharization_RemoveAvatar_Handler,
+		},
+		{
+			MethodName: "CreateCommunity",
+			Handler:    _Autharization_CreateCommunity_Handler,
+		},
+		{
+			MethodName: "JoinCommunity",
+			Handler:    _Autharization_JoinCommunity_Handler,
+		},
+		{
+			MethodName: "LeaveCommunity",
+			Handler:    _Autharization_LeaveCommunity_Handler,
+		},
+		{
+			MethodName: "AcceptJoinCommunity",
+			Handler:    _Autharization_AcceptJoinCommunity_Handler,
+		},
+		{
+			MethodName: "RemoveMember",
+			Handler:    _Autharization_RemoveMember_Handler,
+		},
+		{
+			MethodName: "AddModerator",
+			Handler:    _Autharization_AddModerator_Handler,
+		},
+		{
+			MethodName: "AddMember",
+			Handler:    _Autharization_AddMember_Handler,
+		},
+		{
+			MethodName: "ChangeCommunityJoinType",
+			Handler:    _Autharization_ChangeCommunityJoinType_Handler,
+		},
+		{
+			MethodName: "DeleteCommunity",
+			Handler:    _Autharization_DeleteCommunity_Handler,
+		},
+		{
+			MethodName: "BlockCommunity",
+			Handler:    _Autharization_BlockCommunity_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

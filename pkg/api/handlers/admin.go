@@ -141,6 +141,26 @@ func (h *AdminHandler) ManageInterest(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 }
 
+func (h *AdminHandler) BlockCommunity(ctx *gin.Context) {
+	body := models.BlockCommunityRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.BlockCommunity(context.Background(), body)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "action failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
 func (h *AdminHandler) LogoutAdmin(ctx *gin.Context) {
 	ctx.SetCookie("admin-auth", "", -1, "", "", false, true)
 	ctx.JSON(http.StatusOK, gin.H{
