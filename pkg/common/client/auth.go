@@ -9,6 +9,7 @@ import (
 	"gateway/pkg/common/models"
 	"gateway/pkg/common/pb"
 	"gateway/pkg/utils"
+	"log"
 	"time"
 
 	"google.golang.org/grpc"
@@ -1013,11 +1014,14 @@ func (c *authClient) JoinCommunity(ctx context.Context, request models.JoinCommu
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
+
+	log.Printf("Calling JoinCommunity with UserId: %s, CommunityId: %s, Message: %s", userId, request.CommunityId, request.Message)
 	res, err := c.Server.JoinCommunity(ctx, &pb.JoinCommunityRequest{
 		UserId:      userId,
 		CommunityId: request.CommunityId,
 		Message:     request.Message,
 	})
+
 	if err != nil {
 		return nil, err
 	}
