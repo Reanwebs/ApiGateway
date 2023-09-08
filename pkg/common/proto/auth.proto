@@ -384,7 +384,6 @@ message CreateCommunityResponse{
 message JoinCommunityRequest{
     string userId =1;
     string communityId=2;
-    string joinType =3;
     string message =4;
 }
 

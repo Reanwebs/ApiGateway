@@ -1012,7 +1012,6 @@ func (c *authClient) JoinCommunity(ctx context.Context, request models.JoinCommu
 	res, err := c.Server.JoinCommunity(ctx, &pb.JoinCommunityRequest{
 		UserId:      request.MemberUserID,
 		CommunityId: request.CommunityId,
-		JoinType:    request.JoinType,
 		Message:     request.Message,
 	})
 	if err != nil {
