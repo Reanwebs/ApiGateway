@@ -22,35 +22,32 @@ func AuthenticateAdmin(ctx *gin.Context) {
 // helper to validate cookie and expiry
 func authHelper(ctx *gin.Context, user string) {
 
-	tokenString, err := ctx.Cookie(user + "-auth") // get cookie for user or admin with name
-
+	tokenString, err := ctx.Cookie(user + "-auth")
 	if err != nil || tokenString == "" {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"StatusCode": 401,
-			"msg":        "Unauthorized User Please Login",
+			"msg":        "Unauthorized, Please Login",
 		})
 		return
 	}
 
-	claims, err := ValidateToken(tokenString) // auth function validate the token and return claims with error
+	claims, err := ValidateToken(tokenString)
 	if err != nil || tokenString == "" {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"StatusCode": 401,
-			"msg":        "Unauthorized User Please Login token not valid",
+			"msg":        "Unauthorized, Please Login token not valid",
 		})
 		return
 	}
 
-	// check the cliams expire time
 	if time.Now().Unix() > claims.ExpiresAt {
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"StatusCode": 401,
-			"msg":        "User Need Re-Login time expired",
+			"msg":        "Need Re-Login time expired",
 		})
 		return
 	}
 	traceId := utils.GenerateTraceID()
-	// claim the" userId and set it on context
 	ctx.Set("userId", fmt.Sprint(claims.Id))
 	ctx.Set("traceId", traceId)
 
