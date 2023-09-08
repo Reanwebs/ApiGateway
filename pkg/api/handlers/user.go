@@ -782,7 +782,6 @@ func (h *UserHandler) CreateCommunity(ctx *gin.Context) {
 
 func (h *UserHandler) JoinCommunity(ctx *gin.Context) {
 	body := models.JoinCommunityRequest{}
-
 	if err := ctx.BindJSON(&body); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
