@@ -1008,9 +1008,13 @@ func (c *authClient) CreateCommunity(ctx context.Context, request models.CreateC
 }
 
 func (c *authClient) JoinCommunity(ctx context.Context, request models.JoinCommunityRequest) (*pb.JoinCommunityResponse, error) {
-
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
 	res, err := c.Server.JoinCommunity(ctx, &pb.JoinCommunityRequest{
-		UserId:      request.MemberUserID,
+		UserId:      userId,
 		CommunityId: request.CommunityId,
 		Message:     request.Message,
 	})
