@@ -105,9 +105,8 @@ type CreateCommunityRequest struct {
 }
 
 type JoinCommunityRequest struct {
-	MemberUserID string `json:"joiningUserID"`
-	CommunityId  string `json:"communityId"`
-	Message      string `json:"message"`
+	CommunityId string `json:"communityId"`
+	Message     string `json:"message"`
 }
 
 type LeaveCommunityRequest struct {
