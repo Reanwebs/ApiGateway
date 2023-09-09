@@ -86,8 +86,8 @@ func (c *AdminClient) ManageInterest(ctx context.Context, request models.ManageI
 	return res, nil
 }
 
-func (c *AdminClient) BlockCommunity(ctx context.Context, request models.BlockCommunityRequest) (*pb.BlockCommunityResponse, error) {
-	res, err := c.Server.BlockCommunity(ctx, &pb.BlockCommunityRequest{
+func (c *AdminClient) ManageCommunity(ctx context.Context, request models.ManageCommunityRequest) (*pb.ManageCommunityResponse, error) {
+	res, err := c.Server.ManageCommunity(ctx, &pb.ManageCommunityRequest{
 		CommunityId: request.CommunityId,
 	})
 	if err != nil {

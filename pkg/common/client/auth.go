@@ -997,7 +997,6 @@ func (c *authClient) CreateCommunity(ctx context.Context, request models.CreateC
 	res, err := c.Server.CreateCommunity(ctx, &pb.CreateCommunityRequest{
 		AdminId:       userId,
 		CommunityName: request.CommunityName,
-		Moderators:    request.Moderator,
 		Members:       request.Members,
 		Description:   request.Description,
 		JoinedType:    request.JoinedType,

@@ -96,12 +96,11 @@ type Members struct {
 }
 
 type CreateCommunityRequest struct {
-	AdminId       string          `json:"adminId"`
-	CommunityName string          `json:"communityName"`
-	Moderator     []*pb.Moderator `json:"moderators"`
-	Members       []*pb.Members   `json:"members"`
-	Description   string          `json:"description"`
-	JoinedType    string          `json:"joinedType"`
+	AdminId       string        `json:"adminId"`
+	CommunityName string        `json:"communityName"`
+	Members       []*pb.Members `json:"members"`
+	Description   string        `json:"description"`
+	JoinedType    string        `json:"joinedType"`
 }
 
 type JoinCommunityRequest struct {
@@ -141,6 +140,6 @@ type DeleteCommunityRequest struct {
 	CommunityId string `json:"communityId"`
 }
 
-type BlockCommunityRequest struct {
+type ManageCommunityRequest struct {
 	CommunityId string `json:"communityId"`
 }

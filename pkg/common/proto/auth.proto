@@ -39,7 +39,7 @@ service Autharization {
     rpc AddMember(AddMemberRequest) returns (AddMemberResponse){}
     rpc ChangeCommunityJoinType(ChangeCommunityJoinTypeRequest) returns (ChangeCommunityJoinTypeResponse){}
     rpc DeleteCommunity(DeleteCommunityRequest) returns (DeleteCommunityResponse) {}
-    rpc BlockCommunity(BlockCommunityRequest) returns (BlockCommunityResponse){}
+    rpc ManageCommunity(ManageCommunityRequest) returns (ManageCommunityResponse){}
 }
 
 message SignupRequest {
@@ -358,9 +358,6 @@ message RemoveAvatarResponse{
     string avatarId=7;
 }
 
-message Moderator{
-    string moderatorId=1;
-}
 
 message Members{
     string memberId=1;
@@ -369,7 +366,6 @@ message Members{
 message CreateCommunityRequest{
     string adminId =1;
     string communityName=2;
-    repeated Moderator moderators=3;
     repeated Members members=4;
     string description = 5;
     string joinedType = 6;
@@ -474,11 +470,11 @@ message DeleteCommunityResponse{
     string error =3;
 }
 
-message BlockCommunityRequest{
+message ManageCommunityRequest{
     string communityId=1;
 }
 
-message BlockCommunityResponse{
+message ManageCommunityResponse{
     int64 status =1;
     string message = 2;
     string error =3;

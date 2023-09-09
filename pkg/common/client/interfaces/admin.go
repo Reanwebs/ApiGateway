@@ -13,5 +13,5 @@ type AdminClient interface {
 	GetInterest(context.Context) (*pb.GetInterestResponse, error)
 	AddInterest(context.Context, models.AddInterestRequest) (*pb.AddInterestResponse, error)
 	ManageInterest(context.Context, models.ManageInterestRequest) (*pb.ManageInterestResponse, error)
-	BlockCommunity(context.Context, models.BlockCommunityRequest) (*pb.BlockCommunityResponse, error)
+	ManageCommunity(context.Context, models.ManageCommunityRequest) (*pb.ManageCommunityResponse, error)
 }
