@@ -1,7 +1,5 @@
 package models
 
-import "gateway/pkg/common/pb"
-
 type RegisterRequestBody struct {
 	Email       string `json:"email"`
 	Password    string `json:"password"`
@@ -96,11 +94,11 @@ type Members struct {
 }
 
 type CreateCommunityRequest struct {
-	AdminId       string        `json:"adminId"`
-	CommunityName string        `json:"communityName"`
-	Members       []*pb.Members `json:"members"`
-	Description   string        `json:"description"`
-	JoinedType    string        `json:"joinedType"`
+	AdminId       string   `json:"adminId"`
+	CommunityName string   `json:"communityName"`
+	Members       []string `json:"members"`
+	Description   string   `json:"description"`
+	JoinedType    string   `json:"joinedType"`
 }
 
 type JoinCommunityRequest struct {
