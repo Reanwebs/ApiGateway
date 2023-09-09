@@ -141,15 +141,15 @@ func (h *AdminHandler) ManageInterest(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 }
 
-func (h *AdminHandler) BlockCommunity(ctx *gin.Context) {
-	body := models.BlockCommunityRequest{}
+func (h *AdminHandler) ManageCommunity(ctx *gin.Context) {
+	body := models.ManageCommunityRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	res, err := h.Client.BlockCommunity(context.Background(), body)
+	res, err := h.Client.ManageCommunity(context.Background(), body)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "action failed",

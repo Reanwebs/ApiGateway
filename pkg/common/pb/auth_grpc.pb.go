@@ -51,7 +51,7 @@ type AutharizationClient interface {
 	AddMember(ctx context.Context, in *AddMemberRequest, opts ...grpc.CallOption) (*AddMemberResponse, error)
 	ChangeCommunityJoinType(ctx context.Context, in *ChangeCommunityJoinTypeRequest, opts ...grpc.CallOption) (*ChangeCommunityJoinTypeResponse, error)
 	DeleteCommunity(ctx context.Context, in *DeleteCommunityRequest, opts ...grpc.CallOption) (*DeleteCommunityResponse, error)
-	BlockCommunity(ctx context.Context, in *BlockCommunityRequest, opts ...grpc.CallOption) (*BlockCommunityResponse, error)
+	ManageCommunity(ctx context.Context, in *ManageCommunityRequest, opts ...grpc.CallOption) (*ManageCommunityResponse, error)
 }
 
 type autharizationClient struct {
@@ -359,9 +359,9 @@ func (c *autharizationClient) DeleteCommunity(ctx context.Context, in *DeleteCom
 	return out, nil
 }
 
-func (c *autharizationClient) BlockCommunity(ctx context.Context, in *BlockCommunityRequest, opts ...grpc.CallOption) (*BlockCommunityResponse, error) {
-	out := new(BlockCommunityResponse)
-	err := c.cc.Invoke(ctx, "/pb.Autharization/BlockCommunity", in, out, opts...)
+func (c *autharizationClient) ManageCommunity(ctx context.Context, in *ManageCommunityRequest, opts ...grpc.CallOption) (*ManageCommunityResponse, error) {
+	out := new(ManageCommunityResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ManageCommunity", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -405,7 +405,7 @@ type AutharizationServer interface {
 	AddMember(context.Context, *AddMemberRequest) (*AddMemberResponse, error)
 	ChangeCommunityJoinType(context.Context, *ChangeCommunityJoinTypeRequest) (*ChangeCommunityJoinTypeResponse, error)
 	DeleteCommunity(context.Context, *DeleteCommunityRequest) (*DeleteCommunityResponse, error)
-	BlockCommunity(context.Context, *BlockCommunityRequest) (*BlockCommunityResponse, error)
+	ManageCommunity(context.Context, *ManageCommunityRequest) (*ManageCommunityResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -512,8 +512,8 @@ func (UnimplementedAutharizationServer) ChangeCommunityJoinType(context.Context,
 func (UnimplementedAutharizationServer) DeleteCommunity(context.Context, *DeleteCommunityRequest) (*DeleteCommunityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteCommunity not implemented")
 }
-func (UnimplementedAutharizationServer) BlockCommunity(context.Context, *BlockCommunityRequest) (*BlockCommunityResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method BlockCommunity not implemented")
+func (UnimplementedAutharizationServer) ManageCommunity(context.Context, *ManageCommunityRequest) (*ManageCommunityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ManageCommunity not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -1122,20 +1122,20 @@ func _Autharization_DeleteCommunity_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Autharization_BlockCommunity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(BlockCommunityRequest)
+func _Autharization_ManageCommunity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ManageCommunityRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AutharizationServer).BlockCommunity(ctx, in)
+		return srv.(AutharizationServer).ManageCommunity(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/pb.Autharization/BlockCommunity",
+		FullMethod: "/pb.Autharization/ManageCommunity",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AutharizationServer).BlockCommunity(ctx, req.(*BlockCommunityRequest))
+		return srv.(AutharizationServer).ManageCommunity(ctx, req.(*ManageCommunityRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1280,8 +1280,8 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Autharization_DeleteCommunity_Handler,
 		},
 		{
-			MethodName: "BlockCommunity",
-			Handler:    _Autharization_BlockCommunity_Handler,
+			MethodName: "ManageCommunity",
+			Handler:    _Autharization_ManageCommunity_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
