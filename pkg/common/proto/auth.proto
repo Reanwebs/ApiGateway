@@ -359,14 +359,12 @@ message RemoveAvatarResponse{
 }
 
 
-message Members{
-    string memberId=1;
-}
+
 
 message CreateCommunityRequest{
     string adminId =1;
     string communityName=2;
-    repeated Members members=4;
+    repeated string Members=4;
     string description = 5;
     string joinedType = 6;
 }
