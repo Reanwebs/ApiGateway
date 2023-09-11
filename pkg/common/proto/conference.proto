@@ -112,6 +112,7 @@ service Conference{
       bool   chat        = 7;
       bool   broadcast   = 8;
       int32  participantlimit = 9;
+      string sdpOffer = 10;
    }
   
   message StartPrivateConferenceResponse {
@@ -131,6 +132,7 @@ service Conference{
       bool   chat        = 7;
       bool   broadcast   = 8;
       int32  participantlimit = 9;
+      string sdpOffer = 10;
    }
   
    message StartGroupConferenceResponse{
@@ -148,6 +150,7 @@ service Conference{
       bool   chat        = 8;
       bool   broadcast   = 9;
       int32  participantlimit = 10;
+      string sdpOffer = 11;
   }
   
   message StartPublicConferenceResponse{
@@ -164,6 +167,7 @@ service Conference{
   
   message JoinPrivateConferenceResponse {
      string result = 1;
+     string sdpOffer = 2;
    }
   
   message JoinGroupConferenceRequest{
@@ -174,6 +178,7 @@ service Conference{
   
   message JoinGroupConferenceResponse {
      string result = 1;
+     string sdpOffer = 2;
    }
   
   message JoinPublicConferenceRequest{
@@ -183,6 +188,7 @@ service Conference{
   
   message JoinPublicConferenceResponse{
       string result = 1;
+      string sdpOffer = 2;
   }
   
   

@@ -342,6 +342,7 @@ func (c *conferenceClient) StartPrivateConference(ctx context.Context, request m
 			Chat:             request.Chat,
 			Broadcast:        request.Broadcast,
 			Participantlimit: int32(participantlimit),
+			SdpOffer:         request.SdpOffer,
 		})
 
 		return res, nil
@@ -400,6 +401,7 @@ func (c *conferenceClient) StartGroupConference(ctx context.Context, request mod
 				Chat:             request.Chat,
 				Broadcast:        request.Broadcast,
 				Participantlimit: request.Participantlimit,
+				SdpOffer:         request.SdpOffer,
 			})
 			cancel()
 
@@ -467,6 +469,7 @@ func (c *conferenceClient) StartPublicConference(ctx context.Context, request mo
 				Chat:             request.Chat,
 				Broadcast:        request.Broadcast,
 				Participantlimit: request.Participantlimit,
+				SdpOffer:         request.SdpOffer,
 			})
 			cancel()
 

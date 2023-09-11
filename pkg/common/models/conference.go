@@ -37,6 +37,7 @@ type StartPrivateConferenceRequest struct {
 	Chat             bool   `json:"chat"`
 	Broadcast        bool   `json:"broadcast"`
 	Participantlimit string `json:"participantlimit"`
+	SdpOffer         string `json:"sdpOffer"`
 }
 
 type StartGroupConferenceRequest struct {
@@ -48,6 +49,7 @@ type StartGroupConferenceRequest struct {
 	Chat             bool   `json:"chat"`
 	Broadcast        bool   `json:"broadcast"`
 	Participantlimit int32  `json:"participantlimit"`
+	SdpOffer         string `json:"sdpOffer"`
 }
 
 type StartPublicConferenceRequest struct {
@@ -59,6 +61,7 @@ type StartPublicConferenceRequest struct {
 	Chat             bool   `json:"chat"`
 	Broadcast        bool   `json:"broadcast"`
 	Participantlimit int32  `json:"participantlimit"`
+	SdpOffer         string `json:"sdpOffer"`
 }
 
 //  Join Conference
