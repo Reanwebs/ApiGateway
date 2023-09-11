@@ -29,6 +29,11 @@ func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler,
 	routes.ConferenceRoutes(engine.Group("/api"), conferenceHandler)
 	routes.VideoRoutes(engine.Group("/api"), videoHandler)
 
+	// WebSocket route
+	engine.GET("/ws", func(c *gin.Context) {
+		handlers.HandleWebSocketConnection(c)
+	})
+
 	engine.NoRoute(func(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"StatusCode": 404,
