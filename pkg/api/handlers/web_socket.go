@@ -1,35 +1,16 @@
 package handlers
 
 import (
-	"log"
+	"fmt"
 
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
+	socketio "github.com/googollee/go-socket.io"
 )
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
+// Define your custom event handler function
+func HandleChatMessage(s socketio.Conn, msg string) {
+	// Handle the incoming chat message
+	fmt.Println("Chat message received:", msg)
 
-func HandleWebSocketConnection(c *gin.Context) {
-	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	defer conn.Close()
-
-	for {
-		messageType, p, err := conn.ReadMessage()
-		if err != nil {
-			log.Println(err)
-			return
-		}
-
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Println(err)
-			return
-		}
-	}
+	// You can add your custom logic here, e.g., broadcasting the message to other clients
+	// s.Broadcast().Emit("chat-response", msg) // Broadcast the message to all connected clients
 }
