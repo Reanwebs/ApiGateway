@@ -40,5 +40,5 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	routes.POST("/add-member", userHandler.AddMember)
 	routes.PATCH("/change-community-join-type", userHandler.ChangeCommunityJoinType)
 	routes.PATCH("/delete-community", userHandler.DeleteCommunity)
-	routes.GET("/get-intersts", userHandler.GetInterstsUser)
+	routes.GET("/get-interests", userHandler.GetInterstsUser)
 }
