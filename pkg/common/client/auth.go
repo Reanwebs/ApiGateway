@@ -1150,3 +1150,25 @@ func (c *authClient) DeleteCommunity(ctx context.Context, request models.DeleteC
 	}
 	return res, nil
 }
+
+func (c *authClient) GetInterstsUser(ctx context.Context) (*pb.GetInterstsUserResponse, error) {
+	res, err := c.Server.GetInterest(ctx, &pb.GetInterestRequest{})
+	if err != nil {
+		return nil, err
+	}
+
+	userResponse := &pb.GetInterstsUserResponse{
+		Status:    res.Status,
+		Interests: make([]*pb.UserInterest, len(res.Interests)),
+		Message:   res.Message,
+		Error:     res.Error,
+	}
+
+	for i, interest := range res.Interests {
+		userResponse.Interests[i] = &pb.UserInterest{
+			Interest: interest.Interest,
+		}
+	}
+
+	return userResponse, nil
+}

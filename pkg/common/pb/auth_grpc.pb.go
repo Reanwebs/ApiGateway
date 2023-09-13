@@ -52,6 +52,7 @@ type AutharizationClient interface {
 	ChangeCommunityJoinType(ctx context.Context, in *ChangeCommunityJoinTypeRequest, opts ...grpc.CallOption) (*ChangeCommunityJoinTypeResponse, error)
 	DeleteCommunity(ctx context.Context, in *DeleteCommunityRequest, opts ...grpc.CallOption) (*DeleteCommunityResponse, error)
 	ManageCommunity(ctx context.Context, in *ManageCommunityRequest, opts ...grpc.CallOption) (*ManageCommunityResponse, error)
+	GetInterstsUser(ctx context.Context, in *GetInterstsUserRequest, opts ...grpc.CallOption) (*GetInterstsUserResponse, error)
 }
 
 type autharizationClient struct {
@@ -368,6 +369,15 @@ func (c *autharizationClient) ManageCommunity(ctx context.Context, in *ManageCom
 	return out, nil
 }
 
+func (c *autharizationClient) GetInterstsUser(ctx context.Context, in *GetInterstsUserRequest, opts ...grpc.CallOption) (*GetInterstsUserResponse, error) {
+	out := new(GetInterstsUserResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/GetInterstsUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
@@ -406,6 +416,7 @@ type AutharizationServer interface {
 	ChangeCommunityJoinType(context.Context, *ChangeCommunityJoinTypeRequest) (*ChangeCommunityJoinTypeResponse, error)
 	DeleteCommunity(context.Context, *DeleteCommunityRequest) (*DeleteCommunityResponse, error)
 	ManageCommunity(context.Context, *ManageCommunityRequest) (*ManageCommunityResponse, error)
+	GetInterstsUser(context.Context, *GetInterstsUserRequest) (*GetInterstsUserResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -514,6 +525,9 @@ func (UnimplementedAutharizationServer) DeleteCommunity(context.Context, *Delete
 }
 func (UnimplementedAutharizationServer) ManageCommunity(context.Context, *ManageCommunityRequest) (*ManageCommunityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ManageCommunity not implemented")
+}
+func (UnimplementedAutharizationServer) GetInterstsUser(context.Context, *GetInterstsUserRequest) (*GetInterstsUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInterstsUser not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -1140,6 +1154,24 @@ func _Autharization_ManageCommunity_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Autharization_GetInterstsUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInterstsUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).GetInterstsUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/GetInterstsUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).GetInterstsUser(ctx, req.(*GetInterstsUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1282,6 +1314,10 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ManageCommunity",
 			Handler:    _Autharization_ManageCommunity_Handler,
+		},
+		{
+			MethodName: "GetInterstsUser",
+			Handler:    _Autharization_GetInterstsUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
