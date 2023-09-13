@@ -316,45 +316,48 @@ func (c *conferenceClient) StartPrivateConference(ctx context.Context, request m
 	var res *conference.StartPrivateConferenceResponse
 	var err error
 
-	operation := func() (interface{}, error) {
+	// operation := func() (interface{}, error) {
 
-		userId, ok := ctx.Value("userId").(string)
-		if !ok {
-			fmt.Println("userId not found in context.")
-			return nil, errors.New("login again")
-		}
-
-		participantlimit, err := strconv.Atoi(request.Participantlimit)
-		if err != nil {
-			return nil, errors.New("try again")
-		}
-
-		ctx, cancel := context.WithCancel(ctx)
-		ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
-		defer cancel()
-
-		res, err = c.Server.StartPrivateConference(ctx, &conference.StartPrivateConferenceRequest{
-			UserID:           userId,
-			Title:            request.Title,
-			Description:      request.Description,
-			Interest:         request.Interest,
-			Recording:        request.Recording,
-			Chat:             request.Chat,
-			Broadcast:        request.Broadcast,
-			Participantlimit: int32(participantlimit),
-			SdpOffer:         request.SdpOffer,
-		})
-
-		return res, nil
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
 	}
 
-	result, err := utils.RetryOperation(ctx, retryConfig, operation)
-
-	if res, ok := result.(*conference.StartPrivateConferenceResponse); ok {
-		return res, err
+	participantlimit, err := strconv.Atoi(request.Participantlimit)
+	if err != nil {
+		return nil, errors.New("try again")
 	}
 
-	return nil, err
+	ctx, cancel := context.WithCancel(ctx)
+	ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
+	defer cancel()
+
+	res, err = c.Server.StartPrivateConference(ctx, &conference.StartPrivateConferenceRequest{
+		UserID:           userId,
+		Title:            request.Title,
+		Description:      request.Description,
+		Interest:         request.Interest,
+		Recording:        request.Recording,
+		Chat:             request.Chat,
+		Broadcast:        request.Broadcast,
+		Participantlimit: int32(participantlimit),
+		SdpOffer:         request.SdpOffer,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+	// }
+
+	// result, err := utils.RetryOperation(ctx, retryConfig, operation)
+
+	// if res, ok := result.(*conference.StartPrivateConferenceResponse); ok {
+	// 	return res, err
+	// }
+
+	// return nil, err
 }
 
 func (c *conferenceClient) StartGroupConference(ctx context.Context, request models.StartGroupConferenceRequest, retryConfig models.RetryConfig) (*conference.StartGroupConferenceResponse, error) {
