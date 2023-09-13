@@ -708,3 +708,28 @@ func (h *ConferenceHandler) ToggleParticipantMic(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &res)
 }
+
+func (h *ConferenceHandler) ScheduledConference(ctx *gin.Context) {
+	res, err := h.Client.ScheduledConference(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "failed to fetch",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+func (h *ConferenceHandler) CompletedSchedules(ctx *gin.Context) {
+	res, err := h.Client.CompletedSchedules(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "failed to fetch",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}

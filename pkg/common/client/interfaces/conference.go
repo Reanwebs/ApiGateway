@@ -32,4 +32,6 @@ type ConferenceClient interface {
 	ToggleMic(context.Context, models.ToggleMicRequest) (*conference.ToggleMicResponse, error)
 	ToggleParticipantCamera(context.Context, models.ToggleParticipantCameraRequest) (*conference.ToggleParticipantCameraResponse, error)
 	ToggleParticipantMic(context.Context, models.ToggleParticipantMicRequest) (*conference.ToggleParticipantMicResponse, error)
+	ScheduledConference(context.Context) (*conference.ScheduledConferenceResponse, error)
+	CompletedSchedules(context.Context) (*conference.CompletedSchedulesResponse, error)
 }
