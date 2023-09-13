@@ -40,6 +40,7 @@ service Autharization {
     rpc ChangeCommunityJoinType(ChangeCommunityJoinTypeRequest) returns (ChangeCommunityJoinTypeResponse){}
     rpc DeleteCommunity(DeleteCommunityRequest) returns (DeleteCommunityResponse) {}
     rpc ManageCommunity(ManageCommunityRequest) returns (ManageCommunityResponse){}
+    rpc GetInterstsUser(GetInterstsUserRequest) returns (GetInterstsUserResponse){}
 }
 
 message SignupRequest {
@@ -476,4 +477,18 @@ message ManageCommunityResponse{
     int64 status =1;
     string message = 2;
     string error =3;
+}
+
+message UserInterest {
+    string interest = 1;
+}
+
+message GetInterstsUserRequest {
+}
+
+message GetInterstsUserResponse {
+    int64 status = 1;
+    repeated UserInterest interests = 2;
+    string message = 3;
+    string error = 4;
 }

@@ -938,3 +938,18 @@ func (h *UserHandler) DeleteCommunity(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &res)
 }
+
+func (h *UserHandler) GetInterstsUser(ctx *gin.Context) {
+
+	res, err := h.Client.GetInterstsUser(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to fetch intrests",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+
+}
