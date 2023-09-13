@@ -33,7 +33,9 @@ service Conference{
     rpc ToggleMic (ToggleMicRequest) returns (ToggleMicResponse){}
     rpc ToggleParticipantCamera(ToggleParticipantCameraRequest) returns (ToggleParticipantCameraResponse){}
     rpc ToggleParticipantMic(ToggleParticipantMicRequest) returns (ToggleParticipantMicResponse){}
-    
+    rpc ScheduledConference(ScheduledConferenceRequest) returns (ScheduledConferenceResponse){}
+   rpc CompletedSchedules(CompletedSchedulesRequest) returns (CompletedSchedulesResponse){}
+ 
   }
   
   message Request {
@@ -45,61 +47,61 @@ service Conference{
   }
   
   message SchedulePrivateConferenceRequest {
-      string userID  = 1;
-      string title   = 2;
-      string description = 3;
-      string interest    = 4;
-      bool   recording   = 5;
-      bool   chat        = 6;
-      int32  participantlimit = 7;
-      google.protobuf.Timestamp time = 8;
-      string status      = 9;
-      int32  duration    = 10;
-   }
-  
-  
-  message SchedulePrivateConferenceResponse{
-      string Result = 1;
-      string ScheduleID = 2;
-  }
-  
-  message ScheduleGroupConferenceRequest {
-      string groupID  = 1;
-      string title   = 2;
-      string description = 3;
-      string interest    = 4;
-      bool   recording   = 5;
-      bool   chat        = 6;
-      int32  participantlimit = 7;
-      google.protobuf.Timestamp time = 8;
-      string status      = 9;
-      int32  duration    = 10;
-   }
-  
-  
-  message ScheduleGroupConferenceResponse{
-      string Result = 1;
-      string ScheduleID = 2;
-  }
-  
-  message SchedulePublicConferenceRequest {
-      string userID  = 1;
-      string title   = 2;
-      string description = 3;
-      string interest    = 4;
-      bool   recording   = 5;
-      bool   chat        = 6;
-      int32  participantlimit = 7;
-      google.protobuf.Timestamp time = 8;
-      string status      = 9;
-      int32  duration    = 10;
-   }
-  
-  
-  message SchedulePublicConferenceResponse{
-      string Result = 1;
-      string ScheduleID = 2;
-  }
+    string userID  = 1;
+    string title   = 2;
+    string description = 3;
+    string interest    = 4;
+    bool   recording   = 5;
+    bool   chat        = 6;
+    int32  participantlimit = 7;
+    google.protobuf.Timestamp time = 8;
+    string status      = 9;
+    int32  duration    = 10;
+ }
+
+
+message SchedulePrivateConferenceResponse{
+    string Result = 1;
+    string ScheduleID = 2;
+}
+
+message ScheduleGroupConferenceRequest {
+    string groupID  = 1;
+    string title   = 2;
+    string description = 3;
+    string interest    = 4;
+    bool   recording   = 5;
+    bool   chat        = 6;
+    int32  participantlimit = 7;
+    google.protobuf.Timestamp time = 8;
+    string status      = 9;
+    int32  duration    = 10;
+ }
+
+
+message ScheduleGroupConferenceResponse{
+    string Result = 1;
+    string ScheduleID = 2;
+}
+
+message SchedulePublicConferenceRequest {
+    string userID  = 1;
+    string title   = 2;
+    string description = 3;
+    string interest    = 4;
+    bool   recording   = 5;
+    bool   chat        = 6;
+    int32  participantlimit = 7;
+    google.protobuf.Timestamp time = 8;
+    string status      = 9;
+    int32  duration    = 10;
+ }
+
+
+message SchedulePublicConferenceResponse{
+    string Result = 1;
+    string ScheduleID = 2;
+}
   
   // Start Conference
   
@@ -352,3 +354,35 @@ service Conference{
   message EndPublicConferenceResponse {
       string result = 1;
   }
+  message ScheduledConference{
+    string userID = 1;
+    string title  = 2;
+    string description = 3;
+    string interest    = 4;
+    bool   chat        = 5;
+    int32  participantlimit = 6;
+    google.protobuf.Timestamp time = 7;
+    string status                  = 8;
+    int32  durations               = 9;
+}
+
+
+
+message ScheduledConferenceRequest{
+    string UserID = 1;
+}
+
+message ScheduledConferenceResponse{
+   string Result = 1;
+   repeated ScheduledConference Data = 2;
+}
+
+
+message CompletedSchedulesRequest{
+    string UserID = 1;
+}
+
+message CompletedSchedulesResponse{
+   string Result = 1;
+   repeated ScheduledConference Data = 2;
+}

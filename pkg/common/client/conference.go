@@ -312,6 +312,39 @@ func (c *conferenceClient) SchedulePublicConference(ctx context.Context, request
 	return nil, err
 }
 
+func (c *conferenceClient) ScheduledConference(ctx context.Context) (*conference.ScheduledConferenceResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.ScheduledConference(ctx, &conference.ScheduledConferenceRequest{
+		UserID: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+func (c *conferenceClient) CompletedSchedules(ctx context.Context) (*conference.CompletedSchedulesResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.CompletedSchedules(ctx, &conference.CompletedSchedulesRequest{
+		UserID: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
 func (c *conferenceClient) StartPrivateConference(ctx context.Context, request models.StartPrivateConferenceRequest, retryConfig models.RetryConfig) (*conference.StartPrivateConferenceResponse, error) {
 	var res *conference.StartPrivateConferenceResponse
 	var err error

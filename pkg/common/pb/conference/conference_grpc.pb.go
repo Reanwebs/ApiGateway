@@ -43,6 +43,8 @@ type ConferenceClient interface {
 	ToggleMic(ctx context.Context, in *ToggleMicRequest, opts ...grpc.CallOption) (*ToggleMicResponse, error)
 	ToggleParticipantCamera(ctx context.Context, in *ToggleParticipantCameraRequest, opts ...grpc.CallOption) (*ToggleParticipantCameraResponse, error)
 	ToggleParticipantMic(ctx context.Context, in *ToggleParticipantMicRequest, opts ...grpc.CallOption) (*ToggleParticipantMicResponse, error)
+	ScheduledConference(ctx context.Context, in *ScheduledConferenceRequest, opts ...grpc.CallOption) (*ScheduledConferenceResponse, error)
+	CompletedSchedules(ctx context.Context, in *CompletedSchedulesRequest, opts ...grpc.CallOption) (*CompletedSchedulesResponse, error)
 }
 
 type conferenceClient struct {
@@ -278,6 +280,24 @@ func (c *conferenceClient) ToggleParticipantMic(ctx context.Context, in *ToggleP
 	return out, nil
 }
 
+func (c *conferenceClient) ScheduledConference(ctx context.Context, in *ScheduledConferenceRequest, opts ...grpc.CallOption) (*ScheduledConferenceResponse, error) {
+	out := new(ScheduledConferenceResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/ScheduledConference", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *conferenceClient) CompletedSchedules(ctx context.Context, in *CompletedSchedulesRequest, opts ...grpc.CallOption) (*CompletedSchedulesResponse, error) {
+	out := new(CompletedSchedulesResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/CompletedSchedules", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConferenceServer is the server API for Conference service.
 // All implementations must embed UnimplementedConferenceServer
 // for forward compatibility
@@ -307,6 +327,8 @@ type ConferenceServer interface {
 	ToggleMic(context.Context, *ToggleMicRequest) (*ToggleMicResponse, error)
 	ToggleParticipantCamera(context.Context, *ToggleParticipantCameraRequest) (*ToggleParticipantCameraResponse, error)
 	ToggleParticipantMic(context.Context, *ToggleParticipantMicRequest) (*ToggleParticipantMicResponse, error)
+	ScheduledConference(context.Context, *ScheduledConferenceRequest) (*ScheduledConferenceResponse, error)
+	CompletedSchedules(context.Context, *CompletedSchedulesRequest) (*CompletedSchedulesResponse, error)
 	mustEmbedUnimplementedConferenceServer()
 }
 
@@ -388,6 +410,12 @@ func (UnimplementedConferenceServer) ToggleParticipantCamera(context.Context, *T
 }
 func (UnimplementedConferenceServer) ToggleParticipantMic(context.Context, *ToggleParticipantMicRequest) (*ToggleParticipantMicResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ToggleParticipantMic not implemented")
+}
+func (UnimplementedConferenceServer) ScheduledConference(context.Context, *ScheduledConferenceRequest) (*ScheduledConferenceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ScheduledConference not implemented")
+}
+func (UnimplementedConferenceServer) CompletedSchedules(context.Context, *CompletedSchedulesRequest) (*CompletedSchedulesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CompletedSchedules not implemented")
 }
 func (UnimplementedConferenceServer) mustEmbedUnimplementedConferenceServer() {}
 
@@ -852,6 +880,42 @@ func _Conference_ToggleParticipantMic_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Conference_ScheduledConference_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ScheduledConferenceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConferenceServer).ScheduledConference(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/conference.Conference/ScheduledConference",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConferenceServer).ScheduledConference(ctx, req.(*ScheduledConferenceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Conference_CompletedSchedules_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompletedSchedulesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConferenceServer).CompletedSchedules(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/conference.Conference/CompletedSchedules",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConferenceServer).CompletedSchedules(ctx, req.(*CompletedSchedulesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Conference_ServiceDesc is the grpc.ServiceDesc for Conference service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -958,6 +1022,14 @@ var Conference_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ToggleParticipantMic",
 			Handler:    _Conference_ToggleParticipantMic_Handler,
+		},
+		{
+			MethodName: "ScheduledConference",
+			Handler:    _Conference_ScheduledConference_Handler,
+		},
+		{
+			MethodName: "CompletedSchedules",
+			Handler:    _Conference_CompletedSchedules_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
