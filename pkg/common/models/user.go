@@ -94,11 +94,12 @@ type Members struct {
 }
 
 type CreateCommunityRequest struct {
-	AdminId       string   `json:"adminId"`
-	CommunityName string   `json:"communityName"`
-	Members       []string `json:"members"`
-	Description   string   `json:"description"`
-	JoinedType    string   `json:"joinedType"`
+	AdminId        string   `json:"adminId"`
+	CommunityName  string   `json:"communityName"`
+	Members        []string `json:"members"`
+	Description    string   `json:"description"`
+	JoinedType     string   `json:"joinedType"`
+	CommunityImage string   `json:"communityImage"`
 }
 
 type JoinCommunityRequest struct {

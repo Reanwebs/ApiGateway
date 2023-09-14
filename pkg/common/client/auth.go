@@ -25,6 +25,7 @@ func InitClient(c *config.Config) (interfaces.AuthClient, error) {
 	if err != nil {
 		return nil, err
 	}
+	fmt.Println("...........................\n\n", c.AuthService, "\n\n=================")
 	return NewAuthClient(pb.NewAutharizationClient(cc)), nil
 }
 
@@ -995,11 +996,12 @@ func (c *authClient) CreateCommunity(ctx context.Context, request models.CreateC
 	}
 
 	res, err := c.Server.CreateCommunity(ctx, &pb.CreateCommunityRequest{
-		AdminId:       userId,
-		CommunityName: request.CommunityName,
-		Members:       request.Members,
-		Description:   request.Description,
-		JoinedType:    request.JoinedType,
+		AdminId:        userId,
+		CommunityName:  request.CommunityName,
+		Members:        request.Members,
+		Description:    request.Description,
+		JoinedType:     request.JoinedType,
+		CommunityImage: request.CommunityImage,
 	})
 	if err != nil {
 		return nil, err

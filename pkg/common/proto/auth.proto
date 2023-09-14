@@ -368,6 +368,7 @@ message CreateCommunityRequest{
     repeated string Members=3;
     string description = 4;
     string joinedType = 5;
+    string communityImage = 6;
 }
 
 message CreateCommunityResponse{

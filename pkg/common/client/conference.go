@@ -15,6 +15,7 @@ import (
 	"github.com/golang/protobuf/ptypes/timestamp"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/metadata"
 )
 
 type conferenceClient struct {
@@ -348,13 +349,18 @@ func (c *conferenceClient) CompletedSchedules(ctx context.Context) (*conference.
 func (c *conferenceClient) StartPrivateConference(ctx context.Context, request models.StartPrivateConferenceRequest, retryConfig models.RetryConfig) (*conference.StartPrivateConferenceResponse, error) {
 	var res *conference.StartPrivateConferenceResponse
 	var err error
-
 	// operation := func() (interface{}, error) {
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
-		return nil, errors.New("login again")
+		// return nil, errors.New("login again")
+	}
+
+	email, ok := ctx.Value("email").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		// return nil, errors.New("login again")
 	}
 
 	participantlimit, err := strconv.Atoi(request.Participantlimit)
@@ -362,9 +368,18 @@ func (c *conferenceClient) StartPrivateConference(ctx context.Context, request m
 		return nil, errors.New("try again")
 	}
 
-	ctx, cancel := context.WithCancel(ctx)
-	ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
-	defer cancel()
+	// Create a metadata map with the data you want to send
+	md := metadata.New(map[string]string{
+		"user-id": userId,
+		"email":   email,
+	})
+
+	// Attach the metadata to the context
+	ctx = metadata.NewOutgoingContext(ctx, md)
+
+	// ctx, cancel := context.WithCancel(ctx)
+	// ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
+	// defer cancel()
 
 	res, err = c.Server.StartPrivateConference(ctx, &conference.StartPrivateConferenceRequest{
 		UserID:           userId,
@@ -538,6 +553,19 @@ func (c *conferenceClient) JoinPrivateConference(ctx context.Context, request mo
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
+
+	email, ok := ctx.Value("email").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	// Create a metadata map with the data you want to send
+	md := metadata.New(map[string]string{
+		"user-id": userId,
+		"email":   email,
+	})
+	ctx = metadata.NewOutgoingContext(ctx, md)
 
 	startTime := time.Now()
 
