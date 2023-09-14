@@ -144,8 +144,8 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 		res := errors.New("failed to login")
 		ctx.JSON(http.StatusInternalServerError, res)
 		return
-
 	}
+	ctx.Set("email", body.Email)
 
 	ctx.JSON(http.StatusCreated, &res)
 }
