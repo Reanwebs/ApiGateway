@@ -313,7 +313,7 @@ func (c *conferenceClient) SchedulePublicConference(ctx context.Context, request
 	return nil, err
 }
 
-func (c *conferenceClient) ScheduledConference(ctx context.Context) (*conference.ScheduledConferenceResponse, error) {
+func (c *conferenceClient) ScheduledConference(ctx context.Context) (*models.ScheduledConferenceResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
@@ -326,8 +326,8 @@ func (c *conferenceClient) ScheduledConference(ctx context.Context) (*conference
 	if err != nil {
 		return nil, err
 	}
-
-	return res, nil
+	res1, err := utils.ConvertProtoToStruct(res)
+	return res1, nil
 }
 func (c *conferenceClient) CompletedSchedules(ctx context.Context) (*conference.CompletedSchedulesResponse, error) {
 	userId, ok := ctx.Value("userId").(string)

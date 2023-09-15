@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type StartConferenceRequest struct {
 	Type             string `json:"type"`
 	Title            string `json:"title"`
@@ -197,4 +199,22 @@ type SchedulePublicConferenceRequest struct {
 	Time             string `json:"time"`
 	Status           string `json:"status"`
 	Duration         string `json:"duration"`
+}
+type ScheduledConference struct {
+	UserID           string
+	ScheduleID       string
+	Title            string
+	Description      string
+	Interest         string
+	Chat             bool
+	Participantlimit int32
+	Time             time.Time
+	Status           string
+	Durations        int32
+}
+
+type ScheduledConferenceResponse struct {
+	Result              string
+	ScheduledConference []ScheduledConference
+	Err                 error
 }
