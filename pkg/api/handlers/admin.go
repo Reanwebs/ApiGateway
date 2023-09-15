@@ -39,7 +39,7 @@ func (h *AdminHandler) AdminLogin(ctx *gin.Context) {
 	}
 
 	// setup JWT
-	ok := middleware.JwtCookieSetup(ctx, "admin-auth", res.Uid)
+	ok := middleware.JwtCookieSetup(ctx, "admin-auth", res.Uid, res.Error)
 	if !ok {
 		res := errors.New("Generate JWT failure")
 		ctx.JSON(http.StatusInternalServerError, res)

@@ -11,7 +11,7 @@ import (
 )
 
 // JwtCookieSetup sets up a JWT cookie
-func JwtCookieSetup(c *gin.Context, name string, userId string) bool {
+func JwtCookieSetup(c *gin.Context, name string, userId string, email string) bool {
 	// Get the configuration instance
 	cfg, err := config.LoadConfig()
 	if err != nil {
@@ -25,6 +25,7 @@ func JwtCookieSetup(c *gin.Context, name string, userId string) bool {
 	// Create a new JWT token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Id:        fmt.Sprint(userId),
+		Audience:  email,
 		ExpiresAt: cookieTime,
 	})
 
