@@ -49,6 +49,7 @@ func authHelper(ctx *gin.Context, user string) {
 	}
 	traceId := utils.GenerateTraceID()
 	ctx.Set("userId", fmt.Sprint(claims.Id))
+	ctx.Set("email", fmt.Sprint(claims.Audience))
 	ctx.Set("traceId", traceId)
 
 }

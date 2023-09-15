@@ -349,63 +349,54 @@ func (c *conferenceClient) CompletedSchedules(ctx context.Context) (*conference.
 func (c *conferenceClient) StartPrivateConference(ctx context.Context, request models.StartPrivateConferenceRequest, retryConfig models.RetryConfig) (*conference.StartPrivateConferenceResponse, error) {
 	var res *conference.StartPrivateConferenceResponse
 	var err error
-	// operation := func() (interface{}, error) {
+	operation := func() (interface{}, error) {
 
-	userId, ok := ctx.Value("userId").(string)
-	if !ok {
-		fmt.Println("userId not found in context.")
-		// return nil, errors.New("login again")
-	}
+		userId, ok := ctx.Value("userId").(string)
+		if !ok {
+			fmt.Println("userId not found in context.")
+			return nil, errors.New("login again")
+		}
 
-	email, ok := ctx.Value("email").(string)
-	if !ok {
-		fmt.Println("userId not found in context.")
-		// return nil, errors.New("login again")
-	}
+		email, ok := ctx.Value("email").(string)
+		if !ok {
+			fmt.Println("userId not found in context.")
+			return nil, errors.New("login again")
+		}
 
-	participantlimit, err := strconv.Atoi(request.Participantlimit)
-	if err != nil {
-		return nil, errors.New("try again")
-	}
-
-	// Create a metadata map with the data you want to send
-	md := metadata.New(map[string]string{
-		"user-id": userId,
-		"email":   email,
-	})
-
-	// Attach the metadata to the context
-	ctx = metadata.NewOutgoingContext(ctx, md)
-
-	// ctx, cancel := context.WithCancel(ctx)
-	// ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
-	// defer cancel()
-
-	res, err = c.Server.StartPrivateConference(ctx, &conference.StartPrivateConferenceRequest{
-		UserID:           userId,
-		Title:            request.Title,
-		Description:      request.Description,
-		Interest:         request.Interest,
-		Recording:        request.Recording,
-		Chat:             request.Chat,
-		Broadcast:        request.Broadcast,
-		Participantlimit: int32(participantlimit),
-		SdpOffer:         request.SdpOffer,
-	})
-	if err != nil {
+		participantlimit, err := strconv.Atoi(request.Participantlimit)
+		if err != nil {
+			return nil, errors.New("try again")
+		}
+		fmt.Println(userId)
+		ctx, cancel := context.WithCancel(ctx)
+		ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
+		defer cancel()
+		res, err = c.Server.StartPrivateConference(ctx, &conference.StartPrivateConferenceRequest{
+			UserID:           userId,
+			Title:            request.Title,
+			Description:      request.Description,
+			Interest:         request.Interest,
+			Recording:        request.Recording,
+			Chat:             request.Chat,
+			Broadcast:        request.Broadcast,
+			Participantlimit: int32(participantlimit),
+			SdpOffer:         request.SdpOffer,
+			Email:            email,
+		})
+		if err == nil {
+			return res, nil
+		}
 		return nil, err
+
 	}
 
-	return res, nil
-	// }
+	result, err := utils.RetryOperation(ctx, retryConfig, operation)
 
-	// result, err := utils.RetryOperation(ctx, retryConfig, operation)
+	if res, ok := result.(*conference.StartPrivateConferenceResponse); ok {
+		return res, err
+	}
 
-	// if res, ok := result.(*conference.StartPrivateConferenceResponse); ok {
-	// 	return res, err
-	// }
-
-	// return nil, err
+	return nil, err
 }
 
 func (c *conferenceClient) StartGroupConference(ctx context.Context, request models.StartGroupConferenceRequest, retryConfig models.RetryConfig) (*conference.StartGroupConferenceResponse, error) {

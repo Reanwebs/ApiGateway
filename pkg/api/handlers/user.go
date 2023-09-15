@@ -139,13 +139,12 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 	}
 
 	// setup JWT
-	ok := middleware.JwtCookieSetup(ctx, "user-auth", res.Uid)
+	ok := middleware.JwtCookieSetup(ctx, "user-auth", res.Uid, body.Email)
 	if !ok {
 		res := errors.New("failed to login")
 		ctx.JSON(http.StatusInternalServerError, res)
 		return
 	}
-	ctx.Set("email", body.Email)
 
 	ctx.JSON(http.StatusCreated, &res)
 }
@@ -444,7 +443,7 @@ func (h *UserHandler) GoogleLogin(ctx *gin.Context) {
 	}
 
 	// setup JWT
-	ok := middleware.JwtCookieSetup(ctx, "user-auth", res.Uid)
+	ok := middleware.JwtCookieSetup(ctx, "user-auth", res.Uid, res.Email)
 	if !ok {
 		res := errors.New("failed to login")
 		ctx.JSON(http.StatusInternalServerError, res)
