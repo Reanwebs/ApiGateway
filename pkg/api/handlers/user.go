@@ -955,11 +955,15 @@ func (h *UserHandler) GetInterstsUser(ctx *gin.Context) {
 
 func (h *UserHandler) GetUserByName(ctx *gin.Context) {
 	body := models.GetUserByNameRequest{}
+	userName := ctx.Query("userName")
 
-	if err := ctx.BindJSON(&body); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+	if userName == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "userName is required",
+		})
 		return
 	}
+	body.UserName = userName
 
 	res, err := h.Client.GetUserByName(ctx, body)
 	if err != nil {
@@ -997,6 +1001,7 @@ func (h *UserHandler) GetCommunityById(ctx *gin.Context) {
 		})
 		return
 	}
+	body.CommunityId = communityID
 
 	res, err := h.Client.GetCommunityById(ctx, body)
 	if err != nil {
