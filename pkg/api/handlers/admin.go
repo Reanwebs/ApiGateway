@@ -167,3 +167,17 @@ func (h *AdminHandler) LogoutAdmin(ctx *gin.Context) {
 		"message": "Log out successful",
 	})
 }
+
+func (h *AdminHandler) GetAllCommunity(ctx *gin.Context) {
+
+	res, err := h.Client.GetAllCommunity(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to fetch all community",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}

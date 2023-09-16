@@ -53,6 +53,11 @@ type AutharizationClient interface {
 	DeleteCommunity(ctx context.Context, in *DeleteCommunityRequest, opts ...grpc.CallOption) (*DeleteCommunityResponse, error)
 	ManageCommunity(ctx context.Context, in *ManageCommunityRequest, opts ...grpc.CallOption) (*ManageCommunityResponse, error)
 	GetInterstsUser(ctx context.Context, in *GetInterstsUserRequest, opts ...grpc.CallOption) (*GetInterstsUserResponse, error)
+	GetActiveCommunity(ctx context.Context, in *GetActiveCommunityRequest, opts ...grpc.CallOption) (*GetActiveCommunityResponse, error)
+	GetUserByName(ctx context.Context, in *GetUserByNameRequest, opts ...grpc.CallOption) (*GetUserByNameResponse, error)
+	GetAllCommunity(ctx context.Context, in *GetAllCommunityRequest, opts ...grpc.CallOption) (*GetAllCommunityResponse, error)
+	GetCommunityById(ctx context.Context, in *GetCommunityByIdRequest, opts ...grpc.CallOption) (*GetCommunityByIdResponse, error)
+	ValidateCommunityName(ctx context.Context, in *ValidateCommunityNameRequest, opts ...grpc.CallOption) (*ValidateCommunityNameResponse, error)
 }
 
 type autharizationClient struct {
@@ -378,6 +383,51 @@ func (c *autharizationClient) GetInterstsUser(ctx context.Context, in *GetInters
 	return out, nil
 }
 
+func (c *autharizationClient) GetActiveCommunity(ctx context.Context, in *GetActiveCommunityRequest, opts ...grpc.CallOption) (*GetActiveCommunityResponse, error) {
+	out := new(GetActiveCommunityResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/GetActiveCommunity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) GetUserByName(ctx context.Context, in *GetUserByNameRequest, opts ...grpc.CallOption) (*GetUserByNameResponse, error) {
+	out := new(GetUserByNameResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/GetUserByName", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) GetAllCommunity(ctx context.Context, in *GetAllCommunityRequest, opts ...grpc.CallOption) (*GetAllCommunityResponse, error) {
+	out := new(GetAllCommunityResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/GetAllCommunity", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) GetCommunityById(ctx context.Context, in *GetCommunityByIdRequest, opts ...grpc.CallOption) (*GetCommunityByIdResponse, error) {
+	out := new(GetCommunityByIdResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/GetCommunityById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *autharizationClient) ValidateCommunityName(ctx context.Context, in *ValidateCommunityNameRequest, opts ...grpc.CallOption) (*ValidateCommunityNameResponse, error) {
+	out := new(ValidateCommunityNameResponse)
+	err := c.cc.Invoke(ctx, "/pb.Autharization/ValidateCommunityName", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
@@ -417,6 +467,11 @@ type AutharizationServer interface {
 	DeleteCommunity(context.Context, *DeleteCommunityRequest) (*DeleteCommunityResponse, error)
 	ManageCommunity(context.Context, *ManageCommunityRequest) (*ManageCommunityResponse, error)
 	GetInterstsUser(context.Context, *GetInterstsUserRequest) (*GetInterstsUserResponse, error)
+	GetActiveCommunity(context.Context, *GetActiveCommunityRequest) (*GetActiveCommunityResponse, error)
+	GetUserByName(context.Context, *GetUserByNameRequest) (*GetUserByNameResponse, error)
+	GetAllCommunity(context.Context, *GetAllCommunityRequest) (*GetAllCommunityResponse, error)
+	GetCommunityById(context.Context, *GetCommunityByIdRequest) (*GetCommunityByIdResponse, error)
+	ValidateCommunityName(context.Context, *ValidateCommunityNameRequest) (*ValidateCommunityNameResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -528,6 +583,21 @@ func (UnimplementedAutharizationServer) ManageCommunity(context.Context, *Manage
 }
 func (UnimplementedAutharizationServer) GetInterstsUser(context.Context, *GetInterstsUserRequest) (*GetInterstsUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetInterstsUser not implemented")
+}
+func (UnimplementedAutharizationServer) GetActiveCommunity(context.Context, *GetActiveCommunityRequest) (*GetActiveCommunityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetActiveCommunity not implemented")
+}
+func (UnimplementedAutharizationServer) GetUserByName(context.Context, *GetUserByNameRequest) (*GetUserByNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByName not implemented")
+}
+func (UnimplementedAutharizationServer) GetAllCommunity(context.Context, *GetAllCommunityRequest) (*GetAllCommunityResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllCommunity not implemented")
+}
+func (UnimplementedAutharizationServer) GetCommunityById(context.Context, *GetCommunityByIdRequest) (*GetCommunityByIdResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCommunityById not implemented")
+}
+func (UnimplementedAutharizationServer) ValidateCommunityName(context.Context, *ValidateCommunityNameRequest) (*ValidateCommunityNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ValidateCommunityName not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -1172,6 +1242,96 @@ func _Autharization_GetInterstsUser_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Autharization_GetActiveCommunity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetActiveCommunityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).GetActiveCommunity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/GetActiveCommunity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).GetActiveCommunity(ctx, req.(*GetActiveCommunityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_GetUserByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserByNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).GetUserByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/GetUserByName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).GetUserByName(ctx, req.(*GetUserByNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_GetAllCommunity_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllCommunityRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).GetAllCommunity(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/GetAllCommunity",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).GetAllCommunity(ctx, req.(*GetAllCommunityRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_GetCommunityById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCommunityByIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).GetCommunityById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/GetCommunityById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).GetCommunityById(ctx, req.(*GetCommunityByIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Autharization_ValidateCommunityName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ValidateCommunityNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AutharizationServer).ValidateCommunityName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/pb.Autharization/ValidateCommunityName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AutharizationServer).ValidateCommunityName(ctx, req.(*ValidateCommunityNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1318,6 +1478,26 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetInterstsUser",
 			Handler:    _Autharization_GetInterstsUser_Handler,
+		},
+		{
+			MethodName: "GetActiveCommunity",
+			Handler:    _Autharization_GetActiveCommunity_Handler,
+		},
+		{
+			MethodName: "GetUserByName",
+			Handler:    _Autharization_GetUserByName_Handler,
+		},
+		{
+			MethodName: "GetAllCommunity",
+			Handler:    _Autharization_GetAllCommunity_Handler,
+		},
+		{
+			MethodName: "GetCommunityById",
+			Handler:    _Autharization_GetCommunityById_Handler,
+		},
+		{
+			MethodName: "ValidateCommunityName",
+			Handler:    _Autharization_ValidateCommunityName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

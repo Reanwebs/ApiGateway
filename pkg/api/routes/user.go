@@ -41,4 +41,8 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	routes.PATCH("/change-community-join-type", userHandler.ChangeCommunityJoinType)
 	routes.PATCH("/delete-community", userHandler.DeleteCommunity)
 	routes.GET("/get-interests", userHandler.GetInterstsUser)
+	routes.GET("/get-user-by-name", userHandler.GetUserByName)
+	routes.GET("/get-active-community", userHandler.GetActiveCommunity)
+	routes.GET("/get-community-by-id", userHandler.GetCommunityById)
+	routes.GET("/validate-community-name", userHandler.ValidateCommunityName)
 }

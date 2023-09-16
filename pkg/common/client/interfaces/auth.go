@@ -35,4 +35,8 @@ type AuthClient interface {
 	ChangeCommunityJoinType(context.Context, models.ChangeCommunityJoinTypeRequest) (*pb.ChangeCommunityJoinTypeResponse, error)
 	DeleteCommunity(context.Context, models.DeleteCommunityRequest) (*pb.DeleteCommunityResponse, error)
 	GetInterstsUser(context.Context) (*pb.GetInterstsUserResponse, error)
+	GetUserByName(context.Context, models.GetUserByNameRequest) (*pb.GetUserByNameResponse, error)
+	GetActiveCommunity(context.Context) (*pb.GetActiveCommunityResponse, error)
+	GetCommunityById(context.Context, models.GetCommunityByIdRequest) (*pb.GetCommunityByIdResponse, error)
+	ValidateCommunityName(context.Context, models.ValidateCommunityNameRequest) (*pb.ValidateCommunityNameResponse, error)
 }

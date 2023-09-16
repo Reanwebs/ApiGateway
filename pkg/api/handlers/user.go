@@ -952,3 +952,76 @@ func (h *UserHandler) GetInterstsUser(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 
 }
+
+func (h *UserHandler) GetUserByName(ctx *gin.Context) {
+	body := models.GetUserByNameRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.GetUserByName(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to fetch by user name",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *UserHandler) GetActiveCommunity(ctx *gin.Context) {
+	res, err := h.Client.GetActiveCommunity(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "fetching active community failed",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *UserHandler) GetCommunityById(ctx *gin.Context) {
+	body := models.GetCommunityByIdRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.GetCommunityById(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to fetch community by ID",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *UserHandler) ValidateCommunityName(ctx *gin.Context) {
+	body := models.ValidateCommunityNameRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ValidateCommunityName(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "community name already in used",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
