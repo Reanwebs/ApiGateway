@@ -504,7 +504,7 @@ message Community{
     string communityName=2;
     string communityDescription = 3;
     string communityAvatar = 4;
-    string memberCount = 5;
+    int32 memberCount = 5;
     string communtyAdmin=6;
     bool isActive=7;
     bool isBlocked = 8;
