@@ -557,7 +557,7 @@ message Community{
      int64 status =1;
      string message = 2;
      string error = 3;
-     repeated Community community=4;
+     Community community=4;
      repeated Participants members =5;
  }
  
