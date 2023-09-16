@@ -41,6 +41,11 @@ service Autharization {
     rpc DeleteCommunity(DeleteCommunityRequest) returns (DeleteCommunityResponse) {}
     rpc ManageCommunity(ManageCommunityRequest) returns (ManageCommunityResponse){}
     rpc GetInterstsUser(GetInterstsUserRequest) returns (GetInterstsUserResponse){}
+    rpc GetActiveCommunity(GetActiveCommunityRequest) returns (GetActiveCommunityResponse) {}
+    rpc GetUserByName(GetUserByNameRequest) returns (GetUserByNameResponse){}
+    rpc GetAllCommunity(GetAllCommunityRequest) returns (GetAllCommunityResponse) {}
+    rpc GetCommunityById(GetCommunityByIdRequest) returns (GetCommunityByIdResponse){}
+    rpc ValidateCommunityName(ValidateCommunityNameRequest) returns (ValidateCommunityNameResponse){}
 }
 
 message SignupRequest {
@@ -493,3 +498,75 @@ message GetInterstsUserResponse {
     string message = 3;
     string error = 4;
 }
+
+message Community{
+    string id = 1;
+    string communityName=2;
+    string communityDescription = 3;
+    string communityAvatar = 4;
+    string memberCount = 5;
+    string communtyAdmin=6;
+    bool isActive=7;
+    bool isBlocked = 8;
+ }
+ message GetActiveCommunityRequest{
+ 
+ }
+ 
+ message GetActiveCommunityResponse{
+     string status = 1;
+     string message = 2;
+     repeated Community community=3;
+     string error =4;
+ }
+ 
+ message GetAllCommunityRequest{
+ 
+ }
+ 
+ message GetAllCommunityResponse{
+     int64 status =1;
+     string message =2;
+     repeated Community communities=3;
+     string error =4;
+ }
+ 
+
+ 
+ message GetUserByNameRequest{
+     string userName = 1;
+ }
+ 
+ message GetUserByNameResponse{
+     int64 status =1;
+     string message = 2;
+     string error = 3;
+     repeated user users=4;
+ }
+ 
+ message Participants{
+     string userName=1;
+     string userId=2;
+ }
+ 
+ message GetCommunityByIdRequest{
+     string communityId=1;
+ }
+ 
+ message GetCommunityByIdResponse{
+     int64 status =1;
+     string message = 2;
+     string error = 3;
+     repeated Community community=4;
+     repeated Participants members =5;
+ }
+ 
+ message ValidateCommunityNameRequest{
+     string communityName=1;
+ }
+ 
+ message ValidateCommunityNameResponse{
+     int64 status =1;
+     string message = 2;
+     string error = 3;
+ }

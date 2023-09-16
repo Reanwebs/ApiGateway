@@ -95,3 +95,11 @@ func (c *AdminClient) ManageCommunity(ctx context.Context, request models.Manage
 	}
 	return res, nil
 }
+
+func (c *AdminClient) GetAllCommunity(ctx context.Context) (*pb.GetAllCommunityResponse, error) {
+	res, err := c.Server.GetAllCommunity(ctx, &pb.GetAllCommunityRequest{})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

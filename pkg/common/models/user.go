@@ -142,3 +142,15 @@ type DeleteCommunityRequest struct {
 type ManageCommunityRequest struct {
 	CommunityId string `json:"communityId"`
 }
+
+type GetUserByNameRequest struct {
+	UserName string `json:"userName"`
+}
+
+type GetCommunityByIdRequest struct {
+	CommunityId string `json:"communityId"`
+}
+
+type ValidateCommunityNameRequest struct {
+	CommunityName string `json:"communityName"`
+}

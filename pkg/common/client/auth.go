@@ -25,7 +25,6 @@ func InitClient(c *config.Config) (interfaces.AuthClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("...........................\n\n", c.AuthService, "\n\n=================")
 	return NewAuthClient(pb.NewAutharizationClient(cc)), nil
 }
 
@@ -1173,4 +1172,52 @@ func (c *authClient) GetInterstsUser(ctx context.Context) (*pb.GetInterstsUserRe
 	}
 
 	return userResponse, nil
+}
+
+func (c *authClient) GetUserByName(ctx context.Context, request models.GetUserByNameRequest) (*pb.GetUserByNameResponse, error) {
+	res, err := c.Server.GetUserByName(ctx, &pb.GetUserByNameRequest{
+		UserName: request.UserName,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) GetActiveCommunity(ctx context.Context) (*pb.GetActiveCommunityResponse, error) {
+
+	res, err := c.Server.GetActiveCommunity(ctx, &pb.GetActiveCommunityRequest{})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
+}
+
+func (c *authClient) GetCommunityById(ctx context.Context, request models.GetCommunityByIdRequest) (*pb.GetCommunityByIdResponse, error) {
+	res, err := c.Server.GetCommunityById(ctx, &pb.GetCommunityByIdRequest{
+		CommunityId: request.CommunityId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) ValidateCommunityName(ctx context.Context, request models.ValidateCommunityNameRequest) (*pb.ValidateCommunityNameResponse, error) {
+	res, err := c.Server.ValidateCommunityName(ctx, &pb.ValidateCommunityNameRequest{
+		CommunityName: request.CommunityName,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *authClient) GetAllCommunity(ctx context.Context) (*pb.GetAllCommunityResponse, error) {
+	res, err := c.Server.GetAllCommunity(ctx, &pb.GetAllCommunityRequest{})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

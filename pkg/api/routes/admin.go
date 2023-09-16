@@ -20,5 +20,5 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler handlers.AdminHandler) {
 	routes.PATCH("manage-inetrest", adminHandler.ManageInterest)
 	routes.POST("/logout", adminHandler.LogoutAdmin)
 	routes.POST("/manage-community", adminHandler.ManageCommunity)
-
+	routes.GET("/get-all-community", adminHandler.GetAllCommunity)
 }
