@@ -989,8 +989,12 @@ func (h *UserHandler) GetActiveCommunity(ctx *gin.Context) {
 func (h *UserHandler) GetCommunityById(ctx *gin.Context) {
 	body := models.GetCommunityByIdRequest{}
 
-	if err := ctx.BindJSON(&body); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+	communityID := ctx.Query("communityId")
+
+	if communityID == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "communityId is required",
+		})
 		return
 	}
 
