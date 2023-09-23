@@ -39,4 +39,5 @@ type ConferenceClient interface {
 	LeaveStream(context.Context, models.LeaveStreamRequest) (*conference.LeaveStreamResponse, error)
 	StopStream(context.Context, models.StopStreamRequest) (*conference.StopStreamResponse, error)
 	GetStream(context.Context, models.GetStreamRequest) (*conference.GetStreamResponse, error)
+	GetOngoingStreams(context.Context, string) (*conference.GetOngoingStreamsResponse, error)
 }

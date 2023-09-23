@@ -1535,3 +1535,13 @@ func (c *conferenceClient) GetStream(ctx context.Context, request models.GetStre
 	}
 	return res, nil
 }
+
+func (c *conferenceClient) GetOngoingStreams(ctx context.Context, input string) (*conference.GetOngoingStreamsResponse, error) {
+	res, err := c.Server.GetOngoingStreams(ctx, &conference.GetOngoingStreamsRequest{
+		Sort: input,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

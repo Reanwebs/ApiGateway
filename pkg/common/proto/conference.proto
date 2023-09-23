@@ -40,6 +40,7 @@ service Conference{
     rpc LeaveStream(LeaveStreamRequest) returns (LeaveStreamResponse){}
     rpc StopStream(StopStreamRequest) returns(StopStreamResponse){}
     rpc GetStream(GetStreamRequest)returns(GetStreamResponse){}
+    rpc GetOngoingStreams(GetOngoingStreamsRequest) returns (GetOngoingStreamsResponse){}
   }
   
   message Request {
@@ -453,4 +454,12 @@ message GetStreamResponse{
     string ThubnailID = 5;
     string AvatarID   = 6;
     string UserName   = 7;
+}
+
+message GetOngoingStreamsRequest{
+    string Sort  = 1;
+}
+
+message GetOngoingStreamsResponse{
+    repeated GetStreamResponse Response = 1;
 }
