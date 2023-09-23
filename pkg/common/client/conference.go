@@ -1463,6 +1463,8 @@ func (c *conferenceClient) StartStream(ctx context.Context, request models.Start
 		Discription: request.Discription,
 		Interest:    request.Interest,
 		ThubnailID:  request.ThubnailID,
+		AvatarID:    request.AvatarID,
+		UserName:    request.UserName,
 	})
 	if err != nil {
 		return nil, err
@@ -1522,4 +1524,14 @@ func (c *conferenceClient) StopStream(ctx context.Context, request models.StopSt
 	}
 	return res, nil
 
+}
+
+func (c *conferenceClient) GetStream(ctx context.Context, request models.GetStreamRequest) (*conference.GetStreamResponse, error) {
+	res, err := c.Server.GetStream(ctx, &conference.GetStreamRequest{
+		StreamID: request.StreamID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

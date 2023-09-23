@@ -49,6 +49,7 @@ type ConferenceClient interface {
 	JoinStream(ctx context.Context, in *JoinStreamRequest, opts ...grpc.CallOption) (*JoinStreamResponse, error)
 	LeaveStream(ctx context.Context, in *LeaveStreamRequest, opts ...grpc.CallOption) (*LeaveStreamResponse, error)
 	StopStream(ctx context.Context, in *StopStreamRequest, opts ...grpc.CallOption) (*StopStreamResponse, error)
+	GetStream(ctx context.Context, in *GetStreamRequest, opts ...grpc.CallOption) (*GetStreamResponse, error)
 }
 
 type conferenceClient struct {
@@ -338,6 +339,15 @@ func (c *conferenceClient) StopStream(ctx context.Context, in *StopStreamRequest
 	return out, nil
 }
 
+func (c *conferenceClient) GetStream(ctx context.Context, in *GetStreamRequest, opts ...grpc.CallOption) (*GetStreamResponse, error) {
+	out := new(GetStreamResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/GetStream", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConferenceServer is the server API for Conference service.
 // All implementations must embed UnimplementedConferenceServer
 // for forward compatibility
@@ -373,6 +383,7 @@ type ConferenceServer interface {
 	JoinStream(context.Context, *JoinStreamRequest) (*JoinStreamResponse, error)
 	LeaveStream(context.Context, *LeaveStreamRequest) (*LeaveStreamResponse, error)
 	StopStream(context.Context, *StopStreamRequest) (*StopStreamResponse, error)
+	GetStream(context.Context, *GetStreamRequest) (*GetStreamResponse, error)
 	mustEmbedUnimplementedConferenceServer()
 }
 
@@ -472,6 +483,9 @@ func (UnimplementedConferenceServer) LeaveStream(context.Context, *LeaveStreamRe
 }
 func (UnimplementedConferenceServer) StopStream(context.Context, *StopStreamRequest) (*StopStreamResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method StopStream not implemented")
+}
+func (UnimplementedConferenceServer) GetStream(context.Context, *GetStreamRequest) (*GetStreamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetStream not implemented")
 }
 func (UnimplementedConferenceServer) mustEmbedUnimplementedConferenceServer() {}
 
@@ -1044,6 +1058,24 @@ func _Conference_StopStream_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Conference_GetStream_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetStreamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConferenceServer).GetStream(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/conference.Conference/GetStream",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConferenceServer).GetStream(ctx, req.(*GetStreamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Conference_ServiceDesc is the grpc.ServiceDesc for Conference service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1174,6 +1206,10 @@ var Conference_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "StopStream",
 			Handler:    _Conference_StopStream_Handler,
+		},
+		{
+			MethodName: "GetStream",
+			Handler:    _Conference_GetStream_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

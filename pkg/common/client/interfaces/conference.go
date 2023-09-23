@@ -38,4 +38,5 @@ type ConferenceClient interface {
 	JoinStream(context.Context, models.JoinStreamRequest) (*conference.JoinStreamResponse, error)
 	LeaveStream(context.Context, models.LeaveStreamRequest) (*conference.LeaveStreamResponse, error)
 	StopStream(context.Context, models.StopStreamRequest) (*conference.StopStreamResponse, error)
+	GetStream(context.Context, models.GetStreamRequest) (*conference.GetStreamResponse, error)
 }

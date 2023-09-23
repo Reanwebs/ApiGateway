@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+option go_package = "./pkg/common/pb";
+
+package monitization;
+
+
+import "google/protobuf/timestamp.proto";
+
+service Monitization{
+    rpc HealthCheck(Request) returns (Response){}
+    rpc CreateWallet(CreateWalletRequest)returns(CreateWalletResponse){}
+    rpc UpdateWallet(UpdateWalletRequest)returns(UpdateWalletResponse){}
+    rpc ParticipationReward(ParticipationRewardRequest) returns(ParticipationRewardResponse){}
+    rpc UserRewardHistory(UserRewardHistoryRequest) returns (UserRewardHistoryResponse){}
+    rpc GetWallet(GetWalletRequest)returns(GetWalletResponse){}
+
+    rpc GroupRewardHistory(GroupRewardHistoryRequest) returns (GroupRewardHistoryResponse){}
+    rpc UserWatchHour(UserWatchHourRequest) returns (UserWatchHourResponse){}
+    rpc ConferenceWatchHour(ConferenceWatchHourRequest) returns (ConferenceWatchHourResponse){}
+    rpc GroupWatchHour(GroupWatchHourRequest) returns (GroupWatchHourResponse){}
+}
+
+
+message Request{
+    string Data = 1;
+}
+
+message Response{
+    string Result = 1;
+}
+
+message CreateWalletRequest{
+    string UserID = 1;
+}
+
+message CreateWalletResponse{
+    string Result =1;
+}
+
+message UpdateWalletRequest{
+    string UserID   = 1;
+    string Type     = 2;
+    string Reason   = 3;
+    string UserName = 4;
+}
+
+message UpdateWalletResponse{
+    string Result = 1;
+}
+
+message HistoryData{
+    string Reason = 1;
+    int32  Hour   = 2;
+    int32  Coin   = 3;
+    string Date   = 4;
+    string Time   = 5;
+}
+
+message ParticipationRewardRequest{
+    string UserID         = 1;
+    string ConferenceID   = 2;
+    string ConferenceType = 3;
+    int32  Minutes        = 4;  
+}
+
+message ParticipationRewardResponse{
+    string Result    = 1;
+    int32  CoinCount = 2;
+}
+
+message UserRewardHistoryRequest{
+    string UserID = 1;
+    string Sort   = 2;
+}
+
+message UserRewardHistory {
+    string UserID = 1;
+    string reward_type = 2;
+    string transaction_type = 3;
+    uint32 coin_count = 4;
+    google.protobuf.Timestamp time = 5;
+}
+
+message UserRewardHistoryResponse {
+    repeated UserRewardHistory Result = 1;
+}
+
+message GroupRewardHistoryRequest{
+    string GroupID = 1;
+    string Sort    = 2;
+}
+
+message GroupRewardHistory {
+    string GroupID = 1;
+    string reward_type = 2;
+    string transaction_type = 3;
+    uint32 coin_count = 4;
+    google.protobuf.Timestamp time = 5;
+}
+
+message GroupRewardHistoryResponse{
+    repeated GroupRewardHistory Result = 1;
+}
+
+message UserWatchHourRequest{
+    string UserID = 1;
+}
+
+message UserWatchHourResponse{
+    int32  Hour  = 1;
+    string UserID = 2;
+}
+
+message ConferenceWatchHourRequest{
+    string ConferenceID = 1;
+}
+
+message ConferenceWatchHourResponse{
+    int32 Hour = 1;
+    repeated UserWatchHourResponse User = 2;
+}
+
+message GroupWatchHourRequest{
+    string GroupID = 1;
+}
+
+message GroupWatchHourResponse{
+    int32 Hour = 1;
+    repeated UserWatchHourResponse User = 2;
+}
+
+message GetWalletRequest{
+    string UserID = 1;
+}
+
+message GetWalletResponse{
+    int32 Coins = 1;
+}

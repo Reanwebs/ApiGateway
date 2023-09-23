@@ -8,14 +8,15 @@ import (
 )
 
 type Config struct {
-	AuthService       string `mapstructure:"Auth_SRV"`
-	ConferenceService string `mapstructure:"Conference_SRV"`
-	VideoService      string `mapstructure:"Video_Service"`
-	Port              string `mapstructure:"PORT"`
-	JwtSecretKey      string `mapstructure:"JWT_SECRET_KEY"`
-	SwagTitle         string `mapstructure:"SwagTitle"`
-	SwagDescription   string `mapstructure:"SwagDescription"`
-	SwagVersion       string `mapstructure:"SwagVersion"`
+	AuthService          string `mapstructure:"Auth_SRV"`
+	ConferenceService    string `mapstructure:"Conference_SRV"`
+	VideoService         string `mapstructure:"Video_Service"`
+	MonitaizationService string `mapstructure:"Monitaization_Service"`
+	Port                 string `mapstructure:"PORT"`
+	JwtSecretKey         string `mapstructure:"JWT_SECRET_KEY"`
+	SwagTitle            string `mapstructure:"SwagTitle"`
+	SwagDescription      string `mapstructure:"SwagDescription"`
+	SwagVersion          string `mapstructure:"SwagVersion"`
 }
 
 var envs = []string{"AUTH_SRV", "PORT"}

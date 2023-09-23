@@ -16,8 +16,8 @@ type Server struct {
 	Port   string
 }
 
-func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler,
-	conferenceHandler handlers.ConferenceHandler, adminHandler handlers.AdminHandler, videoHandler handlers.VideoHandler) (*Server, error) {
+func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler, conferenceHandler handlers.ConferenceHandler,
+	adminHandler handlers.AdminHandler, videoHandler handlers.VideoHandler, monitaization handlers.MonitizationHandler) (*Server, error) {
 
 	engine := gin.New()
 	engine.Use(gin.Logger())
@@ -28,7 +28,7 @@ func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler,
 	routes.AdminRoutes(engine.Group("/api"), adminHandler)
 	routes.ConferenceRoutes(engine.Group("/api"), conferenceHandler)
 	routes.VideoRoutes(engine.Group("/api"), videoHandler)
-
+	routes.MonitaizationRoutes(engine.Group("/api"), monitaization)
 	engine.NoRoute(func(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{
 			"StatusCode": 404,

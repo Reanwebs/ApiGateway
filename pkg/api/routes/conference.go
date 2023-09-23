@@ -45,4 +45,5 @@ func ConferenceRoutes(api *gin.RouterGroup, conferenceHandler handlers.Conferenc
 	confernce.POST("/join-stream", conferenceHandler.JoinStream)
 	confernce.PATCH("/leave-stream", conferenceHandler.LeaveStream)
 	confernce.PATCH("/stop-stream", conferenceHandler.StopStream)
+	confernce.POST("/get-stream", conferenceHandler.GetStream)
 }
