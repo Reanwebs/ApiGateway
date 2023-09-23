@@ -41,4 +41,8 @@ func ConferenceRoutes(api *gin.RouterGroup, conferenceHandler handlers.Conferenc
 	confernce.POST("/end-public-conference", conferenceHandler.EndPublicConference)
 	confernce.GET("/completed-schedules", conferenceHandler.CompletedSchedules)
 	confernce.GET("/scheduled-conference", conferenceHandler.ScheduledConference)
+	confernce.POST("/start-stream", conferenceHandler.StartStream)
+	confernce.POST("/join-stream", conferenceHandler.JoinStream)
+	confernce.PATCH("/leave-stream", conferenceHandler.LeaveStream)
+	confernce.PATCH("/stop-stream", conferenceHandler.StopStream)
 }

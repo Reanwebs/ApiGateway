@@ -382,6 +382,7 @@ func (c *conferenceClient) StartPrivateConference(ctx context.Context, request m
 			Participantlimit: int32(participantlimit),
 			SdpOffer:         request.SdpOffer,
 			Email:            email,
+			ScheduledID:      request.ScheduledID,
 		})
 		if err == nil {
 			return res, nil
@@ -1447,4 +1448,78 @@ func (c *conferenceClient) ToggleParticipantMic(ctx context.Context, request mod
 		return nil, err
 	}
 	return res, nil
+}
+
+func (c *conferenceClient) StartStream(ctx context.Context, request models.StartStreamRequest) (*conference.StartStreamResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.StartStream(ctx, &conference.StartStreamRequest{
+		HostID:      userId,
+		Title:       request.Title,
+		Discription: request.Discription,
+		Interest:    request.Interest,
+		ThubnailID:  request.ThubnailID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *conferenceClient) JoinStream(ctx context.Context, request models.JoinStreamRequest) (*conference.JoinStreamResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.JoinStream(ctx, &conference.JoinStreamRequest{
+		PartcipantID: userId,
+		StreamID:     request.StreamID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
+}
+
+func (c *conferenceClient) LeaveStream(ctx context.Context, request models.LeaveStreamRequest) (*conference.LeaveStreamResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.LeaveStream(ctx, &conference.LeaveStreamRequest{
+		StreamID:     request.StreamID,
+		PartcipantID: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
+}
+
+func (c *conferenceClient) StopStream(ctx context.Context, request models.StopStreamRequest) (*conference.StopStreamResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.StopStream(ctx, &conference.StopStreamRequest{
+		StreamID:     request.StreamID,
+		PartcipantID: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
 }

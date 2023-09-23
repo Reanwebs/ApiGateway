@@ -45,6 +45,10 @@ type ConferenceClient interface {
 	ToggleParticipantMic(ctx context.Context, in *ToggleParticipantMicRequest, opts ...grpc.CallOption) (*ToggleParticipantMicResponse, error)
 	ScheduledConference(ctx context.Context, in *ScheduledConferenceRequest, opts ...grpc.CallOption) (*ScheduledConferenceResponse, error)
 	CompletedSchedules(ctx context.Context, in *CompletedSchedulesRequest, opts ...grpc.CallOption) (*CompletedSchedulesResponse, error)
+	StartStream(ctx context.Context, in *StartStreamRequest, opts ...grpc.CallOption) (*StartStreamResponse, error)
+	JoinStream(ctx context.Context, in *JoinStreamRequest, opts ...grpc.CallOption) (*JoinStreamResponse, error)
+	LeaveStream(ctx context.Context, in *LeaveStreamRequest, opts ...grpc.CallOption) (*LeaveStreamResponse, error)
+	StopStream(ctx context.Context, in *StopStreamRequest, opts ...grpc.CallOption) (*StopStreamResponse, error)
 }
 
 type conferenceClient struct {
@@ -298,6 +302,42 @@ func (c *conferenceClient) CompletedSchedules(ctx context.Context, in *Completed
 	return out, nil
 }
 
+func (c *conferenceClient) StartStream(ctx context.Context, in *StartStreamRequest, opts ...grpc.CallOption) (*StartStreamResponse, error) {
+	out := new(StartStreamResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/StartStream", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *conferenceClient) JoinStream(ctx context.Context, in *JoinStreamRequest, opts ...grpc.CallOption) (*JoinStreamResponse, error) {
+	out := new(JoinStreamResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/JoinStream", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *conferenceClient) LeaveStream(ctx context.Context, in *LeaveStreamRequest, opts ...grpc.CallOption) (*LeaveStreamResponse, error) {
+	out := new(LeaveStreamResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/LeaveStream", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *conferenceClient) StopStream(ctx context.Context, in *StopStreamRequest, opts ...grpc.CallOption) (*StopStreamResponse, error) {
+	out := new(StopStreamResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/StopStream", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConferenceServer is the server API for Conference service.
 // All implementations must embed UnimplementedConferenceServer
 // for forward compatibility
@@ -329,6 +369,10 @@ type ConferenceServer interface {
 	ToggleParticipantMic(context.Context, *ToggleParticipantMicRequest) (*ToggleParticipantMicResponse, error)
 	ScheduledConference(context.Context, *ScheduledConferenceRequest) (*ScheduledConferenceResponse, error)
 	CompletedSchedules(context.Context, *CompletedSchedulesRequest) (*CompletedSchedulesResponse, error)
+	StartStream(context.Context, *StartStreamRequest) (*StartStreamResponse, error)
+	JoinStream(context.Context, *JoinStreamRequest) (*JoinStreamResponse, error)
+	LeaveStream(context.Context, *LeaveStreamRequest) (*LeaveStreamResponse, error)
+	StopStream(context.Context, *StopStreamRequest) (*StopStreamResponse, error)
 	mustEmbedUnimplementedConferenceServer()
 }
 
@@ -416,6 +460,18 @@ func (UnimplementedConferenceServer) ScheduledConference(context.Context, *Sched
 }
 func (UnimplementedConferenceServer) CompletedSchedules(context.Context, *CompletedSchedulesRequest) (*CompletedSchedulesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CompletedSchedules not implemented")
+}
+func (UnimplementedConferenceServer) StartStream(context.Context, *StartStreamRequest) (*StartStreamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StartStream not implemented")
+}
+func (UnimplementedConferenceServer) JoinStream(context.Context, *JoinStreamRequest) (*JoinStreamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method JoinStream not implemented")
+}
+func (UnimplementedConferenceServer) LeaveStream(context.Context, *LeaveStreamRequest) (*LeaveStreamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method LeaveStream not implemented")
+}
+func (UnimplementedConferenceServer) StopStream(context.Context, *StopStreamRequest) (*StopStreamResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StopStream not implemented")
 }
 func (UnimplementedConferenceServer) mustEmbedUnimplementedConferenceServer() {}
 
@@ -916,6 +972,78 @@ func _Conference_CompletedSchedules_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Conference_StartStream_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StartStreamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConferenceServer).StartStream(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/conference.Conference/StartStream",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConferenceServer).StartStream(ctx, req.(*StartStreamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Conference_JoinStream_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(JoinStreamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConferenceServer).JoinStream(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/conference.Conference/JoinStream",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConferenceServer).JoinStream(ctx, req.(*JoinStreamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Conference_LeaveStream_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeaveStreamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConferenceServer).LeaveStream(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/conference.Conference/LeaveStream",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConferenceServer).LeaveStream(ctx, req.(*LeaveStreamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Conference_StopStream_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StopStreamRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConferenceServer).StopStream(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/conference.Conference/StopStream",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConferenceServer).StopStream(ctx, req.(*StopStreamRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Conference_ServiceDesc is the grpc.ServiceDesc for Conference service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1030,6 +1158,22 @@ var Conference_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CompletedSchedules",
 			Handler:    _Conference_CompletedSchedules_Handler,
+		},
+		{
+			MethodName: "StartStream",
+			Handler:    _Conference_StartStream_Handler,
+		},
+		{
+			MethodName: "JoinStream",
+			Handler:    _Conference_JoinStream_Handler,
+		},
+		{
+			MethodName: "LeaveStream",
+			Handler:    _Conference_LeaveStream_Handler,
+		},
+		{
+			MethodName: "StopStream",
+			Handler:    _Conference_StopStream_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
