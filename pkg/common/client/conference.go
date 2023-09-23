@@ -1514,8 +1514,8 @@ func (c *conferenceClient) StopStream(ctx context.Context, request models.StopSt
 	}
 
 	res, err := c.Server.StopStream(ctx, &conference.StopStreamRequest{
-		StreamID:     request.StreamID,
-		PartcipantID: userId,
+		StreamID: request.StreamID,
+		HostID:   userId,
 	})
 	if err != nil {
 		return nil, err
