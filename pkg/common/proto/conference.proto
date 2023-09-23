@@ -433,7 +433,7 @@ message LeaveStreamResponse{
 
 message StopStreamRequest{
     string StreamID = 1;
-    string PartcipantID = 2;
+    string HostID = 2;
 }
 
 message StopStreamResponse{
