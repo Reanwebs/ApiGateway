@@ -733,3 +733,82 @@ func (h *ConferenceHandler) CompletedSchedules(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &res)
 }
+func (h *ConferenceHandler) StartStream(ctx *gin.Context) {
+	body := models.StartStreamRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.StartStream(context.Background(), body)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "failed to start stream",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *ConferenceHandler) JoinStream(ctx *gin.Context) {
+	body := models.JoinStreamRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.JoinStream(context.Background(), body)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "failed to join stream",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *ConferenceHandler) LeaveStream(ctx *gin.Context) {
+	body := models.LeaveStreamRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.LeaveStream(context.Background(), body)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "failed to leave stream",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *ConferenceHandler) StopStream(ctx *gin.Context) {
+	body := models.StopStreamRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.StopStream(context.Background(), body)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "failed to stop stream",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}

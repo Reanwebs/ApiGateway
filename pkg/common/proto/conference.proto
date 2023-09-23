@@ -34,8 +34,11 @@ service Conference{
     rpc ToggleParticipantCamera(ToggleParticipantCameraRequest) returns (ToggleParticipantCameraResponse){}
     rpc ToggleParticipantMic(ToggleParticipantMicRequest) returns (ToggleParticipantMicResponse){}
     rpc ScheduledConference(ScheduledConferenceRequest) returns (ScheduledConferenceResponse){}
-   rpc CompletedSchedules(CompletedSchedulesRequest) returns (CompletedSchedulesResponse){}
- 
+    rpc CompletedSchedules(CompletedSchedulesRequest) returns (CompletedSchedulesResponse){}
+    rpc StartStream(StartStreamRequest) returns (StartStreamResponse){}
+    rpc JoinStream(JoinStreamRequest) returns (JoinStreamResponse){}
+    rpc LeaveStream(LeaveStreamRequest) returns (LeaveStreamResponse){}
+    rpc StopStream(StopStreamRequest) returns(StopStreamResponse){}
   }
   
   message Request {
@@ -119,6 +122,7 @@ message SchedulePublicConferenceResponse{
       int32  participantlimit = 9;
       string sdpOffer = 10;
       string email = 11;
+      string scheduledID =12;
    }
   
   message StartPrivateConferenceResponse {
@@ -393,4 +397,45 @@ message CompletedSchedulesRequest{
 message CompletedSchedulesResponse{
    string Result = 1;
    repeated ScheduledConference Data = 2;
+}
+
+
+message StartStreamRequest {
+    string HostID = 1;
+    string Title = 2;
+    string Discription = 3;
+    string Interest = 4;
+    string ThubnailID = 5;
+}
+
+message StartStreamResponse{
+    string StreamID = 1;
+    string  Result = 2;
+}
+
+message JoinStreamRequest{
+    string PartcipantID = 1;
+    string StreamID = 2;
+}
+
+message JoinStreamResponse{
+    string Result = 1;
+}
+
+message LeaveStreamRequest{
+    string StreamID = 1;
+    string PartcipantID = 2;
+}
+
+message LeaveStreamResponse{
+    string Result = 1;
+}
+
+message StopStreamRequest{
+    string StreamID = 1;
+    string PartcipantID = 2;
+}
+
+message StopStreamResponse{
+    string Result = 1;
 }

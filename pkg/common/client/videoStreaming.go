@@ -10,7 +10,7 @@ import (
 	"mime/multipart"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials"
 )
 
 type videoClient struct {
@@ -18,11 +18,18 @@ type videoClient struct {
 }
 
 func InitVideoStreamingClient(c *config.Config) (interfaces.VideoClient, error) {
-	cc, err := grpc.Dial(c.VideoService, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	creds, err := credentials.NewClientTLSFromFile("server.crt", "")
 	if err != nil {
 		return nil, err
 	}
-	return NewVideoClient(pb.NewVideoServiceClient(cc)), nil
+
+	// Dial the gRPC server with TLS
+	conn, err := grpc.Dial(c.VideoService, grpc.WithTransportCredentials(creds))
+	if err != nil {
+		return nil, err
+	}
+
+	return NewVideoClient(pb.NewVideoServiceClient(conn)), nil
 }
 
 func NewVideoClient(server pb.VideoServiceClient) interfaces.VideoClient {

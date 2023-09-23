@@ -34,4 +34,8 @@ type ConferenceClient interface {
 	ToggleParticipantMic(context.Context, models.ToggleParticipantMicRequest) (*conference.ToggleParticipantMicResponse, error)
 	ScheduledConference(context.Context) (*models.ScheduledConferenceResponse, error)
 	CompletedSchedules(context.Context) (*conference.CompletedSchedulesResponse, error)
+	StartStream(context.Context, models.StartStreamRequest) (*conference.StartStreamResponse, error)
+	JoinStream(context.Context, models.JoinStreamRequest) (*conference.JoinStreamResponse, error)
+	LeaveStream(context.Context, models.LeaveStreamRequest) (*conference.LeaveStreamResponse, error)
+	StopStream(context.Context, models.StopStreamRequest) (*conference.StopStreamResponse, error)
 }

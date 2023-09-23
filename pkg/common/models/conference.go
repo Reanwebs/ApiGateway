@@ -40,6 +40,7 @@ type StartPrivateConferenceRequest struct {
 	Broadcast        bool   `json:"broadcast"`
 	Participantlimit string `json:"participantlimit"`
 	SdpOffer         string `json:"sdpOffer"`
+	ScheduledID      string `json:"scheduledID"`
 }
 
 type StartGroupConferenceRequest struct {
@@ -217,4 +218,23 @@ type ScheduledConferenceResponse struct {
 	Result              string
 	ScheduledConference []ScheduledConference
 	Err                 error
+}
+
+type StartStreamRequest struct {
+	Title       string `json:"title"`
+	Discription string `json:"discription"`
+	Interest    string `json:"interest"`
+	ThubnailID  string `json:"thubnailID"`
+}
+
+type JoinStreamRequest struct {
+	StreamID string `json:"streamID"`
+}
+
+type LeaveStreamRequest struct {
+	StreamID string `json:"streamID"`
+}
+
+type StopStreamRequest struct {
+	StreamID string `json:"streamID"`
 }
