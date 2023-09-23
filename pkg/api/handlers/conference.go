@@ -815,13 +815,31 @@ func (h *ConferenceHandler) StopStream(ctx *gin.Context) {
 
 func (h *ConferenceHandler) GetStream(ctx *gin.Context) {
 	body := models.GetStreamRequest{}
+	streamID := ctx.Query("streamID")
 
-	if err := ctx.BindJSON(&body); err != nil {
-		ctx.AbortWithError(http.StatusBadRequest, err)
+	if streamID == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "streamID is required",
+		})
+		return
+	}
+	body.StreamID = streamID
+
+	res, err := h.Client.GetStream(context.Background(), body)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "failed to get stream",
+			"error":   err.Error(),
+		})
 		return
 	}
 
-	res, err := h.Client.GetStream(context.Background(), body)
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *ConferenceHandler) GetOngoingStreams(ctx *gin.Context) {
+	sortString := ctx.DefaultQuery("sort", "")
+	res, err := h.Client.GetOngoingStreams(context.Background(), sortString)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "failed to get stream",

@@ -50,6 +50,7 @@ type ConferenceClient interface {
 	LeaveStream(ctx context.Context, in *LeaveStreamRequest, opts ...grpc.CallOption) (*LeaveStreamResponse, error)
 	StopStream(ctx context.Context, in *StopStreamRequest, opts ...grpc.CallOption) (*StopStreamResponse, error)
 	GetStream(ctx context.Context, in *GetStreamRequest, opts ...grpc.CallOption) (*GetStreamResponse, error)
+	GetOngoingStreams(ctx context.Context, in *GetOngoingStreamsRequest, opts ...grpc.CallOption) (*GetOngoingStreamsResponse, error)
 }
 
 type conferenceClient struct {
@@ -348,6 +349,15 @@ func (c *conferenceClient) GetStream(ctx context.Context, in *GetStreamRequest, 
 	return out, nil
 }
 
+func (c *conferenceClient) GetOngoingStreams(ctx context.Context, in *GetOngoingStreamsRequest, opts ...grpc.CallOption) (*GetOngoingStreamsResponse, error) {
+	out := new(GetOngoingStreamsResponse)
+	err := c.cc.Invoke(ctx, "/conference.Conference/GetOngoingStreams", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConferenceServer is the server API for Conference service.
 // All implementations must embed UnimplementedConferenceServer
 // for forward compatibility
@@ -384,6 +394,7 @@ type ConferenceServer interface {
 	LeaveStream(context.Context, *LeaveStreamRequest) (*LeaveStreamResponse, error)
 	StopStream(context.Context, *StopStreamRequest) (*StopStreamResponse, error)
 	GetStream(context.Context, *GetStreamRequest) (*GetStreamResponse, error)
+	GetOngoingStreams(context.Context, *GetOngoingStreamsRequest) (*GetOngoingStreamsResponse, error)
 	mustEmbedUnimplementedConferenceServer()
 }
 
@@ -486,6 +497,9 @@ func (UnimplementedConferenceServer) StopStream(context.Context, *StopStreamRequ
 }
 func (UnimplementedConferenceServer) GetStream(context.Context, *GetStreamRequest) (*GetStreamResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStream not implemented")
+}
+func (UnimplementedConferenceServer) GetOngoingStreams(context.Context, *GetOngoingStreamsRequest) (*GetOngoingStreamsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetOngoingStreams not implemented")
 }
 func (UnimplementedConferenceServer) mustEmbedUnimplementedConferenceServer() {}
 
@@ -1076,6 +1090,24 @@ func _Conference_GetStream_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Conference_GetOngoingStreams_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetOngoingStreamsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConferenceServer).GetOngoingStreams(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/conference.Conference/GetOngoingStreams",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConferenceServer).GetOngoingStreams(ctx, req.(*GetOngoingStreamsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Conference_ServiceDesc is the grpc.ServiceDesc for Conference service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1210,6 +1242,10 @@ var Conference_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetStream",
 			Handler:    _Conference_GetStream_Handler,
+		},
+		{
+			MethodName: "GetOngoingStreams",
+			Handler:    _Conference_GetOngoingStreams_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
