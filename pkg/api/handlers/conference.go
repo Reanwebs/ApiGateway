@@ -812,3 +812,23 @@ func (h *ConferenceHandler) StopStream(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &res)
 }
+
+func (h *ConferenceHandler) GetStream(ctx *gin.Context) {
+	body := models.GetStreamRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.GetStream(context.Background(), body)
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"message": "failed to get stream",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}

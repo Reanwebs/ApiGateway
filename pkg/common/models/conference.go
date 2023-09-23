@@ -225,6 +225,8 @@ type StartStreamRequest struct {
 	Discription string `json:"discription"`
 	Interest    string `json:"interest"`
 	ThubnailID  string `json:"thubnailID"`
+	AvatarID    string `json:"avatarID"`
+	UserName    string `json:"userName"`
 }
 
 type JoinStreamRequest struct {
@@ -236,5 +238,9 @@ type LeaveStreamRequest struct {
 }
 
 type StopStreamRequest struct {
+	StreamID string `json:"streamID"`
+}
+
+type GetStreamRequest struct {
 	StreamID string `json:"streamID"`
 }

@@ -19,10 +19,12 @@ func InitializeAPI(c *config.Config) (*api.Server, error) {
 		client.InitConferenceClient,
 		client.InitAdminClient,
 		client.InitVideoStreamingClient,
+		client.InitMonitizationClient,
 		handlers.NewAuthHandler,
 		handlers.NewAdminHandler,
 		handlers.NewConferenceHandler,
 		handlers.NewVideoHandler,
+		handlers.NewMonitizationHandler,
 		api.NewServeHTTP,
 	)
 	return &api.Server{}, nil
