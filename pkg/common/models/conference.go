@@ -222,10 +222,10 @@ type ScheduledConferenceResponse struct {
 
 type StartStreamRequest struct {
 	Title       string `json:"title"`
-	Discription string `json:"discription"`
+	Discription string `json:"description"`
 	Interest    string `json:"interest"`
-	ThubnailID  string `json:"thubnailID"`
-	AvatarID    string `json:"avatarID"`
+	ThubnailID  string `json:"thumbnail"`
+	AvatarID    string `json:"avatarId"`
 	UserName    string `json:"userName"`
 }
 

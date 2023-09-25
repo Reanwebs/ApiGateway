@@ -46,5 +46,5 @@ func ConferenceRoutes(api *gin.RouterGroup, conferenceHandler handlers.Conferenc
 	confernce.PATCH("/leave-stream", conferenceHandler.LeaveStream)
 	confernce.PATCH("/stop-stream", conferenceHandler.StopStream)
 	confernce.GET("/get-stream-by-id", conferenceHandler.GetStream)
-	confernce.GET("/grt-stream", conferenceHandler.GetOngoingStreams)
+	confernce.GET("/get-stream", conferenceHandler.GetOngoingStreams)
 }
