@@ -168,7 +168,8 @@ message user{
     string userName =2;
     string email = 3;
     string phoneNumber = 4;
-    bool status = 5;
+    string avatarId = 5;
+    bool status = 6;
 }
 
 message GetUsersResponse{
