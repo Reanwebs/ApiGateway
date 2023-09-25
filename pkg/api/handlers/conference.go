@@ -741,7 +741,7 @@ func (h *ConferenceHandler) StartStream(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.StartStream(context.Background(), body)
+	res, err := h.Client.StartStream(ctx, body)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "failed to start stream",
