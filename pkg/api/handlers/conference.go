@@ -761,7 +761,7 @@ func (h *ConferenceHandler) JoinStream(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.JoinStream(context.Background(), body)
+	res, err := h.Client.JoinStream(ctx, body)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "failed to join stream",
@@ -781,7 +781,7 @@ func (h *ConferenceHandler) LeaveStream(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.LeaveStream(context.Background(), body)
+	res, err := h.Client.LeaveStream(ctx, body)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "failed to leave stream",
@@ -801,7 +801,7 @@ func (h *ConferenceHandler) StopStream(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.StopStream(context.Background(), body)
+	res, err := h.Client.StopStream(ctx, body)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "failed to stop stream",
@@ -825,7 +825,7 @@ func (h *ConferenceHandler) GetStream(ctx *gin.Context) {
 	}
 	body.StreamID = streamID
 
-	res, err := h.Client.GetStream(context.Background(), body)
+	res, err := h.Client.GetStream(ctx, body)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "failed to get stream",
@@ -839,7 +839,7 @@ func (h *ConferenceHandler) GetStream(ctx *gin.Context) {
 
 func (h *ConferenceHandler) GetOngoingStreams(ctx *gin.Context) {
 	sortString := ctx.DefaultQuery("sort", "")
-	res, err := h.Client.GetOngoingStreams(context.Background(), sortString)
+	res, err := h.Client.GetOngoingStreams(ctx, sortString)
 	if err != nil {
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "failed to get stream",
