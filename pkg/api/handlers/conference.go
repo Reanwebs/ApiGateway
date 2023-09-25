@@ -815,7 +815,7 @@ func (h *ConferenceHandler) StopStream(ctx *gin.Context) {
 
 func (h *ConferenceHandler) GetStream(ctx *gin.Context) {
 	body := models.GetStreamRequest{}
-	streamID := ctx.Query("streamID")
+	streamID := ctx.Query("id")
 
 	if streamID == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{
