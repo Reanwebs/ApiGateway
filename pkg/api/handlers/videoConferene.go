@@ -20,14 +20,22 @@ func NewVideoHandler(client interfaces.VideoClient) VideoHandler {
 }
 
 func (cr *VideoHandler) UploadVideo(c *gin.Context) {
-	body := models.UploadVideo{}
 
-	if err := c.ShouldBindJSON(&body); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to parse JSON data",
-			"error":   err.Error(),
-		})
-		return
+	userName := c.PostForm("userName")
+	avatarId := c.PostForm("avatarId")
+	title := c.PostForm("title")
+	discription := c.PostForm("discription")
+	interest := c.PostForm("interest")
+	thumbnailId := c.PostForm("thumbnailId")
+
+	// Create an instance of UploadVideo struct and populate it
+	body := models.UploadVideo{
+		UserName:    userName,
+		AvatarId:    avatarId,
+		Title:       title,
+		Discription: discription,
+		Interest:    interest,
+		ThumbnailId: thumbnailId,
 	}
 
 	file, err := c.FormFile("video")

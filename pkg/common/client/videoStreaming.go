@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
@@ -11,7 +12,7 @@ import (
 	"mime/multipart"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type videoClient struct {
@@ -19,17 +20,11 @@ type videoClient struct {
 }
 
 func InitVideoStreamingClient(c *config.Config) (interfaces.VideoClient, error) {
-	creds, err := credentials.NewClientTLSFromFile("server.crt", "")
+	cc, err := grpc.Dial(c.VideoService, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, err
 	}
-
-	conn, err := grpc.Dial(c.VideoService, grpc.WithTransportCredentials(creds))
-	if err != nil {
-		return nil, err
-	}
-
-	return NewVideoClient(video.NewVideoServiceClient(conn)), nil
+	return NewVideoClient(video.NewVideoServiceClient(cc)), nil
 }
 
 func NewVideoClient(server video.VideoServiceClient) interfaces.VideoClient {
@@ -45,7 +40,10 @@ func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeade
 	}
 	defer upLoadfile.Close()
 
-	stream, _ := c.Server.UploadVideo(ctx)
+	stream, err := c.Server.UploadVideo(ctx)
+	if err != nil {
+		return nil, errors.New("streaming service down")
+	}
 	chunkSize := 4096
 	buffer := make([]byte, chunkSize)
 
@@ -57,7 +55,6 @@ func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeade
 		if err != nil {
 			return nil, err
 		}
-
 		if err := stream.Send(&video.UploadVideoRequest{
 			UserName:    request.UserName,
 			AvatarId:    request.AvatarId,
