@@ -12,3 +12,7 @@ type UploadVideo struct {
 type FetchVideosRequest struct {
 	UserName string `json:"userName"`
 }
+
+type ArchivedVideos struct {
+	VideoId string `json:"videoId"`
+}

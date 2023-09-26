@@ -83,3 +83,46 @@ func (cr *VideoHandler) FetchUserVideo(c *gin.Context) {
 	c.JSON(http.StatusOK, &res)
 
 }
+
+func (cr *VideoHandler) FetchUserArchivedVideo(c *gin.Context) {
+
+	request := models.FetchVideosRequest{}
+	request.UserName = c.Query("userName")
+
+	if request.UserName == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "user name required",
+		})
+		return
+	}
+
+	res, err := cr.Client.FetchArchivedVideos(c, request)
+	if err != nil {
+		c.JSON(http.StatusMethodNotAllowed, gin.H{
+			"message": "failed to fetch videos",
+			"error":   err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &res)
+}
+
+func (cr *VideoHandler) ArchivVideo(c *gin.Context) {
+
+	body := models.ArchivedVideos{}
+
+	if err := c.BindJSON(&body); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := cr.Client.ArchiveVideo(c, body)
+	if err != nil {
+		c.JSON(http.StatusMethodNotAllowed, gin.H{
+			"message": "failed to archive videos",
+			"error":   err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &res)
+}
