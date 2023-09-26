@@ -9,4 +9,5 @@ import (
 
 type VideoClient interface {
 	UploadVideo(context.Context, *multipart.FileHeader, models.UploadVideo) (*video.UploadVideoResponse, error)
+	FetchVideos(context.Context, models.FetchVideosRequest) (*video.FindUserVideoResponse, error)
 }

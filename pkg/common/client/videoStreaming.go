@@ -78,3 +78,14 @@ func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeade
 
 	return response, nil
 }
+
+func (c *videoClient) FetchVideos(ctx context.Context, request models.FetchVideosRequest) (*video.FindUserVideoResponse, error) {
+	fmt.Println("\n\n\n", request)
+	res, err := c.Server.FindUserVideo(ctx, &video.FindUserVideoRequest{
+		UserName: request.UserName,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
