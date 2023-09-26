@@ -2,12 +2,11 @@ package interfaces
 
 import (
 	"context"
-	"gateway/pkg/common/pb"
+	"gateway/pkg/common/models"
+	"gateway/pkg/common/pb/video"
 	"mime/multipart"
 )
 
 type VideoClient interface {
-	UploadVideo(context.Context, *multipart.FileHeader) (*pb.UploadVideoResponse, error)
-	StreamVideo(context.Context, string, string) (pb.VideoService_StreamVideoClient, error)
-	FindAllVideo(context.Context) (*pb.FindAllResponse, error)
+	UploadVideo(context.Context, *multipart.FileHeader, models.UploadVideo) (*video.UploadVideoResponse, error)
 }
