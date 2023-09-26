@@ -8,3 +8,7 @@ type UploadVideo struct {
 	Interest    string `json:"interest"`
 	ThumbnailId string `json:"thumbnailId"`
 }
+
+type FetchVideosRequest struct {
+	UserName string `json:"userName"`
+}

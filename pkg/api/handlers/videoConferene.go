@@ -60,3 +60,26 @@ func (cr *VideoHandler) UploadVideo(c *gin.Context) {
 		"Success": res,
 	})
 }
+
+func (cr *VideoHandler) FetchUserVideo(c *gin.Context) {
+	request := models.FetchVideosRequest{}
+	request.UserName = c.Query("userName")
+
+	if request.UserName == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "user name required",
+		})
+		return
+	}
+
+	res, err := cr.Client.FetchVideos(c, request)
+	if err != nil {
+		c.JSON(http.StatusMethodNotAllowed, gin.H{
+			"message": "failed to fetch videos",
+			"error":   err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &res)
+
+}
