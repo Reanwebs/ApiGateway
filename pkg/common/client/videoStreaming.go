@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
-	"gateway/pkg/common/pb"
+	"gateway/pkg/common/models"
+	"gateway/pkg/common/pb/video"
 	"io"
 	"mime/multipart"
 
@@ -14,7 +15,7 @@ import (
 )
 
 type videoClient struct {
-	Server pb.VideoServiceClient
+	Server video.VideoServiceClient
 }
 
 func InitVideoStreamingClient(c *config.Config) (interfaces.VideoClient, error) {
@@ -23,33 +24,31 @@ func InitVideoStreamingClient(c *config.Config) (interfaces.VideoClient, error) 
 		return nil, err
 	}
 
-	// Dial the gRPC server with TLS
 	conn, err := grpc.Dial(c.VideoService, grpc.WithTransportCredentials(creds))
 	if err != nil {
 		return nil, err
 	}
 
-	return NewVideoClient(pb.NewVideoServiceClient(conn)), nil
+	return NewVideoClient(video.NewVideoServiceClient(conn)), nil
 }
 
-func NewVideoClient(server pb.VideoServiceClient) interfaces.VideoClient {
+func NewVideoClient(server video.VideoServiceClient) interfaces.VideoClient {
 	return &videoClient{
 		Server: server,
 	}
 }
 
-func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeader) (*pb.UploadVideoResponse, error) {
+func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeader, request models.UploadVideo) (*video.UploadVideoResponse, error) {
 	upLoadfile, err := file.Open()
 	if err != nil {
 		return nil, err
 	}
-
-	fmt.Println("file opned in client")
 	defer upLoadfile.Close()
-	//getting the stream object
+
 	stream, _ := c.Server.UploadVideo(ctx)
-	chunkSize := 4096 // Set your desired chunk size
+	chunkSize := 4096
 	buffer := make([]byte, chunkSize)
+
 	for {
 		n, err := upLoadfile.Read(buffer)
 		if err == io.EOF {
@@ -59,15 +58,21 @@ func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeade
 			return nil, err
 		}
 
-		if err := stream.Send(&pb.UploadVideoRequest{
-			Filename: file.Filename,
-			Data:     buffer[:n],
+		if err := stream.Send(&video.UploadVideoRequest{
+			UserName:    request.UserName,
+			AvatarId:    request.AvatarId,
+			Intrest:     request.Interest,
+			ThumbnailId: request.ThumbnailId,
+			Title:       request.Title,
+			Discription: request.Discription,
+			Filename:    file.Filename,
+			Data:        buffer[:n],
 		}); err != nil {
 			fmt.Println("error in streaming in client", err)
 			return nil, err
 		}
 	}
-	//the final response is recieved and the streaming is closed
+
 	response, err := stream.CloseAndRecv()
 	if err != nil {
 		fmt.Println("error in response ", err)
@@ -75,22 +80,4 @@ func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeade
 	}
 
 	return response, nil
-}
-
-func (c *videoClient) StreamVideo(ctx context.Context, filename, playlist string) (pb.VideoService_StreamVideoClient, error) {
-	res, err := c.Server.StreamVideo(ctx, &pb.StreamVideoRequest{
-		VideoId: "188e9aed-9629-463a-b76d-a16f9deab6ef",
-	})
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
-}
-
-func (c *videoClient) FindAllVideo(ctx context.Context) (*pb.FindAllResponse, error) {
-	res, err := c.Server.FindAllVideo(ctx, &pb.FindAllRequest{})
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
 }
