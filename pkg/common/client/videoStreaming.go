@@ -80,9 +80,28 @@ func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeade
 }
 
 func (c *videoClient) FetchVideos(ctx context.Context, request models.FetchVideosRequest) (*video.FindUserVideoResponse, error) {
-	fmt.Println("\n\n\n", request)
 	res, err := c.Server.FindUserVideo(ctx, &video.FindUserVideoRequest{
 		UserName: request.UserName,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *videoClient) FetchArchivedVideos(ctx context.Context, request models.FetchVideosRequest) (*video.FindArchivedVideoByUserIdResponse, error) {
+	res, err := c.Server.FindArchivedVideoByUserId(ctx, &video.FindArchivedVideoByUserIdRequest{
+		UserName: request.UserName,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *videoClient) ArchiveVideo(ctx context.Context, request models.ArchivedVideos) (*video.ArchiveVideoResponse, error) {
+	res, err := c.Server.ArchiveVideo(ctx, &video.ArchiveVideoRequest{
+		VideoId: request.VideoId,
 	})
 	if err != nil {
 		return nil, err
