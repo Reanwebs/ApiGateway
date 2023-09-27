@@ -10,6 +10,7 @@ import (
 	"gateway/pkg/common/pb/video"
 	"io"
 	"mime/multipart"
+	"strconv"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -99,9 +100,23 @@ func (c *videoClient) FetchArchivedVideos(ctx context.Context, request models.Fe
 	return res, nil
 }
 
+func (c *videoClient) FetchAllVideos(ctx context.Context) (*video.FetchAllVideoResponse, error) {
+	res, err := c.Server.FetchAllVideo(ctx, &video.FetchAllVideoRequest{})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
 func (c *videoClient) ArchiveVideo(ctx context.Context, request models.ArchivedVideos) (*video.ArchiveVideoResponse, error) {
+
+	videoID, err := strconv.ParseUint(request.VideoId, 10, 32)
+	if err != nil {
+		fmt.Println("Error converting video ID:", err)
+		return nil, errors.New("video id mismatching")
+	}
 	res, err := c.Server.ArchiveVideo(ctx, &video.ArchiveVideoRequest{
-		VideoId: request.VideoId,
+		VideoId: uint32(videoID),
 	})
 	if err != nil {
 		return nil, err

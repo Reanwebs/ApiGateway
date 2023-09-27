@@ -15,5 +15,6 @@ func VideoRoutes(api *gin.RouterGroup, videoHandler handlers.VideoHandler) {
 	routes.POST("/upload", videoHandler.UploadVideo)
 	routes.GET("/user-videos", videoHandler.FetchUserVideo)
 	routes.GET("/user-archived-videos", videoHandler.FetchUserArchivedVideo)
+	routes.GET("/list-all", videoHandler.FetchAllVideo)
 	routes.POST("/archive-video", videoHandler.ArchivVideo)
 }
