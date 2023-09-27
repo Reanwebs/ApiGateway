@@ -107,6 +107,19 @@ func (cr *VideoHandler) FetchUserArchivedVideo(c *gin.Context) {
 	c.JSON(http.StatusOK, &res)
 }
 
+func (cr *VideoHandler) FetchAllVideo(c *gin.Context) {
+
+	res, err := cr.Client.FetchAllVideos(c)
+	if err != nil {
+		c.JSON(http.StatusMethodNotAllowed, gin.H{
+			"message": "failed to fetch videos",
+			"error":   err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &res)
+}
+
 func (cr *VideoHandler) ArchivVideo(c *gin.Context) {
 
 	body := models.ArchivedVideos{}
