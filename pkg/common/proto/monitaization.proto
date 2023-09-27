@@ -76,10 +76,11 @@ message UserRewardHistoryRequest{
 
 message UserRewardHistory {
     string UserID = 1;
-    string reward_type = 2;
-    string transaction_type = 3;
-    uint32 coin_count = 4;
+    string RewardReason = 2;
+    string TransactionType = 3;
+    uint32 CoinCount = 4;
     google.protobuf.Timestamp time = 5;
+    string ReferalName = 6;
 }
 
 message UserRewardHistoryResponse {
