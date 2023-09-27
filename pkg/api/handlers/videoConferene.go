@@ -139,3 +139,25 @@ func (cr *VideoHandler) ArchivVideo(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, &res)
 }
+
+func (cr *VideoHandler) GetVideoById(c *gin.Context) {
+
+	videoId := c.Query("id")
+
+	if videoId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "user name required",
+		})
+		return
+	}
+
+	res, err := cr.Client.GetVideoById(c, videoId)
+	if err != nil {
+		c.JSON(http.StatusMethodNotAllowed, gin.H{
+			"message": "failed to fetch videos",
+			"error":   err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, &res)
+}
