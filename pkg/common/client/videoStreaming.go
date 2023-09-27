@@ -123,3 +123,20 @@ func (c *videoClient) ArchiveVideo(ctx context.Context, request models.ArchivedV
 	}
 	return res, nil
 }
+
+func (c *videoClient) GetVideoById(ctx context.Context, videoId string) (*video.GetVideoByIdResponse, error) {
+
+	videoID, err := strconv.ParseUint(videoId, 10, 32)
+	if err != nil {
+		fmt.Println("Error converting video ID:", err)
+		return nil, errors.New("video id mismatching")
+	}
+
+	res, err := c.Server.GetVideoById(ctx, &video.GetVideoByIdRequest{
+		VideoId: uint32(videoID),
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
