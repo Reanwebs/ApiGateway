@@ -45,4 +45,6 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	routes.GET("/get-active-community", userHandler.GetActiveCommunity)
 	routes.GET("/get-community-by-id", userHandler.GetCommunityById)
 	routes.GET("/validate-community-name", userHandler.ValidateCommunityName)
+	routes.GET("/get-user-details", userHandler.GetUserDetails)
+	routes.GET("/get-joined-community", userHandler.GetJoinedCommunity)
 }

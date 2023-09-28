@@ -39,4 +39,6 @@ type AuthClient interface {
 	GetActiveCommunity(context.Context) (*pb.GetActiveCommunityResponse, error)
 	GetCommunityById(context.Context, models.GetCommunityByIdRequest) (*pb.GetCommunityByIdResponse, error)
 	ValidateCommunityName(context.Context, models.ValidateCommunityNameRequest) (*pb.ValidateCommunityNameResponse, error)
+	GetJoinedCommunity(context.Context) (*pb.GetJoinedCommunityResponse, error)
+	GetUserDetails(context.Context) (*pb.GetUserDetailsResponse, error)
 }

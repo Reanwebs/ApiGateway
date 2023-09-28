@@ -1034,3 +1034,31 @@ func (h *UserHandler) ValidateCommunityName(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &res)
 }
+
+func (h *UserHandler) GetUserDetails(ctx *gin.Context) {
+
+	res, err := h.Client.GetUserDetails(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to fetch",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *UserHandler) GetJoinedCommunity(ctx *gin.Context) {
+
+	res, err := h.Client.GetJoinedCommunity(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to fetch",
+			"error":   err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}

@@ -1221,3 +1221,39 @@ func (c *authClient) GetAllCommunity(ctx context.Context) (*pb.GetAllCommunityRe
 	}
 	return res, nil
 }
+
+func (c *authClient) GetUserDetails(ctx context.Context) (*pb.GetUserDetailsResponse, error) {
+
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.GetUserDetails(ctx, &pb.GetUserDetailsRequest{
+		UserID: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
+}
+
+func (c *authClient) GetJoinedCommunity(ctx context.Context) (*pb.GetJoinedCommunityResponse, error) {
+
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
+	res, err := c.Server.GetJoinedCommunity(ctx, &pb.GetJoinedCommunityRequest{
+		UserId: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
+}

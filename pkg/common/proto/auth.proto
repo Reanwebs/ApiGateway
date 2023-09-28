@@ -4,7 +4,6 @@ package pb;
 
 option go_package = "./pkg/common/pb";
 
-
 service Autharization {
     rpc UserSignup (SignupRequest) returns (SignupResponse){}
     rpc OtpRequest (OtpSignUpRequest) returns (OtpSignUpResponse){}
@@ -38,14 +37,16 @@ service Autharization {
     rpc AddModerator(AddModeratorRequest) returns (AddModeratorResponse) {}
     rpc AddMember(AddMemberRequest) returns (AddMemberResponse){}
     rpc ChangeCommunityJoinType(ChangeCommunityJoinTypeRequest) returns (ChangeCommunityJoinTypeResponse){}
-    rpc DeleteCommunity(DeleteCommunityRequest) returns (DeleteCommunityResponse) {}
-    rpc ManageCommunity(ManageCommunityRequest) returns (ManageCommunityResponse){}
-    rpc GetInterstsUser(GetInterstsUserRequest) returns (GetInterstsUserResponse){}
+    rpc DeleteCommunity(DeleteCommunityRequest) returns (DeleteCommunityResponse) {} 
+    rpc ManageCommunity(ManageCommunityRequest) returns (ManageCommunityResponse) {}
     rpc GetActiveCommunity(GetActiveCommunityRequest) returns (GetActiveCommunityResponse) {}
+    rpc GetInterstsUser(GetInterstsUserRequest) returns (GetInterstsUserResponse){}
     rpc GetUserByName(GetUserByNameRequest) returns (GetUserByNameResponse){}
     rpc GetAllCommunity(GetAllCommunityRequest) returns (GetAllCommunityResponse) {}
     rpc GetCommunityById(GetCommunityByIdRequest) returns (GetCommunityByIdResponse){}
     rpc ValidateCommunityName(ValidateCommunityNameRequest) returns (ValidateCommunityNameResponse){}
+    rpc GetUserDetails(GetUserDetailsRequest) returns (GetUserDetailsResponse){}
+    rpc GetJoinedCommunity(GetJoinedCommunityRequest) returns (GetJoinedCommunityResponse) {}
 }
 
 message SignupRequest {
@@ -67,6 +68,7 @@ message SignupResponse {
     bool reward =6;
     string recipientId=7;
     string recipientName=8;
+
 }
 
 message OtpSignUpRequest {
@@ -253,7 +255,7 @@ message GoogleLoginResponse{
     string error = 5;
     string uid = 6;
     string message = 7;
-    string avatarId = 8;
+    string avatarId=8;
 }
 
 message ChangeUserNameRequest{
@@ -368,8 +370,6 @@ message RemoveAvatarResponse{
     string message = 6;
     string avatarId=7;
 }
-
-
 
 
 message CreateCommunityRequest{
@@ -490,88 +490,111 @@ message ManageCommunityResponse{
     string error =3;
 }
 
-message UserInterest {
-    string interest = 1;
-}
-
-message GetInterstsUserRequest {
-}
-
-message GetInterstsUserResponse {
-    int64 status = 1;
-    repeated UserInterest interests = 2;
-    string message = 3;
-    string error = 4;
-}
-
 message Community{
-    string id = 1;
-    string communityName=2;
-    string communityDescription = 3;
-    string communityAvatar = 4;
-    int32 memberCount = 5;
-    string communtyAdmin=6;
-    bool isActive=7;
-    bool isBlocked = 8;
- }
- message GetActiveCommunityRequest{
- 
- }
- 
- message GetActiveCommunityResponse{
-     string status = 1;
-     string message = 2;
-     repeated Community community=3;
-     string error =4;
- }
- 
- message GetAllCommunityRequest{
- 
- }
- 
- message GetAllCommunityResponse{
-     int64 status =1;
-     string message =2;
-     repeated Community communities=3;
-     string error =4;
- }
- 
+   string id = 1;
+   string communityName=2;
+   string communityDescription = 3;
+   string communityAvatar = 4;
+   int32 memberCount = 5;
+   string communityAdmin=6;
+   bool isActive=7;
+   bool isBlocked = 8;
+   bool isAdmin = 9;
+   bool isMember = 10;
+}
+message GetActiveCommunityRequest{
+       string userId = 1;
+}
 
- 
- message GetUserByNameRequest{
-     string userName = 1;
- }
- 
- message GetUserByNameResponse{
-     int64 status =1;
-     string message = 2;
-     string error = 3;
-     repeated user users=4;
- }
- 
- message Participants{
-     string userName=1;
-     string userId=2;
- }
- 
- message GetCommunityByIdRequest{
-     string communityId=1;
- }
- 
- message GetCommunityByIdResponse{
-     int64 status =1;
-     string message = 2;
-     string error = 3;
-     Community community=4;
-     repeated Participants members =5;
- }
- 
- message ValidateCommunityNameRequest{
-     string communityName=1;
- }
- 
- message ValidateCommunityNameResponse{
-     int64 status =1;
-     string message = 2;
-     string error = 3;
- }
+message GetActiveCommunityResponse{
+    string status = 1;
+    string message = 2;
+    repeated Community community=3;
+    string error =4;
+}
+
+message GetAllCommunityRequest{
+
+}
+
+message GetAllCommunityResponse{
+    int64 status =1;
+    string message =2;
+    repeated Community communities=3;
+    string error =4;
+}
+
+message UserInterest{
+    string interest =1;
+}
+
+message GetInterstsUserRequest{
+    
+}
+
+message GetInterstsUserResponse{
+    int64 status =1;
+    repeated UserInterest Interests = 2;
+    string message = 3;
+    string error =4;
+}
+
+message GetUserByNameRequest{
+    string userName = 1;
+}
+
+message GetUserByNameResponse{
+    int64 status =1;
+    string message = 2;
+    string error = 3;
+    repeated user users=4;
+}
+
+message Participants{
+    string userName=1;
+    string userId=2;
+}
+
+message GetCommunityByIdRequest{
+    string communityId=1;
+}
+
+message GetCommunityByIdResponse{
+    int64 status =1;
+    string message = 2;
+    string error = 3;
+    Community community=4;
+    repeated Participants members =5;
+}
+
+message ValidateCommunityNameRequest{
+    string communityName=1;
+}
+
+message ValidateCommunityNameResponse{
+    int64 status =1;
+    string message = 2;
+    string error = 3;
+}
+
+message GetUserDetailsRequest{
+    string UserID = 1;
+}
+
+message GetUserDetailsResponse{
+    string UserName = 1;
+    string AvatarID = 2;
+    bool   Permission = 3;
+    string Result     = 4;
+}
+
+message GetJoinedCommunityRequest{
+    string userId =1;
+}
+
+message GetJoinedCommunityResponse{
+    string status = 1;
+    string message = 2;
+    repeated Community community=3;
+    string error =4;
+}
