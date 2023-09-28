@@ -16,3 +16,9 @@ type FetchVideosRequest struct {
 type ArchivedVideos struct {
 	VideoId string `json:"videoId"`
 }
+
+type ToggleStarRequest struct {
+	VideoId  string `json:"videoId"`
+	UserNAme string `json:"userName"`
+	Starred  bool   `json:"starred"`
+}

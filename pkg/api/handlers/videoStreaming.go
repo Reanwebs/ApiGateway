@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/models"
+	"gateway/pkg/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -47,16 +48,18 @@ func (cr *VideoHandler) UploadVideo(c *gin.Context) {
 		})
 		return
 	}
-	res, err1 := cr.Client.UploadVideo(c.Request.Context(), file, body)
-	if err1 != nil {
+	res, err := cr.Client.UploadVideo(c.Request.Context(), file, body)
+	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		c.JSON(http.StatusMethodNotAllowed, gin.H{
 			"message": "failed to upload",
-			"error":   err1.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
+	c.JSON(http.StatusCreated, gin.H{
 		"Success": res,
 	})
 }
@@ -74,9 +77,11 @@ func (cr *VideoHandler) FetchUserVideo(c *gin.Context) {
 
 	res, err := cr.Client.FetchVideos(c, request)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		c.JSON(http.StatusMethodNotAllowed, gin.H{
 			"message": "failed to fetch videos",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -98,9 +103,11 @@ func (cr *VideoHandler) FetchUserArchivedVideo(c *gin.Context) {
 
 	res, err := cr.Client.FetchArchivedVideos(c, request)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		c.JSON(http.StatusMethodNotAllowed, gin.H{
 			"message": "failed to fetch videos",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -111,9 +118,11 @@ func (cr *VideoHandler) FetchAllVideo(c *gin.Context) {
 
 	res, err := cr.Client.FetchAllVideos(c)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		c.JSON(http.StatusMethodNotAllowed, gin.H{
 			"message": "failed to fetch videos",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -131,9 +140,11 @@ func (cr *VideoHandler) ArchivVideo(c *gin.Context) {
 
 	res, err := cr.Client.ArchiveVideo(c, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		c.JSON(http.StatusMethodNotAllowed, gin.H{
 			"message": "failed to archive videos",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -153,11 +164,35 @@ func (cr *VideoHandler) GetVideoById(c *gin.Context) {
 
 	res, err := cr.Client.GetVideoById(c, videoId)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		c.JSON(http.StatusMethodNotAllowed, gin.H{
 			"message": "failed to fetch videos",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
+	c.JSON(http.StatusOK, &res)
+}
+
+func (cr *VideoHandler) ToggleStar(c *gin.Context) {
+	body := models.ToggleStarRequest{}
+
+	if err := c.BindJSON(&body); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := cr.Client.ToggleStar(c, body)
+	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed",
+			"error":   errMsg,
+		})
+		return
+	}
+
 	c.JSON(http.StatusOK, &res)
 }

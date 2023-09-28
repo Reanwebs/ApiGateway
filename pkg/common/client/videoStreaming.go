@@ -140,3 +140,23 @@ func (c *videoClient) GetVideoById(ctx context.Context, videoId string) (*video.
 	}
 	return res, nil
 }
+
+func (c *videoClient) ToggleStar(ctx context.Context, request models.ToggleStarRequest) (*video.ToggleStarResponse, error) {
+
+	videoID, err := strconv.ParseUint(request.VideoId, 10, 32)
+	if err != nil {
+		fmt.Println("Error converting video ID:", err)
+		return nil, errors.New("video id mismatching")
+	}
+
+	res, err := c.Server.ToggleStar(ctx, &video.ToggleStarRequest{
+		VideoId:  uint32(videoID),
+		UserNAme: request.UserNAme,
+		Starred:  request.Starred,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
+}

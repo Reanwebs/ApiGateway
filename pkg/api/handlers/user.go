@@ -3,9 +3,11 @@ package handlers
 import (
 	"context"
 	"errors"
+	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	middleware "gateway/pkg/common/midleware"
 	"gateway/pkg/common/models"
+	"gateway/pkg/utils"
 	"net/http"
 	"time"
 
@@ -52,9 +54,11 @@ func (h *UserHandler) UserSignup(ctx *gin.Context) {
 	res, err := h.Client.UserSignup(context.Background(), body, retryConfig)
 
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "signup failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -91,9 +95,11 @@ func (h *UserHandler) OtpRequest(ctx *gin.Context) {
 
 	res, err := h.Client.OtpRequest(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "otp sending failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -131,10 +137,17 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 
 	res, err := h.Client.UserLogin(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "failed to login",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
+		fmt.Println(
+			"err :::/t", err,
+			"\nerr.ERROR :::/t", err.Error(),
+			"\nextrated error msg :::\t", errMsg,
+		)
 		return
 	}
 
@@ -178,9 +191,11 @@ func (h *UserHandler) ValidName(ctx *gin.Context) {
 
 	res, err := h.Client.ValidName(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "User name not available",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -218,9 +233,11 @@ func (h *UserHandler) ResendOtp(ctx *gin.Context) {
 
 	res, err := h.Client.ResendOtp(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "resending otp failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -277,9 +294,11 @@ func (h *UserHandler) ForgotPasswordOtp(ctx *gin.Context) {
 
 	res, err := h.Client.ForgotPasswordOtp(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "sending otp failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -317,9 +336,11 @@ func (h *UserHandler) ForgotPasswordValidateOtp(ctx *gin.Context) {
 
 	res, err := h.Client.ForgotPasswordValidateOtp(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "otp validation failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -356,9 +377,11 @@ func (h *UserHandler) ForgotPasswordChangePassword(ctx *gin.Context) {
 
 	res, err := h.Client.ForgotPasswordChangePassword(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "otp verification failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -395,9 +418,11 @@ func (h *UserHandler) ValidateUser(ctx *gin.Context) {
 
 	res, err := h.Client.ValidateUser(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "validate user failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -435,9 +460,11 @@ func (h *UserHandler) GoogleLogin(ctx *gin.Context) {
 
 	res, err := h.Client.GoogleLogin(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "google login failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -483,9 +510,11 @@ func (h *UserHandler) ChangeUserName(ctx *gin.Context) {
 
 	res, err := h.Client.ChangeUserName(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to change user name",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -522,9 +551,11 @@ func (h *UserHandler) ChangeEmail(ctx *gin.Context) {
 
 	res, err := h.Client.ChangeEmail(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to change email",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -561,9 +592,11 @@ func (h *UserHandler) ChangePassword(ctx *gin.Context) {
 
 	res, err := h.Client.ChangePassword(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to change password",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -600,9 +633,11 @@ func (h *UserHandler) ChangeEmailVerifyOtp(ctx *gin.Context) {
 
 	res, err := h.Client.ChangeEmailVerifyOtp(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "otp validation failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -639,9 +674,11 @@ func (h *UserHandler) ChangePhoneNumberOtp(ctx *gin.Context) {
 
 	res, err := h.Client.ChangePhoneNumberOtp(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "otp validation failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -678,9 +715,11 @@ func (h *UserHandler) ChangePhoneNumber(ctx *gin.Context) {
 
 	res, err := h.Client.ChangePhoneNumber(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to change phone number",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -717,9 +756,11 @@ func (h *UserHandler) ChangeAvatar(ctx *gin.Context) {
 
 	res, err := h.Client.ChangeAvatar(ctx, body, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "can't change avatar",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -748,9 +789,11 @@ func (h *UserHandler) RemoveAvatar(ctx *gin.Context) {
 
 	res, err := h.Client.RemoveAvatar(ctx, retryConfig)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "remove avatar failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -768,9 +811,11 @@ func (h *UserHandler) CreateCommunity(ctx *gin.Context) {
 
 	res, err := h.Client.CreateCommunity(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to create community",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -788,9 +833,11 @@ func (h *UserHandler) JoinCommunity(ctx *gin.Context) {
 
 	res, err := h.Client.JoinCommunity(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to join community",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -808,9 +855,11 @@ func (h *UserHandler) LeaveCommunity(ctx *gin.Context) {
 
 	res, err := h.Client.LeaveCommunity(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to leave community",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -828,9 +877,11 @@ func (h *UserHandler) AcceptJoinCommunity(ctx *gin.Context) {
 
 	res, err := h.Client.AcceptJoinCommunity(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to accept joining community",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -848,9 +899,11 @@ func (h *UserHandler) RemoveMember(ctx *gin.Context) {
 
 	res, err := h.Client.RemoveMember(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to remove member",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -868,9 +921,11 @@ func (h *UserHandler) AddModerator(ctx *gin.Context) {
 
 	res, err := h.Client.AddModerator(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to add moderator",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -888,9 +943,11 @@ func (h *UserHandler) AddMember(ctx *gin.Context) {
 
 	res, err := h.Client.AddMember(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to add member",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -908,9 +965,11 @@ func (h *UserHandler) ChangeCommunityJoinType(ctx *gin.Context) {
 
 	res, err := h.Client.ChangeCommunityJoinType(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to change community join type",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -928,9 +987,11 @@ func (h *UserHandler) DeleteCommunity(ctx *gin.Context) {
 
 	res, err := h.Client.DeleteCommunity(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to delete community",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -942,9 +1003,11 @@ func (h *UserHandler) GetInterstsUser(ctx *gin.Context) {
 
 	res, err := h.Client.GetInterstsUser(ctx)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to fetch intrests",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -967,9 +1030,11 @@ func (h *UserHandler) GetUserByName(ctx *gin.Context) {
 
 	res, err := h.Client.GetUserByName(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to fetch by user name",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -980,9 +1045,11 @@ func (h *UserHandler) GetUserByName(ctx *gin.Context) {
 func (h *UserHandler) GetActiveCommunity(ctx *gin.Context) {
 	res, err := h.Client.GetActiveCommunity(ctx)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadGateway, gin.H{
 			"message": "fetching active community failed",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -1005,9 +1072,11 @@ func (h *UserHandler) GetCommunityById(ctx *gin.Context) {
 
 	res, err := h.Client.GetCommunityById(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to fetch community by ID",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -1025,9 +1094,11 @@ func (h *UserHandler) ValidateCommunityName(ctx *gin.Context) {
 
 	res, err := h.Client.ValidateCommunityName(ctx, body)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "community name already in used",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -1039,9 +1110,11 @@ func (h *UserHandler) GetUserDetails(ctx *gin.Context) {
 
 	res, err := h.Client.GetUserDetails(ctx)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to fetch",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
@@ -1053,9 +1126,11 @@ func (h *UserHandler) GetJoinedCommunity(ctx *gin.Context) {
 
 	res, err := h.Client.GetJoinedCommunity(ctx)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to fetch",
-			"error":   err.Error(),
+			"error":   errMsg,
 		})
 		return
 	}
