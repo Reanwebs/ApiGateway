@@ -32,7 +32,7 @@ func JwtCookieSetup(c *gin.Context, name string, userId string, email string) bo
 	// Generate a signed JWT token using the retrieved secret key
 	if tokenString, err := token.SignedString([]byte(cfg.GetJWTSecretKey())); err == nil {
 		// Set the cookie with the signed token string, valid for 10 hours
-		c.SetCookie(name, tokenString, 10*3600, "", "", false, true)
+		c.SetCookie(name, tokenString, 10*3600, "", "", false, false)
 		fmt.Println("JWT sign & set Cookie successful")
 		return true
 	}
