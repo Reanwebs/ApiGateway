@@ -553,8 +553,9 @@ message GetUserByNameResponse{
 }
 
 message Participants{
-    string userName=1;
-    string userId=2;
+    string userName = 1;
+    string userId = 2;
+    string avatarId = 3;
 }
 
 message GetCommunityByIdRequest{
