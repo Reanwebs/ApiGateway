@@ -1137,3 +1137,29 @@ func (h *UserHandler) GetJoinedCommunity(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &res)
 }
+
+func (h *UserHandler) SearchCommunity(ctx *gin.Context) {
+	body := models.SearchCommunityRequest{}
+	communityName := ctx.Query("communityName")
+
+	if communityName == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "community name is required",
+		})
+		return
+	}
+	body.CommunityName = communityName
+
+	res, err := h.Client.SearchCommunity(ctx, body)
+	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to fetch by community name",
+			"error":   errMsg,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
