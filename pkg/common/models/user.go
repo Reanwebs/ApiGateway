@@ -154,3 +154,7 @@ type GetCommunityByIdRequest struct {
 type ValidateCommunityNameRequest struct {
 	CommunityName string `json:"communityName"`
 }
+
+type SearchCommunityRequest struct {
+	CommunityName string `json:"communityName"`
+}

@@ -5,17 +5,17 @@ import (
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
-	"gateway/pkg/common/pb"
+	"gateway/pkg/common/pb/auth"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 type AdminClient struct {
-	Server pb.AutharizationClient
+	Server auth.AutharizationClient
 }
 
-func NewAdminClient(server pb.AutharizationClient) interfaces.AdminClient {
+func NewAdminClient(server auth.AutharizationClient) interfaces.AdminClient {
 	return &AdminClient{
 		Server: server,
 	}
@@ -26,11 +26,11 @@ func InitAdminClient(c *config.Config) (interfaces.AdminClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewAdminClient(pb.NewAutharizationClient(cc)), nil
+	return NewAdminClient(auth.NewAutharizationClient(cc)), nil
 }
 
-func (c *AdminClient) AdminLogin(ctx context.Context, request models.AdminLoginRequest) (*pb.AdminLoginResponse, error) {
-	res, err := c.Server.AdminLogin(ctx, &pb.AdminLoginRequest{
+func (c *AdminClient) AdminLogin(ctx context.Context, request models.AdminLoginRequest) (*auth.AdminLoginResponse, error) {
+	res, err := c.Server.AdminLogin(ctx, &auth.AdminLoginRequest{
 		Email:    request.Email,
 		Password: request.Password,
 	})
@@ -40,16 +40,16 @@ func (c *AdminClient) AdminLogin(ctx context.Context, request models.AdminLoginR
 	return res, nil
 }
 
-func (c *AdminClient) GetUsers(ctx context.Context) (*pb.GetUsersResponse, error) {
-	res, err := c.Server.GetUsers(ctx, &pb.GetUsersRequest{})
+func (c *AdminClient) GetUsers(ctx context.Context) (*auth.GetUsersResponse, error) {
+	res, err := c.Server.GetUsers(ctx, &auth.GetUsersRequest{})
 	if err != nil {
 		return nil, err
 	}
 	return res, nil
 }
 
-func (c *AdminClient) ManageUser(ctx context.Context, request models.ManageUserRequest) (*pb.ManageUserResponse, error) {
-	res, err := c.Server.ManageUser(ctx, &pb.ManageUserRequest{
+func (c *AdminClient) ManageUser(ctx context.Context, request models.ManageUserRequest) (*auth.ManageUserResponse, error) {
+	res, err := c.Server.ManageUser(ctx, &auth.ManageUserRequest{
 		Id: request.Id,
 	})
 	if err != nil {
@@ -58,16 +58,16 @@ func (c *AdminClient) ManageUser(ctx context.Context, request models.ManageUserR
 	return res, nil
 }
 
-func (c *AdminClient) GetInterest(ctx context.Context) (*pb.GetInterestResponse, error) {
-	res, err := c.Server.GetInterest(ctx, &pb.GetInterestRequest{})
+func (c *AdminClient) GetInterest(ctx context.Context) (*auth.GetInterestResponse, error) {
+	res, err := c.Server.GetInterest(ctx, &auth.GetInterestRequest{})
 	if err != nil {
 		return nil, err
 	}
 	return res, nil
 }
 
-func (c *AdminClient) AddInterest(ctx context.Context, request models.AddInterestRequest) (*pb.AddInterestResponse, error) {
-	res, err := c.Server.AddInterest(ctx, &pb.AddInterestRequest{
+func (c *AdminClient) AddInterest(ctx context.Context, request models.AddInterestRequest) (*auth.AddInterestResponse, error) {
+	res, err := c.Server.AddInterest(ctx, &auth.AddInterestRequest{
 		Interest: request.Interest,
 	})
 	if err != nil {
@@ -76,8 +76,8 @@ func (c *AdminClient) AddInterest(ctx context.Context, request models.AddInteres
 	return res, nil
 }
 
-func (c *AdminClient) ManageInterest(ctx context.Context, request models.ManageInterestRequest) (*pb.ManageInterestResponse, error) {
-	res, err := c.Server.ManageInterest(ctx, &pb.ManageInterestRequest{
+func (c *AdminClient) ManageInterest(ctx context.Context, request models.ManageInterestRequest) (*auth.ManageInterestResponse, error) {
+	res, err := c.Server.ManageInterest(ctx, &auth.ManageInterestRequest{
 		Id: request.Id,
 	})
 	if err != nil {
@@ -86,8 +86,8 @@ func (c *AdminClient) ManageInterest(ctx context.Context, request models.ManageI
 	return res, nil
 }
 
-func (c *AdminClient) ManageCommunity(ctx context.Context, request models.ManageCommunityRequest) (*pb.ManageCommunityResponse, error) {
-	res, err := c.Server.ManageCommunity(ctx, &pb.ManageCommunityRequest{
+func (c *AdminClient) ManageCommunity(ctx context.Context, request models.ManageCommunityRequest) (*auth.ManageCommunityResponse, error) {
+	res, err := c.Server.ManageCommunity(ctx, &auth.ManageCommunityRequest{
 		CommunityId: request.CommunityId,
 	})
 	if err != nil {
@@ -96,8 +96,8 @@ func (c *AdminClient) ManageCommunity(ctx context.Context, request models.Manage
 	return res, nil
 }
 
-func (c *AdminClient) GetAllCommunity(ctx context.Context) (*pb.GetAllCommunityResponse, error) {
-	res, err := c.Server.GetAllCommunity(ctx, &pb.GetAllCommunityRequest{})
+func (c *AdminClient) GetAllCommunity(ctx context.Context) (*auth.GetAllCommunityResponse, error) {
+	res, err := c.Server.GetAllCommunity(ctx, &auth.GetAllCommunityRequest{})
 	if err != nil {
 		return nil, err
 	}

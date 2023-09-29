@@ -7,14 +7,14 @@ import (
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
-	"gateway/pkg/common/pb"
+	"gateway/pkg/common/pb/monit"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 type monitaizationClient struct {
-	Server pb.MonitizationClient
+	Server monit.MonitizationClient
 }
 
 func InitMonitizationClient(c *config.Config) (interfaces.MonitaizationClient, error) {
@@ -22,18 +22,18 @@ func InitMonitizationClient(c *config.Config) (interfaces.MonitaizationClient, e
 	if err != nil {
 		return nil, err
 	}
-	return NewMonitizationClient(pb.NewMonitizationClient(cc)), nil
+	return NewMonitizationClient(monit.NewMonitizationClient(cc)), nil
 }
 
-func NewMonitizationClient(server pb.MonitizationClient) interfaces.MonitaizationClient {
+func NewMonitizationClient(server monit.MonitizationClient) interfaces.MonitaizationClient {
 	return &monitaizationClient{
 		Server: server,
 	}
 }
 
-func (m *monitaizationClient) HealthCheck(ctx context.Context, request models.Request) (*pb.Response, error) {
+func (m *monitaizationClient) HealthCheck(ctx context.Context, request models.Request) (*monit.Response, error) {
 
-	res, err := m.Server.HealthCheck(ctx, &pb.Request{
+	res, err := m.Server.HealthCheck(ctx, &monit.Request{
 		Data: request.Data,
 	})
 	if err != nil {
@@ -43,8 +43,8 @@ func (m *monitaizationClient) HealthCheck(ctx context.Context, request models.Re
 	return res, err
 }
 
-func (m *monitaizationClient) CreateWallet(ctx context.Context, request models.CreateWalletRequest) (*pb.CreateWalletResponse, error) {
-	res, err := m.Server.CreateWallet(ctx, &pb.CreateWalletRequest{
+func (m *monitaizationClient) CreateWallet(ctx context.Context, request models.CreateWalletRequest) (*monit.CreateWalletResponse, error) {
+	res, err := m.Server.CreateWallet(ctx, &monit.CreateWalletRequest{
 		UserID: request.UserID,
 	})
 	if err != nil {
@@ -54,8 +54,8 @@ func (m *monitaizationClient) CreateWallet(ctx context.Context, request models.C
 	return res, nil
 }
 
-func (m *monitaizationClient) UpdateWallet(ctx context.Context, request models.UpdateWalletRequest) (*pb.UpdateWalletResponse, error) {
-	res, err := m.Server.UpdateWallet(ctx, &pb.UpdateWalletRequest{
+func (m *monitaizationClient) UpdateWallet(ctx context.Context, request models.UpdateWalletRequest) (*monit.UpdateWalletResponse, error) {
+	res, err := m.Server.UpdateWallet(ctx, &monit.UpdateWalletRequest{
 		UserID:   request.UserID,
 		Type:     request.Type,
 		Reason:   request.Reason,
@@ -68,13 +68,13 @@ func (m *monitaizationClient) UpdateWallet(ctx context.Context, request models.U
 	return res, nil
 }
 
-func (m *monitaizationClient) ParticipationReward(ctx context.Context, request models.ParticipationRewardRequest) (*pb.ParticipationRewardResponse, error) {
+func (m *monitaizationClient) ParticipationReward(ctx context.Context, request models.ParticipationRewardRequest) (*monit.ParticipationRewardResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
-	res, err := m.Server.ParticipationReward(ctx, &pb.ParticipationRewardRequest{
+	res, err := m.Server.ParticipationReward(ctx, &monit.ParticipationRewardRequest{
 		UserID:         userId,
 		ConferenceID:   request.ConferenceID,
 		ConferenceType: request.ConferenceType,
@@ -87,14 +87,14 @@ func (m *monitaizationClient) ParticipationReward(ctx context.Context, request m
 	return res, nil
 }
 
-func (m *monitaizationClient) UserRewardHistory(ctx context.Context, request models.UserRewardHistoryRequest) (*pb.UserRewardHistoryResponse, error) {
+func (m *monitaizationClient) UserRewardHistory(ctx context.Context, request models.UserRewardHistoryRequest) (*monit.UserRewardHistoryResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	res, err := m.Server.UserRewardHistory(ctx, &pb.UserRewardHistoryRequest{
+	res, err := m.Server.UserRewardHistory(ctx, &monit.UserRewardHistoryRequest{
 		UserID: userId,
 		Sort:   request.Sort,
 	})
@@ -105,13 +105,13 @@ func (m *monitaizationClient) UserRewardHistory(ctx context.Context, request mod
 	return res, nil
 }
 
-func (m *monitaizationClient) GetWallet(ctx context.Context) (*pb.GetWalletResponse, error) {
+func (m *monitaizationClient) GetWallet(ctx context.Context) (*monit.GetWalletResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
-	res, err := m.Server.GetWallet(ctx, &pb.GetWalletRequest{
+	res, err := m.Server.GetWallet(ctx, &monit.GetWalletRequest{
 		UserID: userId,
 	})
 	if err != nil {

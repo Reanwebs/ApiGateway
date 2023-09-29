@@ -7,7 +7,7 @@ import (
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
-	"gateway/pkg/common/pb"
+	"gateway/pkg/common/pb/auth"
 	"gateway/pkg/utils"
 	"log"
 	"time"
@@ -17,7 +17,7 @@ import (
 )
 
 type authClient struct {
-	Server pb.AutharizationClient
+	Server auth.AutharizationClient
 }
 
 func InitClient(c *config.Config) (interfaces.AuthClient, error) {
@@ -25,18 +25,18 @@ func InitClient(c *config.Config) (interfaces.AuthClient, error) {
 	if err != nil {
 		return nil, err
 	}
-	return NewAuthClient(pb.NewAutharizationClient(cc)), nil
+	return NewAuthClient(auth.NewAutharizationClient(cc)), nil
 }
 
-func NewAuthClient(server pb.AutharizationClient) interfaces.AuthClient {
+func NewAuthClient(server auth.AutharizationClient) interfaces.AuthClient {
 	return &authClient{
 		Server: server,
 	}
 }
 
-func (c *authClient) UserSignup(ctx context.Context, request models.RegisterRequestBody, retryConfig models.RetryConfig) (*pb.SignupResponse, error) {
+func (c *authClient) UserSignup(ctx context.Context, request models.RegisterRequestBody, retryConfig models.RetryConfig) (*auth.SignupResponse, error) {
 
-	res, err := c.Server.UserSignup(ctx, &pb.SignupRequest{
+	res, err := c.Server.UserSignup(ctx, &auth.SignupRequest{
 		Email:       request.Email,
 		Password:    request.Password,
 		CPassword:   request.CPassword,
@@ -51,8 +51,8 @@ func (c *authClient) UserSignup(ctx context.Context, request models.RegisterRequ
 	return res, nil
 }
 
-func (c *authClient) OtpRequest(ctx context.Context, request models.OtpValidation, retryConfig models.RetryConfig) (*pb.OtpSignUpResponse, error) {
-	res, err := c.Server.OtpRequest(ctx, &pb.OtpSignUpRequest{
+func (c *authClient) OtpRequest(ctx context.Context, request models.OtpValidation, retryConfig models.RetryConfig) (*auth.OtpSignUpResponse, error) {
+	res, err := c.Server.OtpRequest(ctx, &auth.OtpSignUpRequest{
 		Username:    request.UserName,
 		Email:       request.Email,
 		PhoneNumber: request.PhoneNumber,
@@ -78,8 +78,8 @@ func (c *authClient) OtpRequest(ctx context.Context, request models.OtpValidatio
 
 // }
 
-func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestBody, retryConfig models.RetryConfig) (*pb.LoginResponse, error) {
-	var res *pb.LoginResponse
+func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestBody, retryConfig models.RetryConfig) (*auth.LoginResponse, error) {
+	var res *auth.LoginResponse
 	var err error
 
 	startTime := time.Now()
@@ -105,7 +105,7 @@ func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestB
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.UserLogin(ctx1, &pb.LoginRequest{
+			res, err = c.Server.UserLogin(ctx1, &auth.LoginRequest{
 				Email:    request.Email,
 				Password: request.Password,
 			})
@@ -131,8 +131,8 @@ func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestB
 	return nil, err
 }
 
-func (c *authClient) ValidName(ctx context.Context, request models.ValidName, retryConfig models.RetryConfig) (*pb.ValidNameResponse, error) {
-	var res *pb.ValidNameResponse
+func (c *authClient) ValidName(ctx context.Context, request models.ValidName, retryConfig models.RetryConfig) (*auth.ValidNameResponse, error) {
+	var res *auth.ValidNameResponse
 	var err error
 
 	startTime := time.Now()
@@ -158,7 +158,7 @@ func (c *authClient) ValidName(ctx context.Context, request models.ValidName, re
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ValidName(ctx1, &pb.ValidNameRequest{
+			res, err = c.Server.ValidName(ctx1, &auth.ValidNameRequest{
 				Username: request.UserName,
 			})
 			cancel()
@@ -184,9 +184,9 @@ func (c *authClient) ValidName(ctx context.Context, request models.ValidName, re
 
 }
 
-func (c *authClient) ResendOtp(ctx context.Context, request models.ResendOtp, retryConfig models.RetryConfig) (*pb.ResendOtpResponse, error) {
+func (c *authClient) ResendOtp(ctx context.Context, request models.ResendOtp, retryConfig models.RetryConfig) (*auth.ResendOtpResponse, error) {
 
-	var res *pb.ResendOtpResponse
+	var res *auth.ResendOtpResponse
 	var err error
 
 	startTime := time.Now()
@@ -212,7 +212,7 @@ func (c *authClient) ResendOtp(ctx context.Context, request models.ResendOtp, re
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ResendOtp(ctx1, &pb.ResendOtpRequest{
+			res, err = c.Server.ResendOtp(ctx1, &auth.ResendOtpRequest{
 				PhoneNumber: request.PhoneNumber,
 			})
 			cancel()
@@ -238,9 +238,9 @@ func (c *authClient) ResendOtp(ctx context.Context, request models.ResendOtp, re
 
 }
 
-func (c *authClient) ForgotPasswordOtp(ctx context.Context, request models.ForgotPasswordOtpRequest, retryConfig models.RetryConfig) (*pb.ForgotPasswordOtpResponse, error) {
+func (c *authClient) ForgotPasswordOtp(ctx context.Context, request models.ForgotPasswordOtpRequest, retryConfig models.RetryConfig) (*auth.ForgotPasswordOtpResponse, error) {
 
-	var res *pb.ForgotPasswordOtpResponse
+	var res *auth.ForgotPasswordOtpResponse
 	var err error
 
 	startTime := time.Now()
@@ -266,7 +266,7 @@ func (c *authClient) ForgotPasswordOtp(ctx context.Context, request models.Forgo
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ForgotPasswordOtp(ctx1, &pb.ForgotPasswordOtpRequest{
+			res, err = c.Server.ForgotPasswordOtp(ctx1, &auth.ForgotPasswordOtpRequest{
 				PhoneNumber: request.PhoneNumber,
 			})
 			cancel()
@@ -292,9 +292,9 @@ func (c *authClient) ForgotPasswordOtp(ctx context.Context, request models.Forgo
 
 }
 
-func (c *authClient) ForgotPasswordValidateOtp(ctx context.Context, request models.ForgotPasswordValidateOtpRequest, retryConfig models.RetryConfig) (*pb.ForgotPasswordValidateOtpResponse, error) {
+func (c *authClient) ForgotPasswordValidateOtp(ctx context.Context, request models.ForgotPasswordValidateOtpRequest, retryConfig models.RetryConfig) (*auth.ForgotPasswordValidateOtpResponse, error) {
 
-	var res *pb.ForgotPasswordValidateOtpResponse
+	var res *auth.ForgotPasswordValidateOtpResponse
 	var err error
 
 	startTime := time.Now()
@@ -320,7 +320,7 @@ func (c *authClient) ForgotPasswordValidateOtp(ctx context.Context, request mode
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ForgotPasswordValidateOtp(ctx1, &pb.ForgotPasswordValidateOtpRequest{
+			res, err = c.Server.ForgotPasswordValidateOtp(ctx1, &auth.ForgotPasswordValidateOtpRequest{
 				PhoneNumber: request.PhoneNumber,
 				Otp:         request.Otp,
 			})
@@ -347,9 +347,9 @@ func (c *authClient) ForgotPasswordValidateOtp(ctx context.Context, request mode
 
 }
 
-func (c *authClient) ForgotPasswordChangePassword(ctx context.Context, request models.ForgotPasswordChangePasswordRequest, retryConfig models.RetryConfig) (*pb.ForgotPasswordChangePasswordResponse, error) {
+func (c *authClient) ForgotPasswordChangePassword(ctx context.Context, request models.ForgotPasswordChangePasswordRequest, retryConfig models.RetryConfig) (*auth.ForgotPasswordChangePasswordResponse, error) {
 
-	var res *pb.ForgotPasswordChangePasswordResponse
+	var res *auth.ForgotPasswordChangePasswordResponse
 	var err error
 
 	startTime := time.Now()
@@ -375,7 +375,7 @@ func (c *authClient) ForgotPasswordChangePassword(ctx context.Context, request m
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ForgotPasswordChangePassword(ctx1, &pb.ForgotPasswordChangePasswordRequest{
+			res, err = c.Server.ForgotPasswordChangePassword(ctx1, &auth.ForgotPasswordChangePasswordRequest{
 				PhoneNumber: request.PhoneNumber,
 				Password:    request.Password,
 			})
@@ -402,9 +402,9 @@ func (c *authClient) ForgotPasswordChangePassword(ctx context.Context, request m
 
 }
 
-func (c *authClient) ValidateUser(ctx context.Context, request models.ValidateUserRequest, retryConfig models.RetryConfig) (*pb.ValidateUserResponse, error) {
+func (c *authClient) ValidateUser(ctx context.Context, request models.ValidateUserRequest, retryConfig models.RetryConfig) (*auth.ValidateUserResponse, error) {
 
-	var res *pb.ValidateUserResponse
+	var res *auth.ValidateUserResponse
 	var err error
 
 	startTime := time.Now()
@@ -430,7 +430,7 @@ func (c *authClient) ValidateUser(ctx context.Context, request models.ValidateUs
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ValidateUser(ctx1, &pb.ValidateUserRequest{
+			res, err = c.Server.ValidateUser(ctx1, &auth.ValidateUserRequest{
 				Email: request.Email,
 			})
 			cancel()
@@ -456,9 +456,9 @@ func (c *authClient) ValidateUser(ctx context.Context, request models.ValidateUs
 
 }
 
-func (c *authClient) GoogleLogin(ctx context.Context, request models.GoogleLoginRequest, retryConfig models.RetryConfig) (*pb.GoogleLoginResponse, error) {
+func (c *authClient) GoogleLogin(ctx context.Context, request models.GoogleLoginRequest, retryConfig models.RetryConfig) (*auth.GoogleLoginResponse, error) {
 
-	var res *pb.GoogleLoginResponse
+	var res *auth.GoogleLoginResponse
 	var err error
 
 	startTime := time.Now()
@@ -484,7 +484,7 @@ func (c *authClient) GoogleLogin(ctx context.Context, request models.GoogleLogin
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.GoogleLogin(ctx1, &pb.GoogleLoginRequest{
+			res, err = c.Server.GoogleLogin(ctx1, &auth.GoogleLoginRequest{
 				Token: request.Token,
 			})
 			cancel()
@@ -509,7 +509,7 @@ func (c *authClient) GoogleLogin(ctx context.Context, request models.GoogleLogin
 	return nil, err
 }
 
-func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUserNameRequest, retryConfig models.RetryConfig) (*pb.ChangeUserNameResponse, error) {
+func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUserNameRequest, retryConfig models.RetryConfig) (*auth.ChangeUserNameResponse, error) {
 	// Retrieve the "userId" from the context.
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
@@ -517,7 +517,7 @@ func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUs
 		return nil, errors.New("login again")
 	}
 
-	var res *pb.ChangeUserNameResponse
+	var res *auth.ChangeUserNameResponse
 	var err error
 
 	startTime := time.Now()
@@ -543,7 +543,7 @@ func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUs
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ChangeUserName(ctx1, &pb.ChangeUserNameRequest{
+			res, err = c.Server.ChangeUserName(ctx1, &auth.ChangeUserNameRequest{
 				UserId:   userId,
 				UserName: request.UserName,
 			})
@@ -569,14 +569,14 @@ func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUs
 	return nil, err
 
 }
-func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmailRequest, retryConfig models.RetryConfig) (*pb.ChangeEmailResponse, error) {
+func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmailRequest, retryConfig models.RetryConfig) (*auth.ChangeEmailResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	var res *pb.ChangeEmailResponse
+	var res *auth.ChangeEmailResponse
 	var err error
 
 	startTime := time.Now()
@@ -602,7 +602,7 @@ func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmail
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ChangeEmail(ctx1, &pb.ChangeEmailRequest{
+			res, err = c.Server.ChangeEmail(ctx1, &auth.ChangeEmailRequest{
 				UserId: userId,
 				Email:  request.Email,
 			})
@@ -629,14 +629,14 @@ func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmail
 
 }
 
-func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePasswordRequest, retryConfig models.RetryConfig) (*pb.ChangePasswordResponse, error) {
+func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePasswordRequest, retryConfig models.RetryConfig) (*auth.ChangePasswordResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	var res *pb.ChangePasswordResponse
+	var res *auth.ChangePasswordResponse
 	var err error
 
 	startTime := time.Now()
@@ -662,7 +662,7 @@ func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePa
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ChangePassword(ctx1, &pb.ChangePasswordRequest{
+			res, err = c.Server.ChangePassword(ctx1, &auth.ChangePasswordRequest{
 				UserId:   userId,
 				Password: request.Password,
 			})
@@ -688,14 +688,14 @@ func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePa
 	return nil, err
 
 }
-func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.ChangeEmailVerifyOtpRequest, retryConfig models.RetryConfig) (*pb.ChangeEmailVerifyOtpResponse, error) {
+func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.ChangeEmailVerifyOtpRequest, retryConfig models.RetryConfig) (*auth.ChangeEmailVerifyOtpResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	var res *pb.ChangeEmailVerifyOtpResponse
+	var res *auth.ChangeEmailVerifyOtpResponse
 	var err error
 
 	startTime := time.Now()
@@ -721,7 +721,7 @@ func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.Ch
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ChangeEmailVerifyOtp(ctx1, &pb.ChangeEmailVerifyOtpRequest{
+			res, err = c.Server.ChangeEmailVerifyOtp(ctx1, &auth.ChangeEmailVerifyOtpRequest{
 				UserId: userId,
 				Email:  request.Email,
 				Otp:    request.Otp,
@@ -749,14 +749,14 @@ func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.Ch
 
 }
 
-func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.ChangePhoneNumberOtpRequest, retryConfig models.RetryConfig) (*pb.ChangePhoneNumberOtpResponse, error) {
+func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.ChangePhoneNumberOtpRequest, retryConfig models.RetryConfig) (*auth.ChangePhoneNumberOtpResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	var res *pb.ChangePhoneNumberOtpResponse
+	var res *auth.ChangePhoneNumberOtpResponse
 	var err error
 
 	startTime := time.Now()
@@ -782,7 +782,7 @@ func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.Ch
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ChangePhoneNumberOtp(ctx1, &pb.ChangePhoneNumberOtpRequest{
+			res, err = c.Server.ChangePhoneNumberOtp(ctx1, &auth.ChangePhoneNumberOtpRequest{
 				UserId:      userId,
 				PhoneNumber: request.PhoneNumber,
 			})
@@ -809,14 +809,14 @@ func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.Ch
 
 }
 
-func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.ChangePhoneNumberRequest, retryConfig models.RetryConfig) (*pb.ChangePhoneNumberResponse, error) {
+func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.ChangePhoneNumberRequest, retryConfig models.RetryConfig) (*auth.ChangePhoneNumberResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	var res *pb.ChangePhoneNumberResponse
+	var res *auth.ChangePhoneNumberResponse
 	var err error
 
 	startTime := time.Now()
@@ -842,7 +842,7 @@ func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.Chang
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ChangePhoneNumber(ctx1, &pb.ChangePhoneNumberRequest{
+			res, err = c.Server.ChangePhoneNumber(ctx1, &auth.ChangePhoneNumberRequest{
 				UserId:      userId,
 				PhoneNumber: request.PhoneNumber,
 				Otp:         request.Otp,
@@ -870,14 +870,14 @@ func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.Chang
 
 }
 
-func (c *authClient) ChangeAvatar(ctx context.Context, request models.ChangeAvatarRequest, retryConfig models.RetryConfig) (*pb.ChangeAvatarResponse, error) {
+func (c *authClient) ChangeAvatar(ctx context.Context, request models.ChangeAvatarRequest, retryConfig models.RetryConfig) (*auth.ChangeAvatarResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	var res *pb.ChangeAvatarResponse
+	var res *auth.ChangeAvatarResponse
 	var err error
 
 	startTime := time.Now()
@@ -903,7 +903,7 @@ func (c *authClient) ChangeAvatar(ctx context.Context, request models.ChangeAvat
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.ChangeAvatar(ctx1, &pb.ChangeAvatarRequest{
+			res, err = c.Server.ChangeAvatar(ctx1, &auth.ChangeAvatarRequest{
 				UserId:   userId,
 				AvatarId: request.AvatarId,
 			})
@@ -929,14 +929,14 @@ func (c *authClient) ChangeAvatar(ctx context.Context, request models.ChangeAvat
 	return nil, err
 }
 
-func (c *authClient) RemoveAvatar(ctx context.Context, retryConfig models.RetryConfig) (*pb.RemoveAvatarResponse, error) {
+func (c *authClient) RemoveAvatar(ctx context.Context, retryConfig models.RetryConfig) (*auth.RemoveAvatarResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	var res *pb.RemoveAvatarResponse
+	var res *auth.RemoveAvatarResponse
 	var err error
 
 	startTime := time.Now()
@@ -962,7 +962,7 @@ func (c *authClient) RemoveAvatar(ctx context.Context, retryConfig models.RetryC
 			cancel()
 			return nil, context.Canceled
 		default:
-			res, err = c.Server.RemoveAvatar(ctx1, &pb.RemoveAvatarRequest{
+			res, err = c.Server.RemoveAvatar(ctx1, &auth.RemoveAvatarRequest{
 				UserId: userId,
 			})
 			cancel()
@@ -987,14 +987,14 @@ func (c *authClient) RemoveAvatar(ctx context.Context, retryConfig models.RetryC
 	return nil, err
 }
 
-func (c *authClient) CreateCommunity(ctx context.Context, request models.CreateCommunityRequest) (*pb.CreateCommunityResponse, error) {
+func (c *authClient) CreateCommunity(ctx context.Context, request models.CreateCommunityRequest) (*auth.CreateCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	res, err := c.Server.CreateCommunity(ctx, &pb.CreateCommunityRequest{
+	res, err := c.Server.CreateCommunity(ctx, &auth.CreateCommunityRequest{
 		AdminId:        userId,
 		CommunityName:  request.CommunityName,
 		Members:        request.Members,
@@ -1008,7 +1008,7 @@ func (c *authClient) CreateCommunity(ctx context.Context, request models.CreateC
 	return res, nil
 }
 
-func (c *authClient) JoinCommunity(ctx context.Context, request models.JoinCommunityRequest) (*pb.JoinCommunityResponse, error) {
+func (c *authClient) JoinCommunity(ctx context.Context, request models.JoinCommunityRequest) (*auth.JoinCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
@@ -1016,7 +1016,7 @@ func (c *authClient) JoinCommunity(ctx context.Context, request models.JoinCommu
 	}
 
 	log.Printf("Calling JoinCommunity with UserId: %s, CommunityId: %s, Message: %s", userId, request.CommunityId, request.Message)
-	res, err := c.Server.JoinCommunity(ctx, &pb.JoinCommunityRequest{
+	res, err := c.Server.JoinCommunity(ctx, &auth.JoinCommunityRequest{
 		UserId:      userId,
 		CommunityId: request.CommunityId,
 		Message:     request.Message,
@@ -1028,14 +1028,14 @@ func (c *authClient) JoinCommunity(ctx context.Context, request models.JoinCommu
 	return res, nil
 }
 
-func (c *authClient) LeaveCommunity(ctx context.Context, request models.LeaveCommunityRequest) (*pb.LeaveCommunityResponse, error) {
+func (c *authClient) LeaveCommunity(ctx context.Context, request models.LeaveCommunityRequest) (*auth.LeaveCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	res, err := c.Server.LeaveCommunity(ctx, &pb.LeaveCommunityRequest{
+	res, err := c.Server.LeaveCommunity(ctx, &auth.LeaveCommunityRequest{
 		UserId:      userId,
 		CommunityId: request.CommunityId,
 	})
@@ -1046,14 +1046,14 @@ func (c *authClient) LeaveCommunity(ctx context.Context, request models.LeaveCom
 
 }
 
-func (c *authClient) AcceptJoinCommunity(ctx context.Context, request models.AcceptJoinCommunityRequest) (*pb.AcceptJoinCommunityResponse, error) {
+func (c *authClient) AcceptJoinCommunity(ctx context.Context, request models.AcceptJoinCommunityRequest) (*auth.AcceptJoinCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	res, err := c.Server.AcceptJoinCommunity(ctx, &pb.AcceptJoinCommunityRequest{
+	res, err := c.Server.AcceptJoinCommunity(ctx, &auth.AcceptJoinCommunityRequest{
 		UserId:      request.RequstedUserId,
 		CommunityId: request.CommunityId,
 		AdminId:     userId,
@@ -1064,14 +1064,14 @@ func (c *authClient) AcceptJoinCommunity(ctx context.Context, request models.Acc
 	return res, nil
 }
 
-func (c *authClient) RemoveMember(ctx context.Context, request models.RemoveMemberRequest) (*pb.RemoveMemberResponse, error) {
+func (c *authClient) RemoveMember(ctx context.Context, request models.RemoveMemberRequest) (*auth.RemoveMemberResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	res, err := c.Server.RemoveMember(ctx, &pb.RemoveMemberRequest{
+	res, err := c.Server.RemoveMember(ctx, &auth.RemoveMemberRequest{
 		CommunityId: request.CommunityId,
 		AdminId:     userId,
 		UserId:      request.MemberUserId,
@@ -1082,14 +1082,14 @@ func (c *authClient) RemoveMember(ctx context.Context, request models.RemoveMemb
 	return res, nil
 }
 
-func (c *authClient) AddModerator(ctx context.Context, request models.AddModeratorRequest) (*pb.AddModeratorResponse, error) {
+func (c *authClient) AddModerator(ctx context.Context, request models.AddModeratorRequest) (*auth.AddModeratorResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	res, err := c.Server.AddModerator(ctx, &pb.AddModeratorRequest{
+	res, err := c.Server.AddModerator(ctx, &auth.AddModeratorRequest{
 		AdminId:     userId,
 		UserId:      request.ModeratorUserId,
 		CommunityId: request.CommunityId,
@@ -1100,14 +1100,14 @@ func (c *authClient) AddModerator(ctx context.Context, request models.AddModerat
 	return res, nil
 }
 
-func (c *authClient) AddMember(ctx context.Context, request models.AddMemberRequest) (*pb.AddMemberResponse, error) {
+func (c *authClient) AddMember(ctx context.Context, request models.AddMemberRequest) (*auth.AddMemberResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	res, err := c.Server.AddMember(ctx, &pb.AddMemberRequest{
+	res, err := c.Server.AddMember(ctx, &auth.AddMemberRequest{
 		UserId:      request.MemberUserId,
 		AdminId:     userId,
 		CommunityId: request.CommunityId,
@@ -1118,14 +1118,14 @@ func (c *authClient) AddMember(ctx context.Context, request models.AddMemberRequ
 	return res, nil
 }
 
-func (c *authClient) ChangeCommunityJoinType(ctx context.Context, request models.ChangeCommunityJoinTypeRequest) (*pb.ChangeCommunityJoinTypeResponse, error) {
+func (c *authClient) ChangeCommunityJoinType(ctx context.Context, request models.ChangeCommunityJoinTypeRequest) (*auth.ChangeCommunityJoinTypeResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	res, err := c.Server.ChangeCommunityJoinType(ctx, &pb.ChangeCommunityJoinTypeRequest{
+	res, err := c.Server.ChangeCommunityJoinType(ctx, &auth.ChangeCommunityJoinTypeRequest{
 		UserId:      userId,
 		CommunityId: request.CommunityId,
 	})
@@ -1135,14 +1135,14 @@ func (c *authClient) ChangeCommunityJoinType(ctx context.Context, request models
 	return res, nil
 }
 
-func (c *authClient) DeleteCommunity(ctx context.Context, request models.DeleteCommunityRequest) (*pb.DeleteCommunityResponse, error) {
+func (c *authClient) DeleteCommunity(ctx context.Context, request models.DeleteCommunityRequest) (*auth.DeleteCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
 		fmt.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
-	res, err := c.Server.DeleteCommunity(ctx, &pb.DeleteCommunityRequest{
+	res, err := c.Server.DeleteCommunity(ctx, &auth.DeleteCommunityRequest{
 		UserId:      userId,
 		CommunityId: request.CommunityId,
 	})
@@ -1152,21 +1152,21 @@ func (c *authClient) DeleteCommunity(ctx context.Context, request models.DeleteC
 	return res, nil
 }
 
-func (c *authClient) GetInterstsUser(ctx context.Context) (*pb.GetInterstsUserResponse, error) {
-	res, err := c.Server.GetInterest(ctx, &pb.GetInterestRequest{})
+func (c *authClient) GetInterstsUser(ctx context.Context) (*auth.GetInterstsUserResponse, error) {
+	res, err := c.Server.GetInterest(ctx, &auth.GetInterestRequest{})
 	if err != nil {
 		return nil, err
 	}
 
-	userResponse := &pb.GetInterstsUserResponse{
+	userResponse := &auth.GetInterstsUserResponse{
 		Status:    res.Status,
-		Interests: make([]*pb.UserInterest, len(res.Interests)),
+		Interests: make([]*auth.UserInterest, len(res.Interests)),
 		Message:   res.Message,
 		Error:     res.Error,
 	}
 
 	for i, interest := range res.Interests {
-		userResponse.Interests[i] = &pb.UserInterest{
+		userResponse.Interests[i] = &auth.UserInterest{
 			Interest: interest.Interest,
 		}
 	}
@@ -1174,8 +1174,8 @@ func (c *authClient) GetInterstsUser(ctx context.Context) (*pb.GetInterstsUserRe
 	return userResponse, nil
 }
 
-func (c *authClient) GetUserByName(ctx context.Context, request models.GetUserByNameRequest) (*pb.GetUserByNameResponse, error) {
-	res, err := c.Server.GetUserByName(ctx, &pb.GetUserByNameRequest{
+func (c *authClient) GetUserByName(ctx context.Context, request models.GetUserByNameRequest) (*auth.GetUserByNameResponse, error) {
+	res, err := c.Server.GetUserByName(ctx, &auth.GetUserByNameRequest{
 		UserName: request.UserName,
 	})
 	if err != nil {
@@ -1184,9 +1184,15 @@ func (c *authClient) GetUserByName(ctx context.Context, request models.GetUserBy
 	return res, nil
 }
 
-func (c *authClient) GetActiveCommunity(ctx context.Context) (*pb.GetActiveCommunityResponse, error) {
-
-	res, err := c.Server.GetActiveCommunity(ctx, &pb.GetActiveCommunityRequest{})
+func (c *authClient) GetActiveCommunity(ctx context.Context) (*auth.GetActiveCommunityResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+	res, err := c.Server.GetActiveCommunity(ctx, &auth.GetActiveCommunityRequest{
+		UserId: userId,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -1194,8 +1200,8 @@ func (c *authClient) GetActiveCommunity(ctx context.Context) (*pb.GetActiveCommu
 
 }
 
-func (c *authClient) GetCommunityById(ctx context.Context, request models.GetCommunityByIdRequest) (*pb.GetCommunityByIdResponse, error) {
-	res, err := c.Server.GetCommunityById(ctx, &pb.GetCommunityByIdRequest{
+func (c *authClient) GetCommunityById(ctx context.Context, request models.GetCommunityByIdRequest) (*auth.GetCommunityByIdResponse, error) {
+	res, err := c.Server.GetCommunityById(ctx, &auth.GetCommunityByIdRequest{
 		CommunityId: request.CommunityId,
 	})
 	if err != nil {
@@ -1204,8 +1210,8 @@ func (c *authClient) GetCommunityById(ctx context.Context, request models.GetCom
 	return res, nil
 }
 
-func (c *authClient) ValidateCommunityName(ctx context.Context, request models.ValidateCommunityNameRequest) (*pb.ValidateCommunityNameResponse, error) {
-	res, err := c.Server.ValidateCommunityName(ctx, &pb.ValidateCommunityNameRequest{
+func (c *authClient) ValidateCommunityName(ctx context.Context, request models.ValidateCommunityNameRequest) (*auth.ValidateCommunityNameResponse, error) {
+	res, err := c.Server.ValidateCommunityName(ctx, &auth.ValidateCommunityNameRequest{
 		CommunityName: request.CommunityName,
 	})
 	if err != nil {
@@ -1214,15 +1220,15 @@ func (c *authClient) ValidateCommunityName(ctx context.Context, request models.V
 	return res, nil
 }
 
-func (c *authClient) GetAllCommunity(ctx context.Context) (*pb.GetAllCommunityResponse, error) {
-	res, err := c.Server.GetAllCommunity(ctx, &pb.GetAllCommunityRequest{})
+func (c *authClient) GetAllCommunity(ctx context.Context) (*auth.GetAllCommunityResponse, error) {
+	res, err := c.Server.GetAllCommunity(ctx, &auth.GetAllCommunityRequest{})
 	if err != nil {
 		return nil, err
 	}
 	return res, nil
 }
 
-func (c *authClient) GetUserDetails(ctx context.Context) (*pb.GetUserDetailsResponse, error) {
+func (c *authClient) GetUserDetails(ctx context.Context) (*auth.GetUserDetailsResponse, error) {
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
@@ -1230,7 +1236,7 @@ func (c *authClient) GetUserDetails(ctx context.Context) (*pb.GetUserDetailsResp
 		return nil, errors.New("login again")
 	}
 
-	res, err := c.Server.GetUserDetails(ctx, &pb.GetUserDetailsRequest{
+	res, err := c.Server.GetUserDetails(ctx, &auth.GetUserDetailsRequest{
 		UserID: userId,
 	})
 	if err != nil {
@@ -1240,7 +1246,7 @@ func (c *authClient) GetUserDetails(ctx context.Context) (*pb.GetUserDetailsResp
 
 }
 
-func (c *authClient) GetJoinedCommunity(ctx context.Context) (*pb.GetJoinedCommunityResponse, error) {
+func (c *authClient) GetJoinedCommunity(ctx context.Context) (*auth.GetJoinedCommunityResponse, error) {
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
@@ -1248,8 +1254,20 @@ func (c *authClient) GetJoinedCommunity(ctx context.Context) (*pb.GetJoinedCommu
 		return nil, errors.New("login again")
 	}
 
-	res, err := c.Server.GetJoinedCommunity(ctx, &pb.GetJoinedCommunityRequest{
+	res, err := c.Server.GetJoinedCommunity(ctx, &auth.GetJoinedCommunityRequest{
 		UserId: userId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+
+}
+
+func (c *authClient) SearchCommunity(ctx context.Context, request models.SearchCommunityRequest) (*auth.SearchCommunityResponse, error) {
+
+	res, err := c.Server.SearchCommunity(ctx, &auth.SearchCommunityRequest{
+		CommunityName: request.CommunityName,
 	})
 	if err != nil {
 		return nil, err

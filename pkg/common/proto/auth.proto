@@ -2,7 +2,7 @@ syntax= "proto3";
 
 package pb;
 
-option go_package = "./pkg/common/pb";
+option go_package = "./pkg/common/pb/auth";
 
 service Autharization {
     rpc UserSignup (SignupRequest) returns (SignupResponse){}
@@ -47,7 +47,9 @@ service Autharization {
     rpc ValidateCommunityName(ValidateCommunityNameRequest) returns (ValidateCommunityNameResponse){}
     rpc GetUserDetails(GetUserDetailsRequest) returns (GetUserDetailsResponse){}
     rpc GetJoinedCommunity(GetJoinedCommunityRequest) returns (GetJoinedCommunityResponse) {}
+    rpc SearchCommunity(SearchCommunityRequest) returns (SearchCommunityResponse) {}
 }
+
 
 message SignupRequest {
     string username = 1;
@@ -593,6 +595,17 @@ message GetJoinedCommunityRequest{
 }
 
 message GetJoinedCommunityResponse{
+    string status = 1;
+    string message = 2;
+    repeated Community community=3;
+    string error =4;
+}
+
+message SearchCommunityRequest{
+    string communityName = 1;
+}
+
+message SearchCommunityResponse{
     string status = 1;
     string message = 2;
     repeated Community community=3;
