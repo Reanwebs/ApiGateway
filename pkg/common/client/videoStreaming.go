@@ -35,6 +35,12 @@ func NewVideoClient(server video.VideoServiceClient) interfaces.VideoClient {
 }
 
 func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeader, request models.UploadVideo) (*video.UploadVideoResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+
 	upLoadfile, err := file.Open()
 	if err != nil {
 		return nil, err
@@ -64,6 +70,7 @@ func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeade
 			Title:       request.Title,
 			Discription: request.Discription,
 			Filename:    file.Filename,
+			UserId:      userId,
 			Data:        buffer[:n],
 		}); err != nil {
 			fmt.Println("error in streaming in client", err)
