@@ -124,16 +124,11 @@ func (c *videoClient) ArchiveVideo(ctx context.Context, request models.ArchivedV
 	return res, nil
 }
 
-func (c *videoClient) GetVideoById(ctx context.Context, videoId string) (*video.GetVideoByIdResponse, error) {
-
-	videoID, err := strconv.ParseUint(videoId, 10, 32)
-	if err != nil {
-		fmt.Println("Error converting video ID:", err)
-		return nil, errors.New("video id mismatching")
-	}
+func (c *videoClient) GetVideoById(ctx context.Context, request models.GetVideoById) (*video.GetVideoByIdResponse, error) {
 
 	res, err := c.Server.GetVideoById(ctx, &video.GetVideoByIdRequest{
-		VideoId: uint32(videoID),
+		VideoId:  request.VideoId,
+		UserName: request.UserNAme,
 	})
 	if err != nil {
 		return nil, err
@@ -143,14 +138,8 @@ func (c *videoClient) GetVideoById(ctx context.Context, videoId string) (*video.
 
 func (c *videoClient) ToggleStar(ctx context.Context, request models.ToggleStarRequest) (*video.ToggleStarResponse, error) {
 
-	videoID, err := strconv.ParseUint(request.VideoId, 10, 32)
-	if err != nil {
-		fmt.Println("Error converting video ID:", err)
-		return nil, errors.New("video id mismatching")
-	}
-
 	res, err := c.Server.ToggleStar(ctx, &video.ToggleStarRequest{
-		VideoId:  uint32(videoID),
+		VideoId:  request.VideoId,
 		UserNAme: request.UserNAme,
 		Starred:  request.Starred,
 	})

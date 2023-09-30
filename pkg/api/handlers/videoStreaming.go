@@ -154,15 +154,28 @@ func (cr *VideoHandler) ArchivVideo(c *gin.Context) {
 func (cr *VideoHandler) GetVideoById(c *gin.Context) {
 
 	videoId := c.Query("id")
+	username := c.Query("userName")
 
-	if videoId == "" {
+	if username == "" {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "user name required",
 		})
 		return
 	}
 
-	res, err := cr.Client.GetVideoById(c, videoId)
+	if videoId == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "video id required",
+		})
+		return
+	}
+
+	data := models.GetVideoById{
+		VideoId:  videoId,
+		UserNAme: username,
+	}
+
+	res, err := cr.Client.GetVideoById(c, data)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 
