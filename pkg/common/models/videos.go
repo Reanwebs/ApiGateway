@@ -22,3 +22,8 @@ type ToggleStarRequest struct {
 	UserNAme string `json:"userName"`
 	Starred  bool   `json:"starred"`
 }
+
+type GetVideoById struct {
+	VideoId  string
+	UserNAme string
+}
