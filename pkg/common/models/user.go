@@ -160,7 +160,6 @@ type SearchCommunityRequest struct {
 }
 
 type ReportVideoRequest struct {
-	VideoId      string `json:"videoId"`
-	Reason       string `json:"reason"`
-	ReportedUser string `json:"reportedUser"`
+	VideoId string `json:"videoId"`
+	Reason  string `json:"reason"`
 }

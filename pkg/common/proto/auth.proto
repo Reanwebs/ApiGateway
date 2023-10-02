@@ -618,7 +618,6 @@ message SearchCommunityResponse{
 message ReportVideoRequest {
     string videoId = 1;
     string reason = 2;
-    string reportedUser = 3;
 }
 message ReportVideoResponse {
     bool status = 1;

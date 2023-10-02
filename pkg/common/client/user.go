@@ -1278,9 +1278,8 @@ func (c *authClient) SearchCommunity(ctx context.Context, request models.SearchC
 
 func (c *authClient) ReportVideo(ctx context.Context, request models.ReportVideoRequest) (*auth.ReportVideoResponse, error) {
 	res, err := c.Server.ReportVideo(ctx, &auth.ReportVideoRequest{
-		VideoId:      request.VideoId,
-		Reason:       request.Reason,
-		ReportedUser: request.ReportedUser,
+		VideoId: request.VideoId,
+		Reason:  request.Reason,
 	})
 	if err != nil {
 		return nil, err
