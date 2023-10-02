@@ -25,7 +25,7 @@ func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler, conference
 	engine.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	routes.UserRoutes(engine.Group("/api"), userHandler)
-	routes.AdminRoutes(engine.Group("/api"), adminHandler)
+	routes.AdminRoutes(engine.Group("/api"), adminHandler, videoHandler)
 	routes.ConferenceRoutes(engine.Group("/api"), conferenceHandler)
 	routes.VideoRoutes(engine.Group("/api"), videoHandler)
 	routes.MonitaizationRoutes(engine.Group("/api"), monitaization)

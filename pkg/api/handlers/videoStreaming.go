@@ -209,3 +209,25 @@ func (cr *VideoHandler) ToggleStar(c *gin.Context) {
 
 	c.JSON(http.StatusOK, &res)
 }
+
+func (cr *VideoHandler) BlockVideo(c *gin.Context) {
+	body := models.BlockVideoRequest{}
+
+	if err := c.BindJSON(&body); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := cr.Client.BlockVideo(c, body)
+	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed",
+			"error":   errMsg,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, &res)
+}

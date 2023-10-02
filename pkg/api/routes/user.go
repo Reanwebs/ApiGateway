@@ -48,4 +48,5 @@ func UserRoutes(api *gin.RouterGroup, userHandler handlers.UserHandler) {
 	routes.GET("/get-user-details", userHandler.GetUserDetails)
 	routes.GET("/get-joined-community", userHandler.GetJoinedCommunity)
 	routes.GET("/search-community", userHandler.SearchCommunity)
+	routes.PUT("/report-video", userHandler.ReportVideo)
 }
