@@ -42,4 +42,5 @@ type AuthClient interface {
 	GetJoinedCommunity(context.Context) (*auth.GetJoinedCommunityResponse, error)
 	GetUserDetails(context.Context) (*auth.GetUserDetailsResponse, error)
 	SearchCommunity(context.Context, models.SearchCommunityRequest) (*auth.SearchCommunityResponse, error)
+	ReportVideo(ctx context.Context, request models.ReportVideoRequest) (*auth.ReportVideoResponse, error)
 }

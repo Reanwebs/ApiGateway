@@ -158,3 +158,9 @@ type ValidateCommunityNameRequest struct {
 type SearchCommunityRequest struct {
 	CommunityName string `json:"communityName"`
 }
+
+type ReportVideoRequest struct {
+	VideoId      string `json:"videoId"`
+	Reason       string `json:"reason"`
+	ReportedUser string `json:"reportedUser"`
+}

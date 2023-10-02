@@ -15,4 +15,5 @@ type VideoClient interface {
 	ArchiveVideo(ctx context.Context, request models.ArchivedVideos) (*video.ArchiveVideoResponse, error)
 	GetVideoById(context.Context, models.GetVideoById) (*video.GetVideoByIdResponse, error)
 	ToggleStar(context.Context, models.ToggleStarRequest) (*video.ToggleStarResponse, error)
+	BlockVideo(ctx context.Context, request models.BlockVideoRequest) (*video.BlockVideoResponse, error)
 }

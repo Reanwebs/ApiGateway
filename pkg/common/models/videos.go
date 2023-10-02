@@ -27,3 +27,9 @@ type GetVideoById struct {
 	VideoId  string
 	UserNAme string
 }
+
+type BlockVideoRequest struct {
+	VideoId string `json:"videoId"`
+	Reason  string `json:"reason"`
+	Block   bool   `json:"block"`
+}

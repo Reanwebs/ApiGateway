@@ -8,6 +8,7 @@ import (
 	middleware "gateway/pkg/common/midleware"
 	"gateway/pkg/common/models"
 	"gateway/pkg/utils"
+	"log"
 	"net/http"
 	"time"
 
@@ -1158,6 +1159,31 @@ func (h *UserHandler) SearchCommunity(ctx *gin.Context) {
 			"message": "failed to fetch by community name",
 			"error":   errMsg,
 		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *UserHandler) ReportVideo(ctx *gin.Context) {
+	body := models.ReportVideoRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to report video",
+			"error":   err,
+		})
+		log.Println(errors.New("fail to parse JSON data from report-video request"))
+		return
+	}
+
+	res, err := h.Client.ReportVideo(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusProcessing, gin.H{
+			"message": "failed to fetch all community",
+			"error":   err.Error(),
+		})
+		log.Println(err.Error())
 		return
 	}
 

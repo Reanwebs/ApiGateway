@@ -11,12 +11,12 @@ import (
 
 // user Auth
 func AuthenticateUser(ctx *gin.Context) {
-	authHelper(ctx, "user")
+	authHelper(ctx, "rean_connect")
 }
 
 // user Admin
 func AuthenticateAdmin(ctx *gin.Context) {
-	authHelper(ctx, "admin")
+	authHelper(ctx, "rean_connect")
 }
 
 // helper to validate cookie and expiry

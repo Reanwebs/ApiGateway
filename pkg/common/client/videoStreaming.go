@@ -156,3 +156,16 @@ func (c *videoClient) ToggleStar(ctx context.Context, request models.ToggleStarR
 	return res, nil
 
 }
+
+func (c *videoClient) BlockVideo(ctx context.Context, request models.BlockVideoRequest) (*video.BlockVideoResponse, error) {
+
+	res, err := c.Server.BlockVideo(ctx, &video.BlockVideoRequest{
+		VideoId: request.VideoId,
+		Reason:  request.Reason,
+		Block:   request.Block,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
