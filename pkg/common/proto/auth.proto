@@ -101,6 +101,7 @@ message LoginResponse {
     string uid = 6;
     string message = 7;
     string avatarId=8;
+    string referralCode =9;
 }
 
 message validNameRequest {
@@ -258,6 +259,7 @@ message GoogleLoginResponse{
     string uid = 6;
     string message = 7;
     string avatarId=8;
+    string referralCode =9;
 }
 
 message ChangeUserNameRequest{
