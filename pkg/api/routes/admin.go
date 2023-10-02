@@ -22,4 +22,5 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler handlers.AdminHandler, video
 	routes.POST("/manage-community", adminHandler.ManageCommunity)
 	routes.GET("/get-all-community", adminHandler.GetAllCommunity)
 	routes.PATCH("/block-video", videoHandler.BlockVideo)
+	routes.GET("/get-reported-videos", videoHandler.GetReportedVideos)
 }

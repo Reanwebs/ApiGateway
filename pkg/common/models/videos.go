@@ -33,3 +33,8 @@ type BlockVideoRequest struct {
 	Reason  string `json:"reason"`
 	Block   bool   `json:"block"`
 }
+
+type ReportVideoRequest struct {
+	VideoId string `json:"videoId"`
+	Reason  string `json:"reason"`
+}

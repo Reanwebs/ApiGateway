@@ -169,3 +169,23 @@ func (c *videoClient) BlockVideo(ctx context.Context, request models.BlockVideoR
 	}
 	return res, nil
 }
+
+func (c *videoClient) ReportVideo(ctx context.Context, request models.ReportVideoRequest) (*video.ReportVideoResponse, error) {
+	res, err := c.Server.ReportVideo(ctx, &video.ReportVideoRequest{
+		VideoId: request.VideoId,
+		Reason:  request.Reason,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
+
+func (c *videoClient) GetReportedVideos(ctx context.Context) (*video.GetReportedVideosResponse, error) {
+
+	res, err := c.Server.GetReportedVideos(ctx, &video.GetReportedVideosRequest{})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}

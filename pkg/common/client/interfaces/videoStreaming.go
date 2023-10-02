@@ -16,4 +16,6 @@ type VideoClient interface {
 	GetVideoById(context.Context, models.GetVideoById) (*video.GetVideoByIdResponse, error)
 	ToggleStar(context.Context, models.ToggleStarRequest) (*video.ToggleStarResponse, error)
 	BlockVideo(ctx context.Context, request models.BlockVideoRequest) (*video.BlockVideoResponse, error)
+	ReportVideo(ctx context.Context, request models.ReportVideoRequest) (*video.ReportVideoResponse, error)
+	GetReportedVideos(context.Context) (*video.GetReportedVideosResponse, error)
 }
