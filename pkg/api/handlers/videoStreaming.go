@@ -1,10 +1,12 @@
 package handlers
 
 import (
+	"errors"
 	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/models"
 	"gateway/pkg/utils"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -230,4 +232,45 @@ func (cr *VideoHandler) BlockVideo(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, &res)
+}
+
+func (h *VideoHandler) ReportVideo(ctx *gin.Context) {
+	body := models.ReportVideoRequest{}
+
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to report video",
+			"error":   err,
+		})
+		log.Println(errors.New("fail to parse JSON data from report-video request"))
+		return
+	}
+
+	res, err := h.Client.ReportVideo(ctx, body)
+	if err != nil {
+		ctx.JSON(http.StatusProcessing, gin.H{
+			"message": "failed to report video",
+			"error":   err.Error(),
+		})
+		log.Println(err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+}
+
+func (h *VideoHandler) GetReportedVideos(ctx *gin.Context) {
+
+	res, err := h.Client.GetReportedVideos(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusProcessing, gin.H{
+			"message": "failed to fetch reported video",
+			"error":   err.Error(),
+		})
+		log.Println(err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, &res)
+
 }

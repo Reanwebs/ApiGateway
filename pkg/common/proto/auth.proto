@@ -48,7 +48,6 @@ service Autharization {
     rpc GetUserDetails(GetUserDetailsRequest) returns (GetUserDetailsResponse){}
     rpc GetJoinedCommunity(GetJoinedCommunityRequest) returns (GetJoinedCommunityResponse) {}
     rpc SearchCommunity(SearchCommunityRequest) returns (SearchCommunityResponse) {}
-    rpc ReportVideo(ReportVideoRequest) returns (ReportVideoResponse) {}
 }
 
 message SignupRequest {
@@ -613,12 +612,4 @@ message SearchCommunityResponse{
     string message = 2;
     repeated Community community=3;
     string error =4;
-}
-
-message ReportVideoRequest {
-    string videoId = 1;
-    string reason = 2;
-}
-message ReportVideoResponse {
-    bool status = 1;
 }

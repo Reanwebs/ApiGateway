@@ -62,7 +62,6 @@ const (
 	Autharization_GetUserDetails_FullMethodName               = "/pb.Autharization/GetUserDetails"
 	Autharization_GetJoinedCommunity_FullMethodName           = "/pb.Autharization/GetJoinedCommunity"
 	Autharization_SearchCommunity_FullMethodName              = "/pb.Autharization/SearchCommunity"
-	Autharization_ReportVideo_FullMethodName                  = "/pb.Autharization/ReportVideo"
 )
 
 // AutharizationClient is the client API for Autharization service.
@@ -112,7 +111,6 @@ type AutharizationClient interface {
 	GetUserDetails(ctx context.Context, in *GetUserDetailsRequest, opts ...grpc.CallOption) (*GetUserDetailsResponse, error)
 	GetJoinedCommunity(ctx context.Context, in *GetJoinedCommunityRequest, opts ...grpc.CallOption) (*GetJoinedCommunityResponse, error)
 	SearchCommunity(ctx context.Context, in *SearchCommunityRequest, opts ...grpc.CallOption) (*SearchCommunityResponse, error)
-	ReportVideo(ctx context.Context, in *ReportVideoRequest, opts ...grpc.CallOption) (*ReportVideoResponse, error)
 }
 
 type autharizationClient struct {
@@ -510,15 +508,6 @@ func (c *autharizationClient) SearchCommunity(ctx context.Context, in *SearchCom
 	return out, nil
 }
 
-func (c *autharizationClient) ReportVideo(ctx context.Context, in *ReportVideoRequest, opts ...grpc.CallOption) (*ReportVideoResponse, error) {
-	out := new(ReportVideoResponse)
-	err := c.cc.Invoke(ctx, Autharization_ReportVideo_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // AutharizationServer is the server API for Autharization service.
 // All implementations must embed UnimplementedAutharizationServer
 // for forward compatibility
@@ -566,7 +555,6 @@ type AutharizationServer interface {
 	GetUserDetails(context.Context, *GetUserDetailsRequest) (*GetUserDetailsResponse, error)
 	GetJoinedCommunity(context.Context, *GetJoinedCommunityRequest) (*GetJoinedCommunityResponse, error)
 	SearchCommunity(context.Context, *SearchCommunityRequest) (*SearchCommunityResponse, error)
-	ReportVideo(context.Context, *ReportVideoRequest) (*ReportVideoResponse, error)
 	mustEmbedUnimplementedAutharizationServer()
 }
 
@@ -702,9 +690,6 @@ func (UnimplementedAutharizationServer) GetJoinedCommunity(context.Context, *Get
 }
 func (UnimplementedAutharizationServer) SearchCommunity(context.Context, *SearchCommunityRequest) (*SearchCommunityResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchCommunity not implemented")
-}
-func (UnimplementedAutharizationServer) ReportVideo(context.Context, *ReportVideoRequest) (*ReportVideoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReportVideo not implemented")
 }
 func (UnimplementedAutharizationServer) mustEmbedUnimplementedAutharizationServer() {}
 
@@ -1493,24 +1478,6 @@ func _Autharization_SearchCommunity_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Autharization_ReportVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReportVideoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AutharizationServer).ReportVideo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Autharization_ReportVideo_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AutharizationServer).ReportVideo(ctx, req.(*ReportVideoRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Autharization_ServiceDesc is the grpc.ServiceDesc for Autharization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1689,10 +1656,6 @@ var Autharization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SearchCommunity",
 			Handler:    _Autharization_SearchCommunity_Handler,
-		},
-		{
-			MethodName: "ReportVideo",
-			Handler:    _Autharization_ReportVideo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
