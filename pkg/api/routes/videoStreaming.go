@@ -19,4 +19,8 @@ func VideoRoutes(api *gin.RouterGroup, videoHandler handlers.VideoHandler) {
 	routes.POST("/archive-video", videoHandler.ArchivVideo)
 	routes.GET("/get-by-id", videoHandler.GetVideoById)
 	routes.PATCH("/star", videoHandler.ToggleStar)
+	routes.PUT("/report-video", videoHandler.ReportVideo)
+	routes.PATCH("/block-video", videoHandler.BlockVideo)
+	routes.GET("/get-reported-videos", videoHandler.GetReportedVideos)
+
 }
