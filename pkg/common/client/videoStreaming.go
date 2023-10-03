@@ -132,10 +132,15 @@ func (c *videoClient) ArchiveVideo(ctx context.Context, request models.ArchivedV
 }
 
 func (c *videoClient) GetVideoById(ctx context.Context, request models.GetVideoById) (*video.GetVideoByIdResponse, error) {
-
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
 	res, err := c.Server.GetVideoById(ctx, &video.GetVideoByIdRequest{
 		VideoId:  request.VideoId,
 		UserName: request.UserNAme,
+		UserId:   userId,
 	})
 	if err != nil {
 		return nil, err

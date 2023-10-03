@@ -14,8 +14,9 @@ service VideoService {
     rpc GetVideoById(GetVideoByIdRequest) returns (GetVideoByIdResponse) {}
     rpc ToggleStar(ToggleStarRequest) returns (ToggleStarResponse) {}
     rpc BlockVideo(BlockVideoRequest) returns (BlockVideoResponse) {}
-    rpc ReportVideo(ReportVideoRequest) returns (ReportVideoResponse) {}
     rpc GetReportedVideos(GetReportedVideosRequest) returns (GetReportedVideosResponse) {}
+    rpc ReportVideo(ReportVideoRequest) returns (ReportVideoResponse) {}
+
 }
 
 message Request {
@@ -36,7 +37,9 @@ message UploadVideoRequest {
     string discription = 6;
     string filename = 7;
     string userId = 8;
-    bytes data = 9;
+    bool exclusive = 9;
+    uint32 coin_for_watch = 10;
+    bytes data = 11;
 }
 
 message UploadVideoResponse {
@@ -68,6 +71,10 @@ message FetchVideo {
     bool archived = 8;
     uint32 views = 9;
     uint32 starred = 10;
+    string discription = 11;
+    bool exclusive = 12;
+    uint32 coin_for_watch = 13;
+    bool blocked = 14;
 }
 
 message FindArchivedVideoByUserIdResponse {
@@ -93,6 +100,7 @@ message FetchAllVideoResponse {
 message GetVideoByIdRequest {
     string videoId = 1;
     string userName = 2;
+    string userId = 3;
 }
 message GetVideoByIdResponse {
     string VideoId = 1;
@@ -105,10 +113,11 @@ message GetVideoByIdResponse {
     bool archived = 8; 
     bool isStarred = 9; 
     uint32 views = 10;
-    uint32 starred = 11; 
-    bool blocked = 12;
-    bool Exclisive = 13;
-    uint32 coin = 14;
+    string discription = 11;
+    bool exclusive = 12;
+    uint32 coin_for_watch = 13;
+    bool blocked = 14;
+    uint32 starred = 15; 
 }
 
 message ArchiveVideoRequest {
@@ -136,13 +145,6 @@ message BlockVideoResponse {
     bool blocked = 1;
 }
 
-message ReportVideoRequest {
-    string videoId = 1;
-    string reason = 2;
-}
-message ReportVideoResponse {
-    bool status = 1;
-}
 
 message ReportedVideos {
     string VideoId = 1;
@@ -159,6 +161,9 @@ message ReportedVideos {
     bool Exclisive = 12;
     uint32 coin = 13;
     string reason = 14;
+    string discription = 15;
+    bool exclusive = 16;
+    uint32 coin_for_watch = 17;
 }
 
 message GetReportedVideosRequest {
@@ -168,4 +173,12 @@ message GetReportedVideosResponse {
     repeated ReportedVideos videos = 1;
 
  
+}
+
+message ReportVideoRequest {
+    string videoId = 1;
+    string reason = 2;
+}
+message ReportVideoResponse {
+    bool status = 1;
 }
