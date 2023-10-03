@@ -50,7 +50,7 @@ func (cr *VideoHandler) UploadVideo(c *gin.Context) {
 		})
 		return
 	}
-	res, err := cr.Client.UploadVideo(c.Request.Context(), file, body)
+	res, err := cr.Client.UploadVideo(c, file, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 

@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func AdminRoutes(api *gin.RouterGroup, adminHandler handlers.AdminHandler, videoHandler handlers.VideoHandler) {
+func AdminRoutes(api *gin.RouterGroup, adminHandler handlers.AdminHandler) {
 	routes := api.Group("/admin")
 	routes.POST("login", adminHandler.AdminLogin)
 
@@ -21,6 +21,5 @@ func AdminRoutes(api *gin.RouterGroup, adminHandler handlers.AdminHandler, video
 	routes.POST("/logout", adminHandler.LogoutAdmin)
 	routes.POST("/manage-community", adminHandler.ManageCommunity)
 	routes.GET("/get-all-community", adminHandler.GetAllCommunity)
-	routes.PATCH("/block-video", videoHandler.BlockVideo)
-	routes.GET("/get-reported-videos", videoHandler.GetReportedVideos)
+
 }
