@@ -28,8 +28,8 @@ const (
 	VideoService_GetVideoById_FullMethodName              = "/pb.VideoService/GetVideoById"
 	VideoService_ToggleStar_FullMethodName                = "/pb.VideoService/ToggleStar"
 	VideoService_BlockVideo_FullMethodName                = "/pb.VideoService/BlockVideo"
-	VideoService_ReportVideo_FullMethodName               = "/pb.VideoService/ReportVideo"
 	VideoService_GetReportedVideos_FullMethodName         = "/pb.VideoService/GetReportedVideos"
+	VideoService_ReportVideo_FullMethodName               = "/pb.VideoService/ReportVideo"
 )
 
 // VideoServiceClient is the client API for VideoService service.
@@ -45,8 +45,8 @@ type VideoServiceClient interface {
 	GetVideoById(ctx context.Context, in *GetVideoByIdRequest, opts ...grpc.CallOption) (*GetVideoByIdResponse, error)
 	ToggleStar(ctx context.Context, in *ToggleStarRequest, opts ...grpc.CallOption) (*ToggleStarResponse, error)
 	BlockVideo(ctx context.Context, in *BlockVideoRequest, opts ...grpc.CallOption) (*BlockVideoResponse, error)
-	ReportVideo(ctx context.Context, in *ReportVideoRequest, opts ...grpc.CallOption) (*ReportVideoResponse, error)
 	GetReportedVideos(ctx context.Context, in *GetReportedVideosRequest, opts ...grpc.CallOption) (*GetReportedVideosResponse, error)
+	ReportVideo(ctx context.Context, in *ReportVideoRequest, opts ...grpc.CallOption) (*ReportVideoResponse, error)
 }
 
 type videoServiceClient struct {
@@ -163,18 +163,18 @@ func (c *videoServiceClient) BlockVideo(ctx context.Context, in *BlockVideoReque
 	return out, nil
 }
 
-func (c *videoServiceClient) ReportVideo(ctx context.Context, in *ReportVideoRequest, opts ...grpc.CallOption) (*ReportVideoResponse, error) {
-	out := new(ReportVideoResponse)
-	err := c.cc.Invoke(ctx, VideoService_ReportVideo_FullMethodName, in, out, opts...)
+func (c *videoServiceClient) GetReportedVideos(ctx context.Context, in *GetReportedVideosRequest, opts ...grpc.CallOption) (*GetReportedVideosResponse, error) {
+	out := new(GetReportedVideosResponse)
+	err := c.cc.Invoke(ctx, VideoService_GetReportedVideos_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *videoServiceClient) GetReportedVideos(ctx context.Context, in *GetReportedVideosRequest, opts ...grpc.CallOption) (*GetReportedVideosResponse, error) {
-	out := new(GetReportedVideosResponse)
-	err := c.cc.Invoke(ctx, VideoService_GetReportedVideos_FullMethodName, in, out, opts...)
+func (c *videoServiceClient) ReportVideo(ctx context.Context, in *ReportVideoRequest, opts ...grpc.CallOption) (*ReportVideoResponse, error) {
+	out := new(ReportVideoResponse)
+	err := c.cc.Invoke(ctx, VideoService_ReportVideo_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -194,8 +194,8 @@ type VideoServiceServer interface {
 	GetVideoById(context.Context, *GetVideoByIdRequest) (*GetVideoByIdResponse, error)
 	ToggleStar(context.Context, *ToggleStarRequest) (*ToggleStarResponse, error)
 	BlockVideo(context.Context, *BlockVideoRequest) (*BlockVideoResponse, error)
-	ReportVideo(context.Context, *ReportVideoRequest) (*ReportVideoResponse, error)
 	GetReportedVideos(context.Context, *GetReportedVideosRequest) (*GetReportedVideosResponse, error)
+	ReportVideo(context.Context, *ReportVideoRequest) (*ReportVideoResponse, error)
 	mustEmbedUnimplementedVideoServiceServer()
 }
 
@@ -230,11 +230,11 @@ func (UnimplementedVideoServiceServer) ToggleStar(context.Context, *ToggleStarRe
 func (UnimplementedVideoServiceServer) BlockVideo(context.Context, *BlockVideoRequest) (*BlockVideoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BlockVideo not implemented")
 }
-func (UnimplementedVideoServiceServer) ReportVideo(context.Context, *ReportVideoRequest) (*ReportVideoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ReportVideo not implemented")
-}
 func (UnimplementedVideoServiceServer) GetReportedVideos(context.Context, *GetReportedVideosRequest) (*GetReportedVideosResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetReportedVideos not implemented")
+}
+func (UnimplementedVideoServiceServer) ReportVideo(context.Context, *ReportVideoRequest) (*ReportVideoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReportVideo not implemented")
 }
 func (UnimplementedVideoServiceServer) mustEmbedUnimplementedVideoServiceServer() {}
 
@@ -419,24 +419,6 @@ func _VideoService_BlockVideo_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VideoService_ReportVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReportVideoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(VideoServiceServer).ReportVideo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: VideoService_ReportVideo_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VideoServiceServer).ReportVideo(ctx, req.(*ReportVideoRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _VideoService_GetReportedVideos_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetReportedVideosRequest)
 	if err := dec(in); err != nil {
@@ -451,6 +433,24 @@ func _VideoService_GetReportedVideos_Handler(srv interface{}, ctx context.Contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(VideoServiceServer).GetReportedVideos(ctx, req.(*GetReportedVideosRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _VideoService_ReportVideo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReportVideoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(VideoServiceServer).ReportVideo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: VideoService_ReportVideo_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(VideoServiceServer).ReportVideo(ctx, req.(*ReportVideoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -495,12 +495,12 @@ var VideoService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _VideoService_BlockVideo_Handler,
 		},
 		{
-			MethodName: "ReportVideo",
-			Handler:    _VideoService_ReportVideo_Handler,
-		},
-		{
 			MethodName: "GetReportedVideos",
 			Handler:    _VideoService_GetReportedVideos_Handler,
+		},
+		{
+			MethodName: "ReportVideo",
+			Handler:    _VideoService_ReportVideo_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

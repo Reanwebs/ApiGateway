@@ -2,12 +2,12 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/models"
 	"gateway/pkg/utils"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,26 +24,40 @@ func NewVideoHandler(client interfaces.VideoClient) VideoHandler {
 
 func (cr *VideoHandler) UploadVideo(c *gin.Context) {
 
-	userName := c.PostForm("userName")
-	avatarId := c.PostForm("avatarId")
-	title := c.PostForm("title")
-	discription := c.PostForm("discription")
-	interest := c.PostForm("interest")
-	thumbnailId := c.PostForm("thumbnailId")
-
-	// Create an instance of UploadVideo struct and populate it
 	body := models.UploadVideo{
-		UserName:    userName,
-		AvatarId:    avatarId,
-		Title:       title,
-		Discription: discription,
-		Interest:    interest,
-		ThumbnailId: thumbnailId,
+		UserName:       c.PostForm("userName"),
+		AvatarId:       c.PostForm("avatarId"),
+		Title:          c.PostForm("title"),
+		Discription:    c.PostForm("discription"),
+		Interest:       c.PostForm("interest"),
+		ThumbnailId:    c.PostForm("thumbnailId"),
+		Exclusive:      false,
+		Coin_for_watch: 0,
+	}
+
+	exclusiveStr := c.PostForm("exclusive")
+	if exclusiveStr == "true" {
+		body.Exclusive = true
+	} else {
+		body.Exclusive = false
+	}
+
+	coinTowatchStr := c.PostForm("coinTowatch")
+	if coinTowatchStr != "" {
+		coinTowatch, err := strconv.ParseUint(coinTowatchStr, 10, 32)
+		if err != nil {
+			log.Println("can't parse in PostForm coinTowatch")
+			c.JSON(http.StatusBadRequest, gin.H{
+				"message": "invalid input ",
+				"error":   err.Error(),
+			})
+			return
+		}
+		body.Coin_for_watch = uint32(coinTowatch)
 	}
 
 	file, err := c.FormFile("video")
 	if err != nil {
-		fmt.Println(file)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to find the file",
 			"error":   err.Error(),
