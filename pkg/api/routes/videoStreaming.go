@@ -20,6 +20,7 @@ func VideoRoutes(api *gin.RouterGroup, videoHandler handlers.VideoHandler) {
 	routes.GET("/get-by-id", videoHandler.GetVideoById)
 	routes.PATCH("/star", videoHandler.ToggleStar)
 	routes.PUT("/report-video", videoHandler.ReportVideo)
+	routes.GET("/exclusive-content", videoHandler.FetchExclusiveVideo)
 
 	adminroutes := api.Group("/video")
 	adminroutes.Use(middleware.AuthenticateAdmin)
