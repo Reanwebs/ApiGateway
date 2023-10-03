@@ -7,7 +7,6 @@ import (
 	"gateway/pkg/utils"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,38 +21,15 @@ func NewVideoHandler(client interfaces.VideoClient) VideoHandler {
 	}
 }
 
-func (cr *VideoHandler) UploadVideo(c *gin.Context) {
+func (h *VideoHandler) UploadVideo(c *gin.Context) {
 
-	body := models.UploadVideo{
-		UserName:       c.PostForm("userName"),
-		AvatarId:       c.PostForm("avatarId"),
-		Title:          c.PostForm("title"),
-		Discription:    c.PostForm("discription"),
-		Interest:       c.PostForm("interest"),
-		ThumbnailId:    c.PostForm("thumbnailId"),
-		Exclusive:      false,
-		Coin_for_watch: 0,
-	}
-
-	exclusiveStr := c.PostForm("exclusive")
-	if exclusiveStr == "true" {
-		body.Exclusive = true
-	} else {
-		body.Exclusive = false
-	}
-
-	coinTowatchStr := c.PostForm("coinTowatch")
-	if coinTowatchStr != "" {
-		coinTowatch, err := strconv.ParseUint(coinTowatchStr, 10, 32)
-		if err != nil {
-			log.Println("can't parse in PostForm coinTowatch")
-			c.JSON(http.StatusBadRequest, gin.H{
-				"message": "invalid input ",
-				"error":   err.Error(),
-			})
-			return
-		}
-		body.Coin_for_watch = uint32(coinTowatch)
+	body, err := utils.ParseUploadVideoForm(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid input",
+			"error":   err.Error(),
+		})
+		return
 	}
 
 	file, err := c.FormFile("video")
@@ -64,10 +40,10 @@ func (cr *VideoHandler) UploadVideo(c *gin.Context) {
 		})
 		return
 	}
-	res, err := cr.Client.UploadVideo(c, file, body)
+
+	res, err := h.Client.UploadVideo(c, file, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
 		c.JSON(http.StatusMethodNotAllowed, gin.H{
 			"message": "failed to upload",
 			"error":   errMsg,
@@ -80,7 +56,7 @@ func (cr *VideoHandler) UploadVideo(c *gin.Context) {
 	})
 }
 
-func (cr *VideoHandler) FetchUserVideo(c *gin.Context) {
+func (h *VideoHandler) FetchUserVideo(c *gin.Context) {
 	request := models.FetchVideosRequest{}
 	request.UserName = c.Query("userName")
 
@@ -91,7 +67,7 @@ func (cr *VideoHandler) FetchUserVideo(c *gin.Context) {
 		return
 	}
 
-	res, err := cr.Client.FetchVideos(c, request)
+	res, err := h.Client.FetchVideos(c, request)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 
@@ -105,7 +81,7 @@ func (cr *VideoHandler) FetchUserVideo(c *gin.Context) {
 
 }
 
-func (cr *VideoHandler) FetchUserArchivedVideo(c *gin.Context) {
+func (h *VideoHandler) FetchUserArchivedVideo(c *gin.Context) {
 
 	request := models.FetchVideosRequest{}
 	request.UserName = c.Query("userName")
@@ -117,7 +93,7 @@ func (cr *VideoHandler) FetchUserArchivedVideo(c *gin.Context) {
 		return
 	}
 
-	res, err := cr.Client.FetchArchivedVideos(c, request)
+	res, err := h.Client.FetchArchivedVideos(c, request)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 
@@ -130,9 +106,9 @@ func (cr *VideoHandler) FetchUserArchivedVideo(c *gin.Context) {
 	c.JSON(http.StatusOK, &res)
 }
 
-func (cr *VideoHandler) FetchAllVideo(c *gin.Context) {
+func (h *VideoHandler) FetchAllVideo(c *gin.Context) {
 
-	res, err := cr.Client.FetchAllVideos(c)
+	res, err := h.Client.FetchAllVideos(c)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 
@@ -145,7 +121,7 @@ func (cr *VideoHandler) FetchAllVideo(c *gin.Context) {
 	c.JSON(http.StatusOK, &res)
 }
 
-func (cr *VideoHandler) ArchivVideo(c *gin.Context) {
+func (h *VideoHandler) ArchivVideo(c *gin.Context) {
 
 	body := models.ArchivedVideos{}
 
@@ -154,7 +130,7 @@ func (cr *VideoHandler) ArchivVideo(c *gin.Context) {
 		return
 	}
 
-	res, err := cr.Client.ArchiveVideo(c, body)
+	res, err := h.Client.ArchiveVideo(c, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 
@@ -167,7 +143,7 @@ func (cr *VideoHandler) ArchivVideo(c *gin.Context) {
 	c.JSON(http.StatusOK, &res)
 }
 
-func (cr *VideoHandler) GetVideoById(c *gin.Context) {
+func (h *VideoHandler) GetVideoById(c *gin.Context) {
 
 	videoId := c.Query("id")
 	username := c.Query("userName")
@@ -191,7 +167,7 @@ func (cr *VideoHandler) GetVideoById(c *gin.Context) {
 		UserNAme: username,
 	}
 
-	res, err := cr.Client.GetVideoById(c, data)
+	res, err := h.Client.GetVideoById(c, data)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 
@@ -204,7 +180,7 @@ func (cr *VideoHandler) GetVideoById(c *gin.Context) {
 	c.JSON(http.StatusOK, &res)
 }
 
-func (cr *VideoHandler) ToggleStar(c *gin.Context) {
+func (h *VideoHandler) ToggleStar(c *gin.Context) {
 	body := models.ToggleStarRequest{}
 
 	if err := c.BindJSON(&body); err != nil {
@@ -212,7 +188,7 @@ func (cr *VideoHandler) ToggleStar(c *gin.Context) {
 		return
 	}
 
-	res, err := cr.Client.ToggleStar(c, body)
+	res, err := h.Client.ToggleStar(c, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 
@@ -226,7 +202,7 @@ func (cr *VideoHandler) ToggleStar(c *gin.Context) {
 	c.JSON(http.StatusOK, &res)
 }
 
-func (cr *VideoHandler) BlockVideo(c *gin.Context) {
+func (h *VideoHandler) BlockVideo(c *gin.Context) {
 	body := models.BlockVideoRequest{}
 
 	if err := c.BindJSON(&body); err != nil {
@@ -234,7 +210,7 @@ func (cr *VideoHandler) BlockVideo(c *gin.Context) {
 		return
 	}
 
-	res, err := cr.Client.BlockVideo(c, body)
+	res, err := h.Client.BlockVideo(c, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 
@@ -287,4 +263,18 @@ func (h *VideoHandler) GetReportedVideos(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &res)
 
+}
+
+func (h *VideoHandler) FetchExclusiveVideo(ctx *gin.Context) {
+	res, err := h.Client.FetchAllVideos(ctx)
+	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+
+		ctx.JSON(http.StatusMethodNotAllowed, gin.H{
+			"message": "failed to fetch videos",
+			"error":   errMsg,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, &res)
 }

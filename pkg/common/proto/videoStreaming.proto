@@ -16,7 +16,7 @@ service VideoService {
     rpc BlockVideo(BlockVideoRequest) returns (BlockVideoResponse) {}
     rpc GetReportedVideos(GetReportedVideosRequest) returns (GetReportedVideosResponse) {}
     rpc ReportVideo(ReportVideoRequest) returns (ReportVideoResponse) {}
-
+    rpc FetchExclusiveVideo(FetchExclusiveVideoRequest) returns (FetchExclusiveVideoResponse) {}
 }
 
 message Request {
@@ -181,4 +181,10 @@ message ReportVideoRequest {
 }
 message ReportVideoResponse {
     bool status = 1;
+}
+
+message FetchExclusiveVideoRequest {}
+
+message FetchExclusiveVideoResponse {
+    repeated FetchVideo videos = 1;
 }

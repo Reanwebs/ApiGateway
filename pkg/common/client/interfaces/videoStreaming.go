@@ -18,4 +18,5 @@ type VideoClient interface {
 	BlockVideo(ctx context.Context, request models.BlockVideoRequest) (*video.BlockVideoResponse, error)
 	ReportVideo(ctx context.Context, request models.ReportVideoRequest) (*video.ReportVideoResponse, error)
 	GetReportedVideos(context.Context) (*video.GetReportedVideosResponse, error)
+	FetchExclusiveVideo(ctx context.Context) (*video.FetchExclusiveVideoResponse, error)
 }

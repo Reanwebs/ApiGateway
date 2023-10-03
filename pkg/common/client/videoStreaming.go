@@ -194,3 +194,12 @@ func (c *videoClient) GetReportedVideos(ctx context.Context) (*video.GetReported
 	}
 	return res, nil
 }
+
+func (c *videoClient) FetchExclusiveVideo(ctx context.Context) (*video.FetchExclusiveVideoResponse, error) {
+
+	res, err := c.Server.FetchExclusiveVideo(ctx, &video.FetchExclusiveVideoRequest{})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
+}
