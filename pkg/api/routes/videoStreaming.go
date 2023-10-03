@@ -8,8 +8,8 @@ import (
 )
 
 func VideoRoutes(api *gin.RouterGroup, videoHandler handlers.VideoHandler) {
-	routes := api.Group("/video")
 
+	routes := api.Group("/video")
 	routes.Use(middleware.AuthenticateUser)
 
 	routes.POST("/upload", videoHandler.UploadVideo)
@@ -20,7 +20,11 @@ func VideoRoutes(api *gin.RouterGroup, videoHandler handlers.VideoHandler) {
 	routes.GET("/get-by-id", videoHandler.GetVideoById)
 	routes.PATCH("/star", videoHandler.ToggleStar)
 	routes.PUT("/report-video", videoHandler.ReportVideo)
-	routes.PATCH("/block-video", videoHandler.BlockVideo)
-	routes.GET("/get-reported-videos", videoHandler.GetReportedVideos)
+
+	adminroutes := api.Group("/video")
+	adminroutes.Use(middleware.AuthenticateAdmin)
+
+	adminroutes.PATCH("/block-video", videoHandler.BlockVideo)
+	adminroutes.GET("/get-reported-videos", videoHandler.GetReportedVideos)
 
 }
