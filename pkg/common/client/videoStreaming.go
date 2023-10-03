@@ -63,15 +63,17 @@ func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeade
 			return nil, err
 		}
 		if err := stream.Send(&video.UploadVideoRequest{
-			UserName:    request.UserName,
-			AvatarId:    request.AvatarId,
-			Intrest:     request.Interest,
-			ThumbnailId: request.ThumbnailId,
-			Title:       request.Title,
-			Discription: request.Discription,
-			Filename:    file.Filename,
-			UserId:      userId,
-			Data:        buffer[:n],
+			UserName:     request.UserName,
+			AvatarId:     request.AvatarId,
+			Intrest:      request.Interest,
+			ThumbnailId:  request.ThumbnailId,
+			Title:        request.Title,
+			Discription:  request.Discription,
+			Filename:     file.Filename,
+			UserId:       userId,
+			Data:         buffer[:n],
+			Exclusive:    request.Exclusive,
+			CoinForWatch: request.Coin_for_watch,
 		}); err != nil {
 			fmt.Println("error in streaming in client", err)
 			return nil, err
