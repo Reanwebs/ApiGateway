@@ -263,7 +263,7 @@ func (h *VideoHandler) GetReportedVideos(ctx *gin.Context) {
 
 	res, err := h.Client.GetReportedVideos(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusProcessing, gin.H{
+		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to fetch reported video",
 			"error":   err.Error(),
 		})
