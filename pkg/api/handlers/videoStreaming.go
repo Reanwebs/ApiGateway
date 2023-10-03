@@ -7,7 +7,6 @@ import (
 	"gateway/pkg/utils"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,36 +23,13 @@ func NewVideoHandler(client interfaces.VideoClient) VideoHandler {
 
 func (cr *VideoHandler) UploadVideo(c *gin.Context) {
 
-	body := models.UploadVideo{
-		UserName:       c.PostForm("userName"),
-		AvatarId:       c.PostForm("avatarId"),
-		Title:          c.PostForm("title"),
-		Discription:    c.PostForm("discription"),
-		Interest:       c.PostForm("interest"),
-		ThumbnailId:    c.PostForm("thumbnailId"),
-		Exclusive:      false,
-		Coin_for_watch: 0,
-	}
-
-	exclusiveStr := c.PostForm("exclusive")
-	if exclusiveStr == "true" {
-		body.Exclusive = true
-	} else {
-		body.Exclusive = false
-	}
-
-	coinTowatchStr := c.PostForm("coinTowatch")
-	if coinTowatchStr != "" {
-		coinTowatch, err := strconv.ParseUint(coinTowatchStr, 10, 32)
-		if err != nil {
-			log.Println("can't parse in PostForm coinTowatch")
-			c.JSON(http.StatusBadRequest, gin.H{
-				"message": "invalid input ",
-				"error":   err.Error(),
-			})
-			return
-		}
-		body.Coin_for_watch = uint32(coinTowatch)
+	body, err := utils.ParseUploadVideoForm(c)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "invalid input",
+			"error":   err.Error(),
+		})
+		return
 	}
 
 	file, err := c.FormFile("video")
@@ -64,10 +40,10 @@ func (cr *VideoHandler) UploadVideo(c *gin.Context) {
 		})
 		return
 	}
+
 	res, err := cr.Client.UploadVideo(c, file, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
 		c.JSON(http.StatusMethodNotAllowed, gin.H{
 			"message": "failed to upload",
 			"error":   errMsg,
