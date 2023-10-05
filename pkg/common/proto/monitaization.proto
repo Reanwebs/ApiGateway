@@ -14,6 +14,7 @@ service Monitization{
     rpc ParticipationReward(ParticipationRewardRequest) returns(ParticipationRewardResponse){}
     rpc UserRewardHistory(UserRewardHistoryRequest) returns (UserRewardHistoryResponse){}
     rpc GetWallet(GetWalletRequest)returns(GetWalletResponse){}
+    rpc ExclusiveContent(ExclusiveContentRequest) returns (ExclusiveContentResponse) {}
 
     rpc GroupRewardHistory(GroupRewardHistoryRequest) returns (GroupRewardHistoryResponse){}
     rpc UserWatchHour(UserWatchHourRequest) returns (UserWatchHourResponse){}
@@ -138,3 +139,12 @@ message GetWalletRequest{
 message GetWalletResponse{
     int32 Coins = 1;
 }
+
+message ExclusiveContentRequest{
+    string UserID     = 1;
+    string VideoID    = 2;
+  }
+  
+  message ExclusiveContentResponse {
+    string Result = 1;
+  }

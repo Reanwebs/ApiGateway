@@ -120,3 +120,21 @@ func (m *monitaizationClient) GetWallet(ctx context.Context) (*monit.GetWalletRe
 
 	return res, nil
 }
+
+func (m *monitaizationClient) ExclusiveContent(ctx context.Context, videoId string) (*monit.ExclusiveContentResponse, error) {
+	userId, ok := ctx.Value("userId").(string)
+	if !ok {
+		fmt.Println("userId not found in context.")
+		return nil, errors.New("login again")
+	}
+	res, err := m.Server.ExclusiveContent(ctx, &monit.ExclusiveContentRequest{
+		UserID:  userId,
+		VideoID: videoId,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+
+}

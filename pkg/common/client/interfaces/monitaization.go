@@ -13,4 +13,5 @@ type MonitaizationClient interface {
 	ParticipationReward(context.Context, models.ParticipationRewardRequest) (*monit.ParticipationRewardResponse, error)
 	UserRewardHistory(context.Context, models.UserRewardHistoryRequest) (*monit.UserRewardHistoryResponse, error)
 	GetWallet(context.Context) (*monit.GetWalletResponse, error)
+	ExclusiveContent(context.Context, string) (*monit.ExclusiveContentResponse, error)
 }

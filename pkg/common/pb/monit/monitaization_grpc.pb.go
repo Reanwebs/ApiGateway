@@ -25,6 +25,7 @@ const (
 	Monitization_ParticipationReward_FullMethodName = "/monitization.Monitization/ParticipationReward"
 	Monitization_UserRewardHistory_FullMethodName   = "/monitization.Monitization/UserRewardHistory"
 	Monitization_GetWallet_FullMethodName           = "/monitization.Monitization/GetWallet"
+	Monitization_ExclusiveContent_FullMethodName    = "/monitization.Monitization/ExclusiveContent"
 	Monitization_GroupRewardHistory_FullMethodName  = "/monitization.Monitization/GroupRewardHistory"
 	Monitization_UserWatchHour_FullMethodName       = "/monitization.Monitization/UserWatchHour"
 	Monitization_ConferenceWatchHour_FullMethodName = "/monitization.Monitization/ConferenceWatchHour"
@@ -41,6 +42,7 @@ type MonitizationClient interface {
 	ParticipationReward(ctx context.Context, in *ParticipationRewardRequest, opts ...grpc.CallOption) (*ParticipationRewardResponse, error)
 	UserRewardHistory(ctx context.Context, in *UserRewardHistoryRequest, opts ...grpc.CallOption) (*UserRewardHistoryResponse, error)
 	GetWallet(ctx context.Context, in *GetWalletRequest, opts ...grpc.CallOption) (*GetWalletResponse, error)
+	ExclusiveContent(ctx context.Context, in *ExclusiveContentRequest, opts ...grpc.CallOption) (*ExclusiveContentResponse, error)
 	GroupRewardHistory(ctx context.Context, in *GroupRewardHistoryRequest, opts ...grpc.CallOption) (*GroupRewardHistoryResponse, error)
 	UserWatchHour(ctx context.Context, in *UserWatchHourRequest, opts ...grpc.CallOption) (*UserWatchHourResponse, error)
 	ConferenceWatchHour(ctx context.Context, in *ConferenceWatchHourRequest, opts ...grpc.CallOption) (*ConferenceWatchHourResponse, error)
@@ -109,6 +111,15 @@ func (c *monitizationClient) GetWallet(ctx context.Context, in *GetWalletRequest
 	return out, nil
 }
 
+func (c *monitizationClient) ExclusiveContent(ctx context.Context, in *ExclusiveContentRequest, opts ...grpc.CallOption) (*ExclusiveContentResponse, error) {
+	out := new(ExclusiveContentResponse)
+	err := c.cc.Invoke(ctx, Monitization_ExclusiveContent_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *monitizationClient) GroupRewardHistory(ctx context.Context, in *GroupRewardHistoryRequest, opts ...grpc.CallOption) (*GroupRewardHistoryResponse, error) {
 	out := new(GroupRewardHistoryResponse)
 	err := c.cc.Invoke(ctx, Monitization_GroupRewardHistory_FullMethodName, in, out, opts...)
@@ -155,6 +166,7 @@ type MonitizationServer interface {
 	ParticipationReward(context.Context, *ParticipationRewardRequest) (*ParticipationRewardResponse, error)
 	UserRewardHistory(context.Context, *UserRewardHistoryRequest) (*UserRewardHistoryResponse, error)
 	GetWallet(context.Context, *GetWalletRequest) (*GetWalletResponse, error)
+	ExclusiveContent(context.Context, *ExclusiveContentRequest) (*ExclusiveContentResponse, error)
 	GroupRewardHistory(context.Context, *GroupRewardHistoryRequest) (*GroupRewardHistoryResponse, error)
 	UserWatchHour(context.Context, *UserWatchHourRequest) (*UserWatchHourResponse, error)
 	ConferenceWatchHour(context.Context, *ConferenceWatchHourRequest) (*ConferenceWatchHourResponse, error)
@@ -183,6 +195,9 @@ func (UnimplementedMonitizationServer) UserRewardHistory(context.Context, *UserR
 }
 func (UnimplementedMonitizationServer) GetWallet(context.Context, *GetWalletRequest) (*GetWalletResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetWallet not implemented")
+}
+func (UnimplementedMonitizationServer) ExclusiveContent(context.Context, *ExclusiveContentRequest) (*ExclusiveContentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExclusiveContent not implemented")
 }
 func (UnimplementedMonitizationServer) GroupRewardHistory(context.Context, *GroupRewardHistoryRequest) (*GroupRewardHistoryResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GroupRewardHistory not implemented")
@@ -317,6 +332,24 @@ func _Monitization_GetWallet_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Monitization_ExclusiveContent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExclusiveContentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MonitizationServer).ExclusiveContent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Monitization_ExclusiveContent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MonitizationServer).ExclusiveContent(ctx, req.(*ExclusiveContentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Monitization_GroupRewardHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GroupRewardHistoryRequest)
 	if err := dec(in); err != nil {
@@ -419,6 +452,10 @@ var Monitization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWallet",
 			Handler:    _Monitization_GetWallet_Handler,
+		},
+		{
+			MethodName: "ExclusiveContent",
+			Handler:    _Monitization_ExclusiveContent_Handler,
 		},
 		{
 			MethodName: "GroupRewardHistory",

@@ -131,3 +131,22 @@ func (h *MonitizationHandler) GetWallet(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, &res)
 }
+
+func (h *MonitizationHandler) ExclusiveContent(ctx *gin.Context) {
+	var videoID string
+	if err := ctx.BindJSON(&videoID); err != nil {
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.ExclusiveContent(ctx, videoID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": "failed to fetch wallet",
+			"error":   err.Error(),
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, &res)
+
+}
