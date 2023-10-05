@@ -266,7 +266,7 @@ func (h *VideoHandler) GetReportedVideos(ctx *gin.Context) {
 }
 
 func (h *VideoHandler) FetchExclusiveVideo(ctx *gin.Context) {
-	res, err := h.Client.FetchAllVideos(ctx)
+	res, err := h.Client.FetchExclusiveVideo(ctx)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 
