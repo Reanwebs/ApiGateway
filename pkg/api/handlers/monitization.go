@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/models"
 	"net/http"
@@ -133,13 +134,14 @@ func (h *MonitizationHandler) GetWallet(ctx *gin.Context) {
 }
 
 func (h *MonitizationHandler) ExclusiveContent(ctx *gin.Context) {
-	var videoID string
-	if err := ctx.BindJSON(&videoID); err != nil {
+	body := models.ExclusiveContent{}
+	if err := ctx.BindJSON(&body); err != nil {
+		fmt.Println("binding error")
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	res, err := h.Client.ExclusiveContent(ctx, videoID)
+	res, err := h.Client.ExclusiveContent(ctx, body.VideoID)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"message": "failed to fetch wallet",

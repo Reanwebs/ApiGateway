@@ -24,6 +24,13 @@ func NewServeHTTP(c *config.Config, userHandler handlers.UserHandler, conference
 
 	engine.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	engine.LoadHTMLFiles("frontend/dist/index.html")
+	engine.Static("/assets", "./frontend/dist/assets")
+
+	engine.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
+
 	routes.UserRoutes(engine.Group("/api"), userHandler)
 	routes.AdminRoutes(engine.Group("/api"), adminHandler)
 	routes.ConferenceRoutes(engine.Group("/api"), conferenceHandler)
