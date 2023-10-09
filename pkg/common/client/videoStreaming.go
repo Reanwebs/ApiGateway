@@ -3,14 +3,13 @@ package client
 import (
 	"context"
 	"errors"
-	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
 	"gateway/pkg/common/pb/video"
 	"io"
+	"log"
 	"mime/multipart"
-	"strconv"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -37,7 +36,7 @@ func NewVideoClient(server video.VideoServiceClient) interfaces.VideoClient {
 func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeader, request models.UploadVideo) (*video.UploadVideoResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -75,14 +74,14 @@ func (c *videoClient) UploadVideo(ctx context.Context, file *multipart.FileHeade
 			Exclusive:    request.Exclusive,
 			CoinForWatch: request.Coin_for_watch,
 		}); err != nil {
-			fmt.Println("error in streaming in client", err)
+			log.Println("error in streaming in client", err)
 			return nil, err
 		}
 	}
 
 	response, err := stream.CloseAndRecv()
 	if err != nil {
-		fmt.Println("error in response ", err)
+		log.Println("error in response ", err)
 		return nil, err
 	}
 
@@ -119,13 +118,8 @@ func (c *videoClient) FetchAllVideos(ctx context.Context) (*video.FetchAllVideoR
 
 func (c *videoClient) ArchiveVideo(ctx context.Context, request models.ArchivedVideos) (*video.ArchiveVideoResponse, error) {
 
-	videoID, err := strconv.ParseUint(request.VideoId, 10, 32)
-	if err != nil {
-		fmt.Println("Error converting video ID:", err)
-		return nil, errors.New("video id mismatching")
-	}
 	res, err := c.Server.ArchiveVideo(ctx, &video.ArchiveVideoRequest{
-		VideoId: uint32(videoID),
+		VideoId: request.VideoId,
 	})
 	if err != nil {
 		return nil, err
@@ -136,7 +130,7 @@ func (c *videoClient) ArchiveVideo(ctx context.Context, request models.ArchivedV
 func (c *videoClient) GetVideoById(ctx context.Context, request models.GetVideoById) (*video.GetVideoByIdResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 	res, err := c.Server.GetVideoById(ctx, &video.GetVideoByIdRequest{

@@ -3,11 +3,11 @@ package client
 import (
 	"context"
 	"errors"
-	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
 	"gateway/pkg/common/pb/monit"
+	"log"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -71,7 +71,7 @@ func (m *monitaizationClient) UpdateWallet(ctx context.Context, request models.U
 func (m *monitaizationClient) ParticipationReward(ctx context.Context, request models.ParticipationRewardRequest) (*monit.ParticipationRewardResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 	res, err := m.Server.ParticipationReward(ctx, &monit.ParticipationRewardRequest{
@@ -90,7 +90,7 @@ func (m *monitaizationClient) ParticipationReward(ctx context.Context, request m
 func (m *monitaizationClient) UserRewardHistory(ctx context.Context, request models.UserRewardHistoryRequest) (*monit.UserRewardHistoryResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -108,7 +108,7 @@ func (m *monitaizationClient) UserRewardHistory(ctx context.Context, request mod
 func (m *monitaizationClient) GetWallet(ctx context.Context) (*monit.GetWalletResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 	res, err := m.Server.GetWallet(ctx, &monit.GetWalletRequest{
@@ -124,7 +124,7 @@ func (m *monitaizationClient) GetWallet(ctx context.Context) (*monit.GetWalletRe
 func (m *monitaizationClient) ExclusiveContent(ctx context.Context, videoId string) (*monit.ExclusiveContentResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 	res, err := m.Server.ExclusiveContent(ctx, &monit.ExclusiveContentRequest{

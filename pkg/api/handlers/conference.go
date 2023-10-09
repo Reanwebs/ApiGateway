@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"context"
-	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/models"
 	"net/http"
@@ -69,7 +68,6 @@ func (h *ConferenceHandler) SchedulePrivateConference(ctx *gin.Context) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-	fmt.Println("\n\n", body.Time, "\n\n", body)
 	retryConfig := models.RetryConfig{
 		MaxRetries:    5,
 		MaxDuration:   5 * time.Second,

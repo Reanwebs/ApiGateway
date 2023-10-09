@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"errors"
-	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	middleware "gateway/pkg/common/midleware"
 	"gateway/pkg/common/models"
@@ -143,11 +142,7 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 			"message": "failed to login",
 			"error":   errMsg,
 		})
-		fmt.Println(
-			"err :::/t", err,
-			"\nerr.ERROR :::/t", err.Error(),
-			"\nextrated error msg :::\t", errMsg,
-		)
+
 		return
 	}
 

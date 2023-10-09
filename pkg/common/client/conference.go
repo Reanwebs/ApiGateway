@@ -3,12 +3,12 @@ package client
 import (
 	"context"
 	"errors"
-	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
 	"gateway/pkg/common/pb/conference"
 	"gateway/pkg/utils"
+	"log"
 	"strconv"
 	"time"
 
@@ -43,7 +43,7 @@ func (c *conferenceClient) HealthCheck(ctx context.Context, request string, retr
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -95,7 +95,7 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 	// Retrieve the "userId" from the context.
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -120,7 +120,7 @@ func (c *conferenceClient) SchedulePrivateConference(ctx context.Context, reques
 	}
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -200,7 +200,7 @@ func (c *conferenceClient) ScheduleGroupConference(ctx context.Context, request 
 	}
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -258,7 +258,7 @@ func (c *conferenceClient) SchedulePublicConference(ctx context.Context, request
 	operation := func() (interface{}, error) {
 		userId, ok := ctx.Value("userId").(string)
 		if !ok {
-			fmt.Println("userId not found in context.")
+			log.Println("userId not found in context.")
 			return nil, errors.New("login again")
 		}
 
@@ -316,7 +316,7 @@ func (c *conferenceClient) SchedulePublicConference(ctx context.Context, request
 func (c *conferenceClient) ScheduledConference(ctx context.Context) (*models.ScheduledConferenceResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -332,7 +332,7 @@ func (c *conferenceClient) ScheduledConference(ctx context.Context) (*models.Sch
 func (c *conferenceClient) CompletedSchedules(ctx context.Context) (*conference.CompletedSchedulesResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -353,13 +353,13 @@ func (c *conferenceClient) StartPrivateConference(ctx context.Context, request m
 
 		userId, ok := ctx.Value("userId").(string)
 		if !ok {
-			fmt.Println("userId not found in context.")
+			log.Println("userId not found in context.")
 			return nil, errors.New("login again")
 		}
 
 		email, ok := ctx.Value("email").(string)
 		if !ok {
-			fmt.Println("userId not found in context.")
+			log.Println("email not found in context.")
 			return nil, errors.New("login again")
 		}
 
@@ -367,7 +367,6 @@ func (c *conferenceClient) StartPrivateConference(ctx context.Context, request m
 		if err != nil {
 			return nil, errors.New("try again")
 		}
-		fmt.Println(userId)
 		ctx, cancel := context.WithCancel(ctx)
 		ctx, cancel = context.WithTimeout(ctx, 30*time.Second)
 		defer cancel()
@@ -406,14 +405,14 @@ func (c *conferenceClient) StartGroupConference(ctx context.Context, request mod
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -474,14 +473,14 @@ func (c *conferenceClient) StartPublicConference(ctx context.Context, request mo
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -542,13 +541,13 @@ func (c *conferenceClient) JoinPrivateConference(ctx context.Context, request mo
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	email, ok := ctx.Value("email").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("email not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -562,7 +561,7 @@ func (c *conferenceClient) JoinPrivateConference(ctx context.Context, request mo
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -613,14 +612,14 @@ func (c *conferenceClient) JoinGroupConfernce(ctx context.Context, request model
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -673,14 +672,14 @@ func (c *conferenceClient) JoinPublicConference(ctx context.Context, request mod
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -732,14 +731,14 @@ func (c *conferenceClient) AcceptJoining(ctx context.Context, request models.Acc
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -792,14 +791,14 @@ func (c *conferenceClient) DeclineJoining(ctx context.Context, request models.De
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -851,14 +850,14 @@ func (c *conferenceClient) LeavePrivateConference(ctx context.Context, request m
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -910,14 +909,14 @@ func (c *conferenceClient) LeaveGroupConference(ctx context.Context, request mod
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -969,14 +968,14 @@ func (c *conferenceClient) LeavePublicConference(ctx context.Context, request mo
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -1028,14 +1027,14 @@ func (c *conferenceClient) RemovePrivateParticipant(ctx context.Context, request
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -1089,14 +1088,14 @@ func (c *conferenceClient) RemoveGroupParticipant(ctx context.Context, request m
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -1150,14 +1149,14 @@ func (c *conferenceClient) RemovePublicParticipant(ctx context.Context, request 
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -1211,14 +1210,14 @@ func (c *conferenceClient) EndPrivateConference(ctx context.Context, request mod
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -1270,14 +1269,14 @@ func (c *conferenceClient) EndGroupConference(ctx context.Context, request model
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -1329,14 +1328,14 @@ func (c *conferenceClient) EndPublicConference(ctx context.Context, request mode
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -1385,7 +1384,7 @@ func (c *conferenceClient) EndPublicConference(ctx context.Context, request mode
 func (c *conferenceClient) ToggleCamera(ctx context.Context, request models.ToggleCameraRequest) (*conference.ToggleCameraResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1402,7 +1401,7 @@ func (c *conferenceClient) ToggleCamera(ctx context.Context, request models.Togg
 func (c *conferenceClient) ToggleMic(ctx context.Context, request models.ToggleMicRequest) (*conference.ToggleMicResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1419,7 +1418,7 @@ func (c *conferenceClient) ToggleMic(ctx context.Context, request models.ToggleM
 func (c *conferenceClient) ToggleParticipantCamera(ctx context.Context, request models.ToggleParticipantCameraRequest) (*conference.ToggleParticipantCameraResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1436,7 +1435,7 @@ func (c *conferenceClient) ToggleParticipantCamera(ctx context.Context, request 
 func (c *conferenceClient) ToggleParticipantMic(ctx context.Context, request models.ToggleParticipantMicRequest) (*conference.ToggleParticipantMicResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1453,7 +1452,7 @@ func (c *conferenceClient) ToggleParticipantMic(ctx context.Context, request mod
 func (c *conferenceClient) StartStream(ctx context.Context, request models.StartStreamRequest) (*conference.StartStreamResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1475,7 +1474,7 @@ func (c *conferenceClient) StartStream(ctx context.Context, request models.Start
 func (c *conferenceClient) JoinStream(ctx context.Context, request models.JoinStreamRequest) (*conference.JoinStreamResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1493,7 +1492,7 @@ func (c *conferenceClient) JoinStream(ctx context.Context, request models.JoinSt
 func (c *conferenceClient) LeaveStream(ctx context.Context, request models.LeaveStreamRequest) (*conference.LeaveStreamResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1511,7 +1510,7 @@ func (c *conferenceClient) LeaveStream(ctx context.Context, request models.Leave
 func (c *conferenceClient) StopStream(ctx context.Context, request models.StopStreamRequest) (*conference.StopStreamResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 

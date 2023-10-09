@@ -3,7 +3,6 @@ package client
 import (
 	"context"
 	"errors"
-	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
@@ -85,7 +84,7 @@ func (c *authClient) UserLogin(ctx context.Context, request models.LoginRequestB
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -138,7 +137,7 @@ func (c *authClient) ValidName(ctx context.Context, request models.ValidName, re
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -192,7 +191,7 @@ func (c *authClient) ResendOtp(ctx context.Context, request models.ResendOtp, re
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -246,7 +245,7 @@ func (c *authClient) ForgotPasswordOtp(ctx context.Context, request models.Forgo
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -300,7 +299,7 @@ func (c *authClient) ForgotPasswordValidateOtp(ctx context.Context, request mode
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -355,7 +354,7 @@ func (c *authClient) ForgotPasswordChangePassword(ctx context.Context, request m
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -410,7 +409,7 @@ func (c *authClient) ValidateUser(ctx context.Context, request models.ValidateUs
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -464,7 +463,7 @@ func (c *authClient) GoogleLogin(ctx context.Context, request models.GoogleLogin
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -513,7 +512,7 @@ func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUs
 	// Retrieve the "userId" from the context.
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -523,7 +522,7 @@ func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUs
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -572,7 +571,7 @@ func (c *authClient) ChangeUserName(ctx context.Context, request models.ChangeUs
 func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmailRequest, retryConfig models.RetryConfig) (*auth.ChangeEmailResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -582,7 +581,7 @@ func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmail
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -632,7 +631,7 @@ func (c *authClient) ChangeEmail(ctx context.Context, request models.ChangeEmail
 func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePasswordRequest, retryConfig models.RetryConfig) (*auth.ChangePasswordResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -642,7 +641,7 @@ func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePa
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -691,7 +690,7 @@ func (c *authClient) ChangePassword(ctx context.Context, request models.ChangePa
 func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.ChangeEmailVerifyOtpRequest, retryConfig models.RetryConfig) (*auth.ChangeEmailVerifyOtpResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -701,7 +700,7 @@ func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.Ch
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -752,7 +751,7 @@ func (c *authClient) ChangeEmailVerifyOtp(ctx context.Context, request models.Ch
 func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.ChangePhoneNumberOtpRequest, retryConfig models.RetryConfig) (*auth.ChangePhoneNumberOtpResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -762,7 +761,7 @@ func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.Ch
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -812,7 +811,7 @@ func (c *authClient) ChangePhoneNumberOtp(ctx context.Context, request models.Ch
 func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.ChangePhoneNumberRequest, retryConfig models.RetryConfig) (*auth.ChangePhoneNumberResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -822,7 +821,7 @@ func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.Chang
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -873,7 +872,7 @@ func (c *authClient) ChangePhoneNumber(ctx context.Context, request models.Chang
 func (c *authClient) ChangeAvatar(ctx context.Context, request models.ChangeAvatarRequest, retryConfig models.RetryConfig) (*auth.ChangeAvatarResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -883,7 +882,7 @@ func (c *authClient) ChangeAvatar(ctx context.Context, request models.ChangeAvat
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -932,7 +931,7 @@ func (c *authClient) ChangeAvatar(ctx context.Context, request models.ChangeAvat
 func (c *authClient) RemoveAvatar(ctx context.Context, retryConfig models.RetryConfig) (*auth.RemoveAvatarResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -942,7 +941,7 @@ func (c *authClient) RemoveAvatar(ctx context.Context, retryConfig models.RetryC
 	startTime := time.Now()
 
 	for retryCount := 1; retryCount <= retryConfig.MaxRetries; retryCount++ {
-		fmt.Println("try.........", retryCount)
+		log.Println("try.........", retryCount)
 
 		if time.Since(startTime) > retryConfig.MaxDuration {
 			err = errors.New("time limit exceeded")
@@ -990,7 +989,7 @@ func (c *authClient) RemoveAvatar(ctx context.Context, retryConfig models.RetryC
 func (c *authClient) CreateCommunity(ctx context.Context, request models.CreateCommunityRequest) (*auth.CreateCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1011,7 +1010,7 @@ func (c *authClient) CreateCommunity(ctx context.Context, request models.CreateC
 func (c *authClient) JoinCommunity(ctx context.Context, request models.JoinCommunityRequest) (*auth.JoinCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1031,7 +1030,7 @@ func (c *authClient) JoinCommunity(ctx context.Context, request models.JoinCommu
 func (c *authClient) LeaveCommunity(ctx context.Context, request models.LeaveCommunityRequest) (*auth.LeaveCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1049,7 +1048,7 @@ func (c *authClient) LeaveCommunity(ctx context.Context, request models.LeaveCom
 func (c *authClient) AcceptJoinCommunity(ctx context.Context, request models.AcceptJoinCommunityRequest) (*auth.AcceptJoinCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1067,7 +1066,7 @@ func (c *authClient) AcceptJoinCommunity(ctx context.Context, request models.Acc
 func (c *authClient) RemoveMember(ctx context.Context, request models.RemoveMemberRequest) (*auth.RemoveMemberResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1085,7 +1084,7 @@ func (c *authClient) RemoveMember(ctx context.Context, request models.RemoveMemb
 func (c *authClient) AddModerator(ctx context.Context, request models.AddModeratorRequest) (*auth.AddModeratorResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1103,7 +1102,7 @@ func (c *authClient) AddModerator(ctx context.Context, request models.AddModerat
 func (c *authClient) AddMember(ctx context.Context, request models.AddMemberRequest) (*auth.AddMemberResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1121,7 +1120,7 @@ func (c *authClient) AddMember(ctx context.Context, request models.AddMemberRequ
 func (c *authClient) ChangeCommunityJoinType(ctx context.Context, request models.ChangeCommunityJoinTypeRequest) (*auth.ChangeCommunityJoinTypeResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1138,7 +1137,7 @@ func (c *authClient) ChangeCommunityJoinType(ctx context.Context, request models
 func (c *authClient) DeleteCommunity(ctx context.Context, request models.DeleteCommunityRequest) (*auth.DeleteCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1187,7 +1186,7 @@ func (c *authClient) GetUserByName(ctx context.Context, request models.GetUserBy
 func (c *authClient) GetActiveCommunity(ctx context.Context) (*auth.GetActiveCommunityResponse, error) {
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 	res, err := c.Server.GetActiveCommunity(ctx, &auth.GetActiveCommunityRequest{
@@ -1232,7 +1231,7 @@ func (c *authClient) GetUserDetails(ctx context.Context) (*auth.GetUserDetailsRe
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
@@ -1250,7 +1249,7 @@ func (c *authClient) GetJoinedCommunity(ctx context.Context) (*auth.GetJoinedCom
 
 	userId, ok := ctx.Value("userId").(string)
 	if !ok {
-		fmt.Println("userId not found in context.")
+		log.Println("userId not found in context.")
 		return nil, errors.New("login again")
 	}
 
