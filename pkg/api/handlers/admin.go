@@ -6,6 +6,8 @@ import (
 	"gateway/pkg/common/client/interfaces"
 	middleware "gateway/pkg/common/midleware"
 	"gateway/pkg/common/models"
+	"gateway/pkg/utils"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -25,15 +27,18 @@ func (h *AdminHandler) AdminLogin(ctx *gin.Context) {
 	body := models.AdminLoginRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.AdminLogin(context.Background(), body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "login failed",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -41,6 +46,7 @@ func (h *AdminHandler) AdminLogin(ctx *gin.Context) {
 	// setup JWT
 	ok := middleware.JwtCookieSetup(ctx, "admin-auth", res.Uid, res.Error)
 	if !ok {
+		log.Println("failed to setup JWT")
 		res := errors.New("Generate JWT failure")
 		ctx.JSON(http.StatusInternalServerError, res)
 		return
@@ -54,9 +60,11 @@ func (h *AdminHandler) GetUsers(ctx *gin.Context) {
 
 	res, err := h.Client.GetUsers(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "can't fetch users",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -69,15 +77,18 @@ func (h *AdminHandler) ManageUser(ctx *gin.Context) {
 	body := models.ManageUserRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.ManageUser(context.Background(), body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "action failed",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -90,9 +101,11 @@ func (h *AdminHandler) GetInterest(ctx *gin.Context) {
 
 	res, err := h.Client.GetInterest(context.Background())
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "intrest fetching failed",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -110,9 +123,11 @@ func (h *AdminHandler) AddInterest(ctx *gin.Context) {
 
 	res, err := h.Client.AddInterest(context.Background(), body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "intrest adding failed",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -131,9 +146,11 @@ func (h *AdminHandler) ManageInterest(ctx *gin.Context) {
 
 	res, err := h.Client.ManageInterest(context.Background(), body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "action failed",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -151,9 +168,11 @@ func (h *AdminHandler) ManageCommunity(ctx *gin.Context) {
 
 	res, err := h.Client.ManageCommunity(context.Background(), body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "action failed",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -172,9 +191,11 @@ func (h *AdminHandler) GetAllCommunity(ctx *gin.Context) {
 
 	res, err := h.Client.GetAllCommunity(ctx)
 	if err != nil {
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to fetch all community",
-			"error":   err.Error(),
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}

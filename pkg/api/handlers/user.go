@@ -7,6 +7,7 @@ import (
 	middleware "gateway/pkg/common/midleware"
 	"gateway/pkg/common/models"
 	"gateway/pkg/utils"
+	"log"
 	"net/http"
 	"time"
 
@@ -40,6 +41,7 @@ func (h *UserHandler) UserSignup(ctx *gin.Context) {
 	body := models.RegisterRequestBody{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -54,11 +56,12 @@ func (h *UserHandler) UserSignup(ctx *gin.Context) {
 
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "signup failed",
-			"error":   errMsg,
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
+
 		return
 	}
 
@@ -82,6 +85,7 @@ func (h *UserHandler) OtpRequest(ctx *gin.Context) {
 	body := models.OtpValidation{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -95,10 +99,10 @@ func (h *UserHandler) OtpRequest(ctx *gin.Context) {
 	res, err := h.Client.OtpRequest(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "otp sending failed",
-			"error":   errMsg,
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -124,6 +128,7 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 	body := models.LoginRequestBody{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -137,10 +142,10 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 	res, err := h.Client.UserLogin(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to login",
-			"error":   errMsg,
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 
 		return
@@ -150,6 +155,7 @@ func (h *UserHandler) UserLogin(ctx *gin.Context) {
 	ok := middleware.JwtCookieSetup(ctx, "user-auth", res.Uid, body.Email)
 	if !ok {
 		res := errors.New("failed to login")
+		log.Println("failed to setup JWT")
 		ctx.JSON(http.StatusInternalServerError, res)
 		return
 	}
@@ -174,6 +180,7 @@ func (h *UserHandler) ValidName(ctx *gin.Context) {
 	body := models.ValidName{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -187,10 +194,10 @@ func (h *UserHandler) ValidName(ctx *gin.Context) {
 	res, err := h.Client.ValidName(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "User name not available",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -216,6 +223,7 @@ func (h *UserHandler) ResendOtp(ctx *gin.Context) {
 	body := models.ResendOtp{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -229,10 +237,10 @@ func (h *UserHandler) ResendOtp(ctx *gin.Context) {
 	res, err := h.Client.ResendOtp(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "resending otp failed",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -277,6 +285,7 @@ func (h *UserHandler) ForgotPasswordOtp(ctx *gin.Context) {
 	body := models.ForgotPasswordOtpRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -290,10 +299,10 @@ func (h *UserHandler) ForgotPasswordOtp(ctx *gin.Context) {
 	res, err := h.Client.ForgotPasswordOtp(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "sending otp failed",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -319,6 +328,7 @@ func (h *UserHandler) ForgotPasswordValidateOtp(ctx *gin.Context) {
 	body := models.ForgotPasswordValidateOtpRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -332,10 +342,10 @@ func (h *UserHandler) ForgotPasswordValidateOtp(ctx *gin.Context) {
 	res, err := h.Client.ForgotPasswordValidateOtp(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "otp validation failed",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -360,6 +370,7 @@ func (h *UserHandler) ForgotPasswordChangePassword(ctx *gin.Context) {
 	body := models.ForgotPasswordChangePasswordRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -373,10 +384,10 @@ func (h *UserHandler) ForgotPasswordChangePassword(ctx *gin.Context) {
 	res, err := h.Client.ForgotPasswordChangePassword(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "otp verification failed",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -401,6 +412,7 @@ func (h *UserHandler) ValidateUser(ctx *gin.Context) {
 	body := models.ValidateUserRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -414,10 +426,10 @@ func (h *UserHandler) ValidateUser(ctx *gin.Context) {
 	res, err := h.Client.ValidateUser(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "validate user failed",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -443,6 +455,7 @@ func (h *UserHandler) GoogleLogin(ctx *gin.Context) {
 	body := models.GoogleLoginRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -456,10 +469,10 @@ func (h *UserHandler) GoogleLogin(ctx *gin.Context) {
 	res, err := h.Client.GoogleLogin(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "google login failed",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -468,6 +481,7 @@ func (h *UserHandler) GoogleLogin(ctx *gin.Context) {
 	ok := middleware.JwtCookieSetup(ctx, "user-auth", res.Uid, res.Email)
 	if !ok {
 		res := errors.New("failed to login")
+		log.Println("failed to setup jwt tocken")
 		ctx.JSON(http.StatusInternalServerError, res)
 		return
 
@@ -493,6 +507,7 @@ func (h *UserHandler) ChangeUserName(ctx *gin.Context) {
 	body := models.ChangeUserNameRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -506,10 +521,10 @@ func (h *UserHandler) ChangeUserName(ctx *gin.Context) {
 	res, err := h.Client.ChangeUserName(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to change user name",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -534,6 +549,7 @@ func (h *UserHandler) ChangeEmail(ctx *gin.Context) {
 	body := models.ChangeEmailRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -547,10 +563,10 @@ func (h *UserHandler) ChangeEmail(ctx *gin.Context) {
 	res, err := h.Client.ChangeEmail(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to change email",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -575,6 +591,7 @@ func (h *UserHandler) ChangePassword(ctx *gin.Context) {
 	body := models.ChangePasswordRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -588,10 +605,10 @@ func (h *UserHandler) ChangePassword(ctx *gin.Context) {
 	res, err := h.Client.ChangePassword(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to change password",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -616,6 +633,7 @@ func (h *UserHandler) ChangeEmailVerifyOtp(ctx *gin.Context) {
 	body := models.ChangeEmailVerifyOtpRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -629,10 +647,10 @@ func (h *UserHandler) ChangeEmailVerifyOtp(ctx *gin.Context) {
 	res, err := h.Client.ChangeEmailVerifyOtp(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "otp validation failed",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -657,6 +675,7 @@ func (h *UserHandler) ChangePhoneNumberOtp(ctx *gin.Context) {
 	body := models.ChangePhoneNumberOtpRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -670,10 +689,10 @@ func (h *UserHandler) ChangePhoneNumberOtp(ctx *gin.Context) {
 	res, err := h.Client.ChangePhoneNumberOtp(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "otp validation failed",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -698,6 +717,7 @@ func (h *UserHandler) ChangePhoneNumber(ctx *gin.Context) {
 	body := models.ChangePhoneNumberRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -711,10 +731,10 @@ func (h *UserHandler) ChangePhoneNumber(ctx *gin.Context) {
 	res, err := h.Client.ChangePhoneNumber(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to change phone number",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -739,6 +759,7 @@ func (h *UserHandler) ChangeAvatar(ctx *gin.Context) {
 	body := models.ChangeAvatarRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -752,10 +773,10 @@ func (h *UserHandler) ChangeAvatar(ctx *gin.Context) {
 	res, err := h.Client.ChangeAvatar(ctx, body, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "can't change avatar",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -785,10 +806,10 @@ func (h *UserHandler) RemoveAvatar(ctx *gin.Context) {
 	res, err := h.Client.RemoveAvatar(ctx, retryConfig)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "remove avatar failed",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -800,6 +821,7 @@ func (h *UserHandler) CreateCommunity(ctx *gin.Context) {
 	body := models.CreateCommunityRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -807,10 +829,10 @@ func (h *UserHandler) CreateCommunity(ctx *gin.Context) {
 	res, err := h.Client.CreateCommunity(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to create community",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -822,6 +844,7 @@ func (h *UserHandler) CreateCommunity(ctx *gin.Context) {
 func (h *UserHandler) JoinCommunity(ctx *gin.Context) {
 	body := models.JoinCommunityRequest{}
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -829,10 +852,10 @@ func (h *UserHandler) JoinCommunity(ctx *gin.Context) {
 	res, err := h.Client.JoinCommunity(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to join community",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -844,6 +867,7 @@ func (h *UserHandler) LeaveCommunity(ctx *gin.Context) {
 	body := models.LeaveCommunityRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -851,10 +875,10 @@ func (h *UserHandler) LeaveCommunity(ctx *gin.Context) {
 	res, err := h.Client.LeaveCommunity(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to leave community",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -866,6 +890,7 @@ func (h *UserHandler) AcceptJoinCommunity(ctx *gin.Context) {
 	body := models.AcceptJoinCommunityRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -873,10 +898,10 @@ func (h *UserHandler) AcceptJoinCommunity(ctx *gin.Context) {
 	res, err := h.Client.AcceptJoinCommunity(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to accept joining community",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -888,6 +913,7 @@ func (h *UserHandler) RemoveMember(ctx *gin.Context) {
 	body := models.RemoveMemberRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -895,10 +921,10 @@ func (h *UserHandler) RemoveMember(ctx *gin.Context) {
 	res, err := h.Client.RemoveMember(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to remove member",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -910,6 +936,7 @@ func (h *UserHandler) AddModerator(ctx *gin.Context) {
 	body := models.AddModeratorRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -917,10 +944,10 @@ func (h *UserHandler) AddModerator(ctx *gin.Context) {
 	res, err := h.Client.AddModerator(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to add moderator",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -932,6 +959,7 @@ func (h *UserHandler) AddMember(ctx *gin.Context) {
 	body := models.AddMemberRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -939,10 +967,10 @@ func (h *UserHandler) AddMember(ctx *gin.Context) {
 	res, err := h.Client.AddMember(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to add member",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -954,6 +982,7 @@ func (h *UserHandler) ChangeCommunityJoinType(ctx *gin.Context) {
 	body := models.ChangeCommunityJoinTypeRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -961,10 +990,10 @@ func (h *UserHandler) ChangeCommunityJoinType(ctx *gin.Context) {
 	res, err := h.Client.ChangeCommunityJoinType(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to change community join type",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -976,6 +1005,7 @@ func (h *UserHandler) DeleteCommunity(ctx *gin.Context) {
 	body := models.DeleteCommunityRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -983,10 +1013,10 @@ func (h *UserHandler) DeleteCommunity(ctx *gin.Context) {
 	res, err := h.Client.DeleteCommunity(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to delete community",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -999,10 +1029,10 @@ func (h *UserHandler) GetInterstsUser(ctx *gin.Context) {
 	res, err := h.Client.GetInterstsUser(ctx)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to fetch intrests",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -1026,10 +1056,10 @@ func (h *UserHandler) GetUserByName(ctx *gin.Context) {
 	res, err := h.Client.GetUserByName(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to fetch by user name",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -1041,10 +1071,10 @@ func (h *UserHandler) GetActiveCommunity(ctx *gin.Context) {
 	res, err := h.Client.GetActiveCommunity(ctx)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "fetching active community failed",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -1068,10 +1098,10 @@ func (h *UserHandler) GetCommunityById(ctx *gin.Context) {
 	res, err := h.Client.GetCommunityById(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to fetch community by ID",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -1083,6 +1113,7 @@ func (h *UserHandler) ValidateCommunityName(ctx *gin.Context) {
 	body := models.ValidateCommunityNameRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -1090,10 +1121,10 @@ func (h *UserHandler) ValidateCommunityName(ctx *gin.Context) {
 	res, err := h.Client.ValidateCommunityName(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "community name already in used",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -1106,10 +1137,10 @@ func (h *UserHandler) GetUserDetails(ctx *gin.Context) {
 	res, err := h.Client.GetUserDetails(ctx)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to fetch",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -1122,10 +1153,10 @@ func (h *UserHandler) GetJoinedCommunity(ctx *gin.Context) {
 	res, err := h.Client.GetJoinedCommunity(ctx)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to fetch",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -1148,10 +1179,10 @@ func (h *UserHandler) SearchCommunity(ctx *gin.Context) {
 	res, err := h.Client.SearchCommunity(ctx, body)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
-
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to fetch by community name",
-			"error":   errMsg,
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}

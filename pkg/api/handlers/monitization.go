@@ -3,6 +3,8 @@ package handlers
 import (
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/models"
+	"gateway/pkg/utils"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -22,15 +24,18 @@ func (h *MonitizationHandler) MonitaizationHealthCheck(ctx *gin.Context) {
 	body := models.Request{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.HealthCheck(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "conference service down",
-			"error":   err.Error(),
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -42,15 +47,18 @@ func (h *MonitizationHandler) CreateWallet(ctx *gin.Context) {
 	body := models.CreateWalletRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.CreateWallet(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to create wallet",
-			"error":   err.Error(),
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -62,15 +70,18 @@ func (h *MonitizationHandler) UpdateWallet(ctx *gin.Context) {
 	body := models.UpdateWalletRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.UpdateWallet(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to update wallet",
-			"error":   err.Error(),
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -82,15 +93,18 @@ func (h *MonitizationHandler) ParticipationReward(ctx *gin.Context) {
 	body := models.ParticipationRewardRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.ParticipationReward(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to update wallet",
-			"error":   err.Error(),
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -102,15 +116,18 @@ func (h *MonitizationHandler) UserRewardHistory(ctx *gin.Context) {
 	body := models.UserRewardHistoryRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.UserRewardHistory(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to fetch wallet",
-			"error":   err.Error(),
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -122,9 +139,11 @@ func (h *MonitizationHandler) GetWallet(ctx *gin.Context) {
 
 	res, err := h.Client.GetWallet(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to fetch wallet",
-			"error":   err.Error(),
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -135,15 +154,18 @@ func (h *MonitizationHandler) GetWallet(ctx *gin.Context) {
 func (h *MonitizationHandler) ExclusiveContent(ctx *gin.Context) {
 	var videoID string
 	if err := ctx.BindJSON(&videoID); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.ExclusiveContent(ctx, videoID)
 	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"message": "failed to fetch wallet",
-			"error":   err.Error(),
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}

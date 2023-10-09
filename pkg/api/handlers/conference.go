@@ -4,6 +4,8 @@ import (
 	"context"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/models"
+	"gateway/pkg/utils"
+	"log"
 	"net/http"
 	"time"
 
@@ -39,6 +41,7 @@ func (h *ConferenceHandler) HealthCheck(ctx *gin.Context) {
 	body := models.HealthCheck{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -51,9 +54,11 @@ func (h *ConferenceHandler) HealthCheck(ctx *gin.Context) {
 
 	res, err := h.Client.HealthCheck(ctx, body.Data, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "conference service down",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -65,6 +70,7 @@ func (h *ConferenceHandler) SchedulePrivateConference(ctx *gin.Context) {
 	body := models.SchedulePrivateConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -76,9 +82,11 @@ func (h *ConferenceHandler) SchedulePrivateConference(ctx *gin.Context) {
 
 	res, err := h.Client.SchedulePrivateConference(ctx, body, retryConfig)
 	if err != nil {
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
 		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "can't schedule conference",
-			"error":   err.Error(),
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -90,6 +98,7 @@ func (h *ConferenceHandler) ScheduleGroupConference(ctx *gin.Context) {
 	body := models.ScheduleGroupConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -102,9 +111,11 @@ func (h *ConferenceHandler) ScheduleGroupConference(ctx *gin.Context) {
 
 	res, err := h.Client.ScheduleGroupConference(ctx, body, retryConfig)
 	if err != nil {
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
 		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "can't schedule conference",
-			"error":   err.Error(),
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -115,6 +126,7 @@ func (h *ConferenceHandler) SchedulePublicConference(ctx *gin.Context) {
 	body := models.SchedulePublicConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -127,9 +139,11 @@ func (h *ConferenceHandler) SchedulePublicConference(ctx *gin.Context) {
 
 	res, err := h.Client.SchedulePublicConference(ctx, body, retryConfig)
 	if err != nil {
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
 		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "can't schedule conference",
-			"error":   err.Error(),
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -154,6 +168,7 @@ func (h *ConferenceHandler) StartPrivateConference(ctx *gin.Context) {
 	body := models.StartPrivateConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -166,9 +181,11 @@ func (h *ConferenceHandler) StartPrivateConference(ctx *gin.Context) {
 
 	res, err := h.Client.StartPrivateConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in StartPrivateConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -193,6 +210,7 @@ func (h *ConferenceHandler) StartPublicConference(ctx *gin.Context) {
 	body := models.StartPublicConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -205,9 +223,11 @@ func (h *ConferenceHandler) StartPublicConference(ctx *gin.Context) {
 
 	res, err := h.Client.StartPublicConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in StartPublicConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -232,6 +252,7 @@ func (h *ConferenceHandler) JoinPrivateConference(ctx *gin.Context) {
 	body := models.JoinPrivateConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -244,9 +265,11 @@ func (h *ConferenceHandler) JoinPrivateConference(ctx *gin.Context) {
 
 	res, err := h.Client.JoinPrivateConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in JoinPrivateConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -271,6 +294,7 @@ func (h *ConferenceHandler) JoinPublicConference(ctx *gin.Context) {
 	body := models.JoinPublicConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -283,9 +307,11 @@ func (h *ConferenceHandler) JoinPublicConference(ctx *gin.Context) {
 
 	res, err := h.Client.JoinPublicConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in JoinPublicConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -310,6 +336,7 @@ func (h *ConferenceHandler) JoinGroupConfernce(ctx *gin.Context) {
 	body := models.JoinGroupConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -322,9 +349,11 @@ func (h *ConferenceHandler) JoinGroupConfernce(ctx *gin.Context) {
 
 	res, err := h.Client.JoinGroupConfernce(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in JoinGroupConfernce",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -336,6 +365,7 @@ func (h *ConferenceHandler) LeavePrivateConference(ctx *gin.Context) {
 	body := models.LeavePrivateConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -348,9 +378,11 @@ func (h *ConferenceHandler) LeavePrivateConference(ctx *gin.Context) {
 
 	res, err := h.Client.LeavePrivateConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in LeavePrivateConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -362,6 +394,7 @@ func (h *ConferenceHandler) EndPublicConference(ctx *gin.Context) {
 	body := models.EndPublicConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -374,9 +407,11 @@ func (h *ConferenceHandler) EndPublicConference(ctx *gin.Context) {
 
 	res, err := h.Client.EndPublicConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in EndPublicConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -388,6 +423,7 @@ func (h *ConferenceHandler) EndGroupConference(ctx *gin.Context) {
 	body := models.EndGroupConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -400,9 +436,11 @@ func (h *ConferenceHandler) EndGroupConference(ctx *gin.Context) {
 
 	res, err := h.Client.EndGroupConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in EndGroupConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -414,6 +452,7 @@ func (h *ConferenceHandler) EndPrivateConference(ctx *gin.Context) {
 	body := models.EndPrivateConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -426,9 +465,11 @@ func (h *ConferenceHandler) EndPrivateConference(ctx *gin.Context) {
 
 	res, err := h.Client.EndPrivateConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in EndPrivateConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -440,6 +481,7 @@ func (h *ConferenceHandler) RemovePublicParticipant(ctx *gin.Context) {
 	body := models.RemovePublicParticipantRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -452,9 +494,11 @@ func (h *ConferenceHandler) RemovePublicParticipant(ctx *gin.Context) {
 
 	res, err := h.Client.RemovePublicParticipant(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in RemovePublicParticipant",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -466,6 +510,7 @@ func (h *ConferenceHandler) RemoveGroupParticipant(ctx *gin.Context) {
 	body := models.RemoveGroupParticipantRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -478,9 +523,11 @@ func (h *ConferenceHandler) RemoveGroupParticipant(ctx *gin.Context) {
 
 	res, err := h.Client.RemoveGroupParticipant(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in RemoveGroupParticipant",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -492,6 +539,7 @@ func (h *ConferenceHandler) RemovePrivateParticipant(ctx *gin.Context) {
 	body := models.RemovePrivateParticipantRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -504,9 +552,11 @@ func (h *ConferenceHandler) RemovePrivateParticipant(ctx *gin.Context) {
 
 	res, err := h.Client.RemovePrivateParticipant(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in RemovePrivateParticipant",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -518,6 +568,7 @@ func (h *ConferenceHandler) LeavePublicConference(ctx *gin.Context) {
 	body := models.LeavePublicConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -530,9 +581,11 @@ func (h *ConferenceHandler) LeavePublicConference(ctx *gin.Context) {
 
 	res, err := h.Client.LeavePublicConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in LeavePublicConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -543,6 +596,7 @@ func (h *ConferenceHandler) LeaveGroupConference(ctx *gin.Context) {
 	body := models.LeaveGroupConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -555,9 +609,11 @@ func (h *ConferenceHandler) LeaveGroupConference(ctx *gin.Context) {
 
 	res, err := h.Client.LeaveGroupConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in LeaveGroupConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -569,6 +625,7 @@ func (h *ConferenceHandler) StartGroupConference(ctx *gin.Context) {
 	body := models.StartGroupConferenceRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -581,9 +638,11 @@ func (h *ConferenceHandler) StartGroupConference(ctx *gin.Context) {
 
 	res, err := h.Client.StartGroupConference(ctx, body, retryConfig)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "error in StartGroupConference",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -595,6 +654,7 @@ func (h *ConferenceHandler) AcceptJoining(ctx *gin.Context) {
 	body := models.AcceptJoiningRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -605,9 +665,10 @@ func (h *ConferenceHandler) AcceptJoining(ctx *gin.Context) {
 		RetryInterval: 1 * time.Second, // Wait 1 second between retries
 	}
 
-	res, err := h.Client.AcceptJoining(context.Background(), body, retryConfig)
+	res, err := h.Client.AcceptJoining(ctx, body, retryConfig)
 	if err != nil {
-		ctx.AbortWithError(http.StatusBadGateway, err)
+		log.Println(err)
+		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
@@ -619,6 +680,7 @@ func (h *ConferenceHandler) DeclineJoining(ctx *gin.Context) {
 	body := models.DeclineJoiningRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -629,8 +691,9 @@ func (h *ConferenceHandler) DeclineJoining(ctx *gin.Context) {
 		RetryInterval: 1 * time.Second, // Wait 1 second between retries
 	}
 
-	res, err := h.Client.DeclineJoining(context.Background(), body, retryConfig)
+	res, err := h.Client.DeclineJoining(ctx, body, retryConfig)
 	if err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadGateway, err)
 		return
 	}
@@ -647,7 +710,7 @@ func (h *ConferenceHandler) ToggleCamera(ctx *gin.Context) {
 		return
 	}
 
-	res, err := h.Client.ToggleCamera(context.Background(), body)
+	res, err := h.Client.ToggleCamera(ctx, body)
 	if err != nil {
 		ctx.AbortWithError(http.StatusBadGateway, err)
 		return
@@ -710,9 +773,11 @@ func (h *ConferenceHandler) ToggleParticipantMic(ctx *gin.Context) {
 func (h *ConferenceHandler) ScheduledConference(ctx *gin.Context) {
 	res, err := h.Client.ScheduledConference(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to fetch",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -722,9 +787,11 @@ func (h *ConferenceHandler) ScheduledConference(ctx *gin.Context) {
 func (h *ConferenceHandler) CompletedSchedules(ctx *gin.Context) {
 	res, err := h.Client.CompletedSchedules(ctx)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to fetch",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -735,15 +802,18 @@ func (h *ConferenceHandler) StartStream(ctx *gin.Context) {
 	body := models.StartStreamRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.StartStream(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to start stream",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -755,15 +825,18 @@ func (h *ConferenceHandler) JoinStream(ctx *gin.Context) {
 	body := models.JoinStreamRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.JoinStream(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to join stream",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -775,15 +848,18 @@ func (h *ConferenceHandler) LeaveStream(ctx *gin.Context) {
 	body := models.LeaveStreamRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.LeaveStream(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to leave stream",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -795,15 +871,18 @@ func (h *ConferenceHandler) StopStream(ctx *gin.Context) {
 	body := models.StopStreamRequest{}
 
 	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
 	res, err := h.Client.StopStream(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to stop stream",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -825,9 +904,11 @@ func (h *ConferenceHandler) GetStream(ctx *gin.Context) {
 
 	res, err := h.Client.GetStream(ctx, body)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to get stream",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
@@ -839,9 +920,11 @@ func (h *ConferenceHandler) GetOngoingStreams(ctx *gin.Context) {
 	sortString := ctx.DefaultQuery("sort", "")
 	res, err := h.Client.GetOngoingStreams(ctx, sortString)
 	if err != nil {
-		ctx.JSON(http.StatusBadGateway, gin.H{
-			"message": "failed to get stream",
-			"error":   err.Error(),
+		log.Println(err)
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
 		})
 		return
 	}
