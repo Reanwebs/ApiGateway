@@ -206,4 +206,5 @@ message Suggestion {
     bool exclusive = 12;
     uint32 coin_for_watch = 13;
     bool blocked = 14;
+    string ownerId = 15;
 }

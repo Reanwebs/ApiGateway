@@ -152,14 +152,14 @@ func (h *MonitizationHandler) GetWallet(ctx *gin.Context) {
 }
 
 func (h *MonitizationHandler) ExclusiveContent(ctx *gin.Context) {
-	var videoID string
-	if err := ctx.BindJSON(&videoID); err != nil {
+	body := models.ExclusiveContentRequest{}
+	if err := ctx.BindJSON(&body); err != nil {
 		log.Println(err)
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	res, err := h.Client.ExclusiveContent(ctx, videoID)
+	res, err := h.Client.ExclusiveContent(ctx, body.VideoId)
 	if err != nil {
 		errMsg := utils.ExtractErrorMessage(err.Error())
 		log.Println(err)
