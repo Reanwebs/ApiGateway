@@ -2,7 +2,10 @@ package client
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"errors"
+	"fmt"
 	"gateway/pkg/common/client/interfaces"
 	"gateway/pkg/common/config"
 	"gateway/pkg/common/models"
@@ -10,9 +13,11 @@ import (
 	"io"
 	"log"
 	"mime/multipart"
+	"os"
+	"time"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials"
 )
 
 type videoClient struct {
@@ -20,11 +25,39 @@ type videoClient struct {
 }
 
 func InitVideoStreamingClient(c *config.Config) (interfaces.VideoClient, error) {
-	cc, err := grpc.Dial(c.VideoService, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	caCert, err := os.ReadFile("cert/ca-cert.pem")
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to read CA certificate: %w", err)
 	}
-	return NewVideoClient(video.NewVideoServiceClient(cc)), nil
+
+	// create cert pool and append ca's cert
+	certPool := x509.NewCertPool()
+	if !certPool.AppendCertsFromPEM(caCert) {
+		return nil, errors.New("failed to append CA certificate to certificate pool")
+	}
+
+	//read client cert
+	clientCert, err := tls.LoadX509KeyPair("cert/client-cert.pem", "cert/client-key.pem")
+	if err != nil {
+		return nil, fmt.Errorf("failed to load client certificate and key: %w", err)
+	}
+
+	config := &tls.Config{
+		Certificates: []tls.Certificate{clientCert},
+		RootCAs:      certPool,
+	}
+
+	tlsCredential := credentials.NewTLS(config)
+
+	conn, err := grpc.DialContext(ctx, c.VideoService, grpc.WithTransportCredentials(tlsCredential))
+	if err != nil {
+		return nil, fmt.Errorf("failed to load client certificate and key: %w", err)
+	}
+
+	return NewVideoClient(video.NewVideoServiceClient(conn)), nil
 }
 
 func NewVideoClient(server video.VideoServiceClient) interfaces.VideoClient {
