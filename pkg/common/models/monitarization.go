@@ -24,3 +24,7 @@ type UserRewardHistoryRequest struct {
 type CreateWalletRequest struct {
 	UserID string `json:"userID"`
 }
+
+type ExclusiveContentRequest struct {
+	VideoId string `json:"videoId"`
+}
