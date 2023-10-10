@@ -86,6 +86,7 @@ message UserRewardHistory {
 
 message UserRewardHistoryResponse {
     repeated UserRewardHistory Result = 1;
+    int32  Coins = 2;
 }
 
 message GroupRewardHistoryRequest{
