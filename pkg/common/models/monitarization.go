@@ -28,3 +28,9 @@ type CreateWalletRequest struct {
 type ExclusiveContentRequest struct {
 	VideoId string `json:"videoId"`
 }
+
+type EmailNotificationRequest struct {
+	Emails  []string `json:"emails"`
+	Subject string   `json:"subject"`
+	Body    string   `json:"body"`
+}

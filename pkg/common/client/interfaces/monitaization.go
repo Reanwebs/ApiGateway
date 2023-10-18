@@ -14,4 +14,5 @@ type MonitaizationClient interface {
 	UserRewardHistory(context.Context, models.UserRewardHistoryRequest) (*monit.UserRewardHistoryResponse, error)
 	GetWallet(context.Context) (*monit.GetWalletResponse, error)
 	ExclusiveContent(context.Context, string) (*monit.ExclusiveContentResponse, error)
+	EmailNotification(context.Context, models.EmailNotificationRequest) (*monit.EmailNotificationResponse, error)
 }

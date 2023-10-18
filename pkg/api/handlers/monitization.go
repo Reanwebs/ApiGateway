@@ -172,3 +172,25 @@ func (h *MonitizationHandler) ExclusiveContent(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, &res)
 
 }
+
+func (h *MonitizationHandler) EmailNotification(ctx *gin.Context) {
+	body := models.EmailNotificationRequest{}
+	if err := ctx.BindJSON(&body); err != nil {
+		log.Println(err)
+		ctx.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	res, err := h.Client.EmailNotification(ctx, body)
+	if err != nil {
+		errMsg := utils.ExtractErrorMessage(err.Error())
+		log.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"message": errMsg,
+			"error":   err,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, &res)
+
+}

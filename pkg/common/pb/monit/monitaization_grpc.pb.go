@@ -30,6 +30,7 @@ const (
 	Monitization_UserWatchHour_FullMethodName       = "/monitization.Monitization/UserWatchHour"
 	Monitization_ConferenceWatchHour_FullMethodName = "/monitization.Monitization/ConferenceWatchHour"
 	Monitization_GroupWatchHour_FullMethodName      = "/monitization.Monitization/GroupWatchHour"
+	Monitization_EmailNotification_FullMethodName   = "/monitization.Monitization/EmailNotification"
 )
 
 // MonitizationClient is the client API for Monitization service.
@@ -47,6 +48,7 @@ type MonitizationClient interface {
 	UserWatchHour(ctx context.Context, in *UserWatchHourRequest, opts ...grpc.CallOption) (*UserWatchHourResponse, error)
 	ConferenceWatchHour(ctx context.Context, in *ConferenceWatchHourRequest, opts ...grpc.CallOption) (*ConferenceWatchHourResponse, error)
 	GroupWatchHour(ctx context.Context, in *GroupWatchHourRequest, opts ...grpc.CallOption) (*GroupWatchHourResponse, error)
+	EmailNotification(ctx context.Context, in *EmailNotificationRequest, opts ...grpc.CallOption) (*EmailNotificationResponse, error)
 }
 
 type monitizationClient struct {
@@ -156,6 +158,15 @@ func (c *monitizationClient) GroupWatchHour(ctx context.Context, in *GroupWatchH
 	return out, nil
 }
 
+func (c *monitizationClient) EmailNotification(ctx context.Context, in *EmailNotificationRequest, opts ...grpc.CallOption) (*EmailNotificationResponse, error) {
+	out := new(EmailNotificationResponse)
+	err := c.cc.Invoke(ctx, Monitization_EmailNotification_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MonitizationServer is the server API for Monitization service.
 // All implementations must embed UnimplementedMonitizationServer
 // for forward compatibility
@@ -171,6 +182,7 @@ type MonitizationServer interface {
 	UserWatchHour(context.Context, *UserWatchHourRequest) (*UserWatchHourResponse, error)
 	ConferenceWatchHour(context.Context, *ConferenceWatchHourRequest) (*ConferenceWatchHourResponse, error)
 	GroupWatchHour(context.Context, *GroupWatchHourRequest) (*GroupWatchHourResponse, error)
+	EmailNotification(context.Context, *EmailNotificationRequest) (*EmailNotificationResponse, error)
 	mustEmbedUnimplementedMonitizationServer()
 }
 
@@ -210,6 +222,9 @@ func (UnimplementedMonitizationServer) ConferenceWatchHour(context.Context, *Con
 }
 func (UnimplementedMonitizationServer) GroupWatchHour(context.Context, *GroupWatchHourRequest) (*GroupWatchHourResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GroupWatchHour not implemented")
+}
+func (UnimplementedMonitizationServer) EmailNotification(context.Context, *EmailNotificationRequest) (*EmailNotificationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EmailNotification not implemented")
 }
 func (UnimplementedMonitizationServer) mustEmbedUnimplementedMonitizationServer() {}
 
@@ -422,6 +437,24 @@ func _Monitization_GroupWatchHour_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Monitization_EmailNotification_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmailNotificationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MonitizationServer).EmailNotification(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Monitization_EmailNotification_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MonitizationServer).EmailNotification(ctx, req.(*EmailNotificationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Monitization_ServiceDesc is the grpc.ServiceDesc for Monitization service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -472,6 +505,10 @@ var Monitization_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GroupWatchHour",
 			Handler:    _Monitization_GroupWatchHour_Handler,
+		},
+		{
+			MethodName: "EmailNotification",
+			Handler:    _Monitization_EmailNotification_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

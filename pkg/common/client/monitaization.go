@@ -138,3 +138,26 @@ func (m *monitaizationClient) ExclusiveContent(ctx context.Context, videoId stri
 	return res, nil
 
 }
+
+func (m *monitaizationClient) EmailNotification(ctx context.Context, request models.EmailNotificationRequest) (*monit.EmailNotificationResponse, error) {
+	var monitEmails []*monit.Emails
+
+	for _, email := range request.Emails {
+		monitEmail := &monit.Emails{
+			Email: email,
+		}
+		monitEmails = append(monitEmails, monitEmail)
+	}
+
+	res, err := m.Server.EmailNotification(ctx, &monit.EmailNotificationRequest{
+		To:      monitEmails,
+		Subject: request.Subject,
+		Body:    request.Body,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

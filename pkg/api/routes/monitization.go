@@ -20,4 +20,5 @@ func MonitaizationRoutes(api *gin.RouterGroup, monitaizationHandlers handlers.Mo
 	monitaization.POST("/user-reward-history", monitaizationHandlers.UserRewardHistory)
 	monitaization.GET("/get-wallet", monitaizationHandlers.GetWallet)
 	monitaization.POST("/check-wallet-status", monitaizationHandlers.ExclusiveContent)
+	monitaization.POST("/email-notification", monitaizationHandlers.EmailNotification)
 }

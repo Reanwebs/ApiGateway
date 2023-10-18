@@ -20,6 +20,7 @@ service Monitization{
     rpc UserWatchHour(UserWatchHourRequest) returns (UserWatchHourResponse){}
     rpc ConferenceWatchHour(ConferenceWatchHourRequest) returns (ConferenceWatchHourResponse){}
     rpc GroupWatchHour(GroupWatchHourRequest) returns (GroupWatchHourResponse){}
+    rpc EmailNotification(EmailNotificationRequest) returns (EmailNotificationResponse) {}
 }
 
 
@@ -149,3 +150,18 @@ message ExclusiveContentRequest{
   message ExclusiveContentResponse {
     string Result = 1;
   }
+
+
+  message Emails{
+    string Email = 1;
+}
+
+message EmailNotificationRequest{
+    repeated Emails To = 1;
+    string   Subject   = 3;
+    string   Body      = 4;
+}
+
+message EmailNotificationResponse{
+    string Result  = 1;
+}
